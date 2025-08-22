@@ -14,6 +14,7 @@ public class Vacinacao
 
     [Display(Name = "Relatório da Razão")]
     public string? Relatorio { get; set; }
+    
     [Display(Name = "veterinario responsavel")]
     public MedicoVeterinario _veterinario { get; set; }
 
