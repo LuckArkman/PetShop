@@ -1,0 +1,35 @@
+using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace PetShop.Application.DTOs;
+
+public class Animal
+{
+    public int Id { get; set; }
+
+    [Required, Display(Name = "Nome do Animal")]
+    public string Nome { get; set; } = string.Empty;
+
+    [Required, Display(Name = "Espécie")]
+    public string Especie { get; set; } = string.Empty;
+
+    [Display(Name = "Raça")]
+    public string? Raca { get; set; }
+
+    [Range(0, 100), Display(Name = "Idade (anos)")]
+    public int Idade { get; set; }
+
+    [Range(0, 200), Display(Name = "Peso (Kg)")]
+    public double Peso { get; set; }
+
+    [Display(Name = "Porte / Tamanho")]
+    public string? Porte { get; set; }
+
+    [Display(Name = "Relatório Clínico")]
+    public RelatorioClinico? RelatorioClinico { get; set; }
+    
+    [BsonRepresentation(BsonType.ObjectId)]
+    [BsonElement("responsavel_id")]
+    public List<Responsavel> ResponsavelId { get; set; } = new ();
+}
