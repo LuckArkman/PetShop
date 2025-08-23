@@ -4,7 +4,7 @@ namespace PetShop.Application.DTOs;
 
 public class MedicoVeterinario
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     [Required, Display(Name = "Nome Completo")]
     public string Nome { get; set; } = string.Empty;

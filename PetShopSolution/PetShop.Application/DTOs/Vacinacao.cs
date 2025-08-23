@@ -4,7 +4,7 @@ namespace PetShop.Application.DTOs;
 
 public class Vacinacao
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public string AnimalId { get; set; }
 
     [Required, DataType(DataType.Date), Display(Name = "Data da Vacinação")]
