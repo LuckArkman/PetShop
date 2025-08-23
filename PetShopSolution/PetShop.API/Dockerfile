@@ -8,6 +8,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["PetShop.API/PetShop.API.csproj", "PetShop.API/"]
+COPY ["PetShop.Application/PetShop.Application.csproj", "PetShop.Application/"]
 RUN dotnet restore "PetShop.API/PetShop.API.csproj"
 COPY . .
 WORKDIR "/src/PetShop.API"
