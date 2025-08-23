@@ -20,7 +20,7 @@ public class ResponsavelService : IResponsavelService
 
         // Create a filter to find the document by Id
         var filter = Builders<Responsavel>.Filter.Eq(u => u.Id, _object);
-
+        
         // Find the document matching the filter
         var _responsavel = collection.Find(filter).FirstOrDefault();
 
