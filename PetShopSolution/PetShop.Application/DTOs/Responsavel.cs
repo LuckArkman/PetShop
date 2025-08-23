@@ -44,5 +44,5 @@ public class Responsavel
     public string? PhoneNumber { get; set; }
 
     // Relacionamento: um responsável pode ter vários animais
-    public ICollection<Animal> Animais { get; set; } = new List<Animal>();
+    public ICollection<string>? Animais { get; set; }
 }

@@ -10,23 +10,21 @@ namespace PetShop.API.Controllers;
 [ApiController]
 public class AnimalController : ControllerBase
 {
-    private readonly IAnimalService _animalService;  // Campo privado para armazenar o serviço injetado
-
-    // Construtor para injeção de dependência
+    private readonly IAnimalService _animalService;
     public AnimalController(IAnimalService animalService)
     {
-        _animalService = animalService;  // Atribui o serviço injetado ao campo privado
+        _animalService = animalService;
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Animal model)
     {
-
-        return Ok(model);
+        var register = await _animalService.InsetObject(model, CancellationToken.None) as Animal;
+        return Ok(register);
     }
     [HttpGet("animal")]
     public async Task<IActionResult> animal(string animal)
     {
-        var model = new Animal();
+        var model = await _animalService.GetObject(animal, CancellationToken.None) as Animal;
         return Ok(model);
     }
 }
