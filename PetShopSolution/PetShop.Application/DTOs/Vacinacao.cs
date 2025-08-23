@@ -19,6 +19,5 @@ public class Vacinacao
     public MedicoVeterinario _veterinario { get; set; }
 
     // Relacionamento (opcional, se quiser vincular ao Animal)
-    public int? AnimalId { get; set; }
     public Animal? Animal { get; set; }
 }

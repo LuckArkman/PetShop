@@ -6,7 +6,7 @@ namespace PetShop.Application.DTOs;
 
 public class Animal
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     [Required, Display(Name = "Nome do Animal")]
     public string Nome { get; set; } = string.Empty;
@@ -25,11 +25,8 @@ public class Animal
 
     [Display(Name = "Porte / Tamanho")]
     public string? Porte { get; set; }
-
-    [Display(Name = "Relatório Clínico")]
-    public RelatorioClinico? RelatorioClinico { get; set; }
     
     [BsonRepresentation(BsonType.ObjectId)]
     [BsonElement("responsavel_id")]
-    public List<Responsavel> ResponsavelId { get; set; } = new ();
+    public ICollection<string> ResponsavelId { get; set; }
 }

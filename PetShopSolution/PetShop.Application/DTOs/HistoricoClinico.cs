@@ -14,7 +14,7 @@ public class HistoricoClinico
     public string AnimalId { get; set; } = string.Empty;
 
     // Lista de relatórios clínicos relacionados ao animal
-    public List<RelatorioClinico> Relatorios { get; set; } = new();
+    public ICollection<RelatorioClinico> Relatorios { get; set; }
 
     // Data da última atualização no histórico
     public DateTime UltimaAtualizacao { get; set; } = DateTime.UtcNow;
