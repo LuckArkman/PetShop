@@ -18,8 +18,9 @@ public class ResponsavelController  : ControllerBase
     private readonly UserManager<Responsavel> _userManager;
     private readonly IConfiguration _configuration;
     private readonly IResponsavelService _service;
-    public ResponsavelController(IResponsavelService _Service)
+    public ResponsavelController(UserManager<Responsavel> userManager,IResponsavelService _Service)
     {
+        _userManager  = userManager;
         _service = _Service;
     }
     [HttpPost("register")]

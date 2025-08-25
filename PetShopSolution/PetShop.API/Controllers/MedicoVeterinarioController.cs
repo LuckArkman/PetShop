@@ -18,8 +18,9 @@ public class MedicoVeterinarioController  : ControllerBase
     private readonly UserManager<MedicoVeterinario> _userManager;
     private readonly IConfiguration _configuration;
     readonly IMedicoVeterinarioService _service;
-    public MedicoVeterinarioController(IMedicoVeterinarioService service)
+    public MedicoVeterinarioController(UserManager<MedicoVeterinario> userManager,IMedicoVeterinarioService service)
     {
+        _userManager = userManager;
         _service = service;
     }
     [HttpPost("register")]
