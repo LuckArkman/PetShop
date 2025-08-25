@@ -2,6 +2,7 @@ using MongoDB.Driver;
 using PetShop.Application.Data;
 using PetShop.Application.DTOs;
 using PetShop.Application.Interfaces;
+using PetShop.Application.Singletons;
 
 namespace PetShop.Application.Services;
 
@@ -10,7 +11,8 @@ public class VacinacaoService : IVacinacaoService
     public VacinacaoDB _db { get; set; }
     public VacinacaoService()
     {
-        _db = new VacinacaoDB();
+        _db = new VacinacaoDB(Singleton.Instance().src, "Vacinacao");
+        _db.GetOrCreateDatabase();
     }
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
@@ -44,7 +46,7 @@ public class VacinacaoService : IVacinacaoService
             .Set(u => u._dataVacinacao, _object._dataVacinacao)
             .Set(u => u.Tipo, _object.Tipo)
             .Set(u => u.Relatorio, _object.Relatorio)
-            .Set(u => u._veterinario, _object._veterinario);
+            .Set(u => u._veterinarioId, _object._veterinarioId);
 
         // Perform the update
         var result = collection.UpdateOne(filter, update);

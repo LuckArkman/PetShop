@@ -1,8 +1,8 @@
-using System.Data;
 using MongoDB.Driver;
 using PetShop.Application.Data;
 using PetShop.Application.DTOs;
 using PetShop.Application.Interfaces;
+using PetShop.Application.Singletons;
 
 namespace PetShop.Application.Services;
 
@@ -12,7 +12,8 @@ public class ResponsavelService : IResponsavelService
 
     public ResponsavelService()
     {
-        
+        _dbMongo = new ResponsavelDBMongo(Singleton.Instance().src, "Responsavel");
+        _dbMongo.GetOrCreateDatabase();
     }
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
@@ -73,4 +74,17 @@ public class ResponsavelService : IResponsavelService
 
     public async Task RemoveObject(object _object, CancellationToken cancellationToken)
         => await Task.FromResult<object?>(null);
+
+    public async Task<object?> FindByEmailAsync(string modelCredencial, CancellationToken cancellationToken)
+    {
+        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsaveis");
+
+        // Create a filter to find the document by Id
+        var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, modelCredencial);
+        
+        // Find the document matching the filter
+        var _responsavel = collection.Find(filter).FirstOrDefault();
+
+        return _responsavel as Responsavel;
+    }
 }

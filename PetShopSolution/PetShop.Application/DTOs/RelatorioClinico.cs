@@ -18,7 +18,7 @@ public class RelatorioClinico
     public string ResponsavelId { get; set; } = string.Empty;
 
     [BsonElement("dataAtendimento")]
-    public DateTime DataAtendimento { get; set; } = DateTime.UtcNow;
+    public DateTime _dataAtendimento { get; set; } = DateTime.UtcNow;
 
     [BsonElement("sintomas")]
     public string Sintomas { get; set; } = string.Empty;
@@ -35,4 +35,10 @@ public class RelatorioClinico
     [BsonElement("veterinarioId")] // Quem atendeu o animal
     [BsonRepresentation(BsonType.ObjectId)]
     public string VeterinarioId { get; set; } = string.Empty;
+
+    public RelatorioClinico()
+    {
+        Id =  Guid.NewGuid().ToString();
+        _dataAtendimento =  DateTime.UtcNow;
+    }
 }

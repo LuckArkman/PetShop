@@ -2,6 +2,7 @@ using MongoDB.Driver;
 using PetShop.Application.Data;
 using PetShop.Application.DTOs;
 using PetShop.Application.Interfaces;
+using PetShop.Application.Singletons;
 
 namespace PetShop.Application.Services;
 
@@ -10,7 +11,8 @@ public class MedicoVeterinarioService : IMedicoVeterinarioService
     public MedicoVeterinarioDB _db { get; set; }
     public MedicoVeterinarioService()
     {
-        _db = new MedicoVeterinarioDB();
+        _db = new MedicoVeterinarioDB(Singleton.Instance().src, "MedicoVeterinario");
+        _db.GetOrCreateDatabase();
     }
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
@@ -70,5 +72,18 @@ public class MedicoVeterinarioService : IMedicoVeterinarioService
     public Task RemoveObject(object _object, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<object?> FindByCRMVAsync(string modelCredencial, CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<MedicoVeterinario>("MedicoVeterinario");
+
+        // Create a filter to find the document by Id
+        var filter = Builders<MedicoVeterinario>.Filter.Eq(u => u.Id, modelCredencial);
+
+        // Find the document matching the filter
+        var character = collection.Find(filter).FirstOrDefault();
+
+        return character as MedicoVeterinario;
     }
 }

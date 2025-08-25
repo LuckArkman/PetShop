@@ -29,4 +29,9 @@ public class Animal
     [BsonRepresentation(BsonType.ObjectId)]
     [BsonElement("responsavel_id")]
     public ICollection<string> ResponsavelId { get; set; }
+
+    public Animal()
+    {
+        Id =  Guid.NewGuid().ToString();
+    }
 }

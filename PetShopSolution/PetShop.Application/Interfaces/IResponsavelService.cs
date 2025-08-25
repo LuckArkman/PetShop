@@ -11,4 +11,5 @@ public interface IResponsavelService
     Task<object?> UpdateObject(Responsavel _object, CancellationToken cancellationToken);
 
     Task RemoveObject(object _object, CancellationToken cancellationToken);
+    Task<object?> FindByEmailAsync(string modelCredencial, CancellationToken cancellationToken);
 }

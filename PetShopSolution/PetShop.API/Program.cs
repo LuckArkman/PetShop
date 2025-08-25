@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using PetShop.Application.Data;
 using PetShop.Application.Interfaces;
 using PetShop.Application.Services;
 
@@ -10,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.Configure<MongoDbService>(builder.Configuration.GetSection("MongoDbSettings"));
+builder.Services.AddSingleton<IMongoDbService, MongoDbService>();
 /*
 builder.Services.AddAuthentication(options =>
 {

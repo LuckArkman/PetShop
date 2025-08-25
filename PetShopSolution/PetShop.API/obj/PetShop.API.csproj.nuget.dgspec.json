@@ -57,9 +57,21 @@
               "target": "Package",
               "version": "[8.0.16, )"
             },
+            "QRCode": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "QRCoder": {
+              "target": "Package",
+              "version": "[1.6.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.6.2, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             }
           },
           "imports": [
@@ -135,6 +147,14 @@
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[3.4.3, )"
+            },
+            "QRCoder": {
+              "target": "Package",
+              "version": "[1.6.0, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             }
           },
           "imports": [
