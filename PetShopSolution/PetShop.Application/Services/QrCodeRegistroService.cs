@@ -2,6 +2,7 @@ using MongoDB.Driver;
 using PetShop.Application.Data;
 using PetShop.Application.DTOs;
 using PetShop.Application.Interfaces;
+using PetShop.Application.Singletons;
 
 namespace PetShop.Application.Services;
 
@@ -10,7 +11,8 @@ public class QrCodeRegistroService : IQrCodeRegistroService
     public QrCodeRegistroDB _db { get; set; }
     public QrCodeRegistroService()
     {
-        _db = new QrCodeRegistroDB();
+        _db = new QrCodeRegistroDB(Singleton.Instance().src, "QrCodeRegistro");
+        _db.GetOrCreateDatabase();
     }
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {

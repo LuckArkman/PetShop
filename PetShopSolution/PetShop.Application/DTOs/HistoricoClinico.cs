@@ -18,4 +18,9 @@ public class HistoricoClinico
 
     // Data da última atualização no histórico
     public DateTime UltimaAtualizacao { get; set; } = DateTime.UtcNow;
+
+    public HistoricoClinico()
+    {
+        Id =  Guid.NewGuid().ToString();
+    }
 }

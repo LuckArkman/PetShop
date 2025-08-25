@@ -15,4 +15,9 @@ public class AnimalGeolocationHistory
 
     // Lista de registros de localização
     public List<GeolocationRecord> Locations { get; set; } = new List<GeolocationRecord>();
+
+    public AnimalGeolocationHistory()
+    {
+        Id =  Guid.NewGuid().ToString();
+    }
 }

@@ -2,6 +2,7 @@ using MongoDB.Driver;
 using PetShop.Application.Data;
 using PetShop.Application.DTOs;
 using PetShop.Application.Interfaces;
+using PetShop.Application.Singletons;
 
 namespace PetShop.Application.Services;
 
@@ -10,7 +11,8 @@ public class HistoryVacinacaoService : IHistoryVacinacaoService
     public HistoryVacinacaoDB _db { get; set; }
     public HistoryVacinacaoService()
     {
-        _db = new HistoryVacinacaoDB();
+        _db = new HistoryVacinacaoDB(Singleton.Instance().src, "HistoryVacinacao");
+        _db.GetOrCreateDatabase();
     }
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {

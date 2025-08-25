@@ -17,6 +17,12 @@ public class Vacinacao
     public string? Relatorio { get; set; }
     
     [Display(Name = "veterinario responsavel")]
-    public MedicoVeterinario _veterinario { get; set; }
+    public string? _veterinarioId { get; set; }
+
+    public Vacinacao()
+    {
+        Id = Guid.NewGuid().ToString();
+        _dataVacinacao =  DateTime.UtcNow;
+    }
     
 }

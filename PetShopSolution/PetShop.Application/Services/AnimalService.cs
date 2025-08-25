@@ -2,12 +2,19 @@ using MongoDB.Driver;
 using PetShop.Application.Data;
 using PetShop.Application.DTOs;
 using PetShop.Application.Interfaces;
+using PetShop.Application.Singletons;
 
 namespace PetShop.Application.Services;
 
 public class AnimalService : IAnimalService
 {
     public AnimalDBMongo _animalDb { get; set; }
+
+    public AnimalService()
+    {
+        _animalDb = new AnimalDBMongo(Singleton.Instance().src, "Animal");
+        _animalDb.GetOrCreateDatabase();
+    }
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
         var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");

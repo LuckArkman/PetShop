@@ -36,4 +36,9 @@ public class GeolocationRecord
     /// Observações adicionais (ex: local do resgate, visto pela última vez, etc.)
     /// </summary>
     public string? Observacoes { get; set; }
+
+    public GeolocationRecord()
+    {
+        Id =  Guid.NewGuid().ToString();
+    }
 }

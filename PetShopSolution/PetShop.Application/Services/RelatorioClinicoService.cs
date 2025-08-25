@@ -2,14 +2,20 @@ using MongoDB.Driver;
 using PetShop.Application.Data;
 using PetShop.Application.DTOs;
 using PetShop.Application.Interfaces;
+using PetShop.Application.Singletons;
 
 namespace PetShop.Application.Services;
 
 public class RelatorioClinicoService : IRelatorioClinicoService
 {
     public RelatorioClinicoDB _db { get; set; }
+
     public RelatorioClinicoService()
-    => _db = new RelatorioClinicoDB();
+    {
+        _db = new RelatorioClinicoDB(Singleton.Instance().src, "RelatorioClinico");
+        _db.GetOrCreateDatabase();
+    }
+
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
         var collection = _db.GetDatabase().GetCollection<RelatorioClinico>("RelatorioClinico");
@@ -40,7 +46,7 @@ public class RelatorioClinicoService : IRelatorioClinicoService
             .Set(u => u.Id, _object.Id)
             .Set(u => u.AnimalId, _object.AnimalId)
             .Set(u => u.ResponsavelId, _object.ResponsavelId)
-            .Set(u => u.DataAtendimento, _object.DataAtendimento)
+            .Set(u => u._dataAtendimento, _object._dataAtendimento)
             .Set(u => u.Sintomas, _object.Sintomas)
             .Set(u => u.Diagnostico, _object.Diagnostico)
             .Set(u => u.Tratamento, _object.Tratamento)
