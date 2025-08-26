@@ -17,7 +17,7 @@ public class ResponsavelService : IResponsavelService
     }
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
-        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsaveis");
+        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
 
         // Create a filter to find the document by Id
         var filter = Builders<Responsavel>.Filter.Eq(u => u.Id, _object);
@@ -30,7 +30,7 @@ public class ResponsavelService : IResponsavelService
 
     public async Task<object?> InsetObject(Responsavel _object, CancellationToken cancellationToken)
     {
-        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsaveis");
+        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
         // Insert the user object into the collection
         collection.InsertOne(_object);
         return _object as Responsavel;
@@ -39,7 +39,7 @@ public class ResponsavelService : IResponsavelService
     public async Task<object?> UpdateObject(Responsavel _object, CancellationToken cancellationToken)
     {
         var obj = await GetObject(_object.Id, CancellationToken.None) as Responsavel;
-        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsaveis");
+        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
 
         // Create a filter to find the document by Id
         var filter = Builders<Responsavel>.Filter.Eq(u => u.Id, _object.Id);
@@ -77,7 +77,7 @@ public class ResponsavelService : IResponsavelService
 
     public async Task<object?> FindByEmailAsync(string modelCredencial, CancellationToken cancellationToken)
     {
-        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsaveis");
+        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
 
         // Create a filter to find the document by Id
         var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, modelCredencial);
