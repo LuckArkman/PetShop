@@ -5,12 +5,8 @@ namespace PetShop.Application.DTOs;
 
 public class GeolocationRecord
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = string.Empty;
-
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string AnimalId { get; set; } = string.Empty;
+    public string Id { get; set; }
+    public string AnimalId { get; set; }
 
     /// <summary>
     /// Latitude da localização atual do animal

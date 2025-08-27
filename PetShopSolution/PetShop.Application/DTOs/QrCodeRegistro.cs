@@ -9,20 +9,13 @@ namespace PetShop.Application.DTOs;
 
 public class QrCodeRegistro
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = string.Empty;
-
-    /// <summary>
-    /// ID do animal ao qual o QR Code está vinculado
-    /// </summary>
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string AnimalId { get; set; } = string.Empty;
+    public string Id { get; set; }
+    public string AnimalId { get; set; }
 
     /// <summary>
     /// QR Code em formato Base64 que permitirá acessar a ficha veterinária do animal
     /// </summary>
-    public string? QrCodeBase64 { get; set; } = string.Empty;
+    public string? QrCodeBase64 { get; set; }
 
     /// <summary>
     /// Data em que o QR Code foi gerado
@@ -32,20 +25,29 @@ public class QrCodeRegistro
 
     public QrCodeRegistro()
     {
-        DataGeracao =  DateTime.UtcNow;
-        QrCodeBase64 = GenerateQrCodeAsBase64String(AnimalId);
+        
     }
-    
-    public string GenerateQrCodeAsBase64String(string url, int pixelsPerModule = 20,
-        QRCodeGenerator.ECCLevel eccLevel = QRCodeGenerator.ECCLevel.Q)
+
+    public QrCodeRegistro(string id, string animalId)
     {
-        if (string.IsNullOrWhiteSpace(url))
-            throw new ArgumentException("URL cannot be null or empty.", nameof(url));
+        Id = id;
+        AnimalId = animalId;
+        QrCodeBase64 = GenerateQrCodeAsBase64String();
+    }
+
+    public string GenerateQrCodeAsBase64String()
+    {
+        Console.WriteLine(AnimalId);
+        int pixelsPerModule = 20;
+        QRCodeGenerator.ECCLevel eccLevel = QRCodeGenerator.ECCLevel.Q;
+        
+        if (string.IsNullOrWhiteSpace(AnimalId))
+            throw new ArgumentException("AnimalId cannot be null or empty.", nameof(AnimalId));
 
         try
         {
             using var qrGenerator = new QRCodeGenerator();
-            using var qrCodeData = qrGenerator.CreateQrCode(url, eccLevel);
+            using var qrCodeData = qrGenerator.CreateQrCode(AnimalId, eccLevel);
             var qrCode = new PngByteQRCode(qrCodeData);
             byte[] qrCodeBytes = qrCode.GetGraphic(pixelsPerModule);
 
