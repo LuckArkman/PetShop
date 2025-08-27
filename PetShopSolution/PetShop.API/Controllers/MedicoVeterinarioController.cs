@@ -15,12 +15,10 @@ namespace PetShop.API.Controllers;
 public class MedicoVeterinarioController  : ControllerBase
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly UserManager<MedicoVeterinario> _userManager;
     private readonly IConfiguration _configuration;
     readonly IMedicoVeterinarioService _service;
-    public MedicoVeterinarioController(UserManager<MedicoVeterinario> userManager,IMedicoVeterinarioService service)
+    public MedicoVeterinarioController(IMedicoVeterinarioService service)
     {
-        _userManager = userManager;
         _service = service;
     }
     [HttpPost("register")]
@@ -45,7 +43,7 @@ public class MedicoVeterinarioController  : ControllerBase
         }
 
         var user = await _service.FindByCRMVAsync(model.credencial, CancellationToken.None) as MedicoVeterinario;
-        if (user == null || (bool)await _userManager.CheckPasswordAsync(user, model.password))
+        if (user == null || !BCrypt.Net.BCrypt.Verify(model.password, user.Password))
         {
             return Unauthorized(new LoginResult { Success = false, Message = "Credenciais inválidas." });
         }
@@ -57,15 +55,9 @@ public class MedicoVeterinarioController  : ControllerBase
             new Claim(ClaimTypes.Email, user.Email)
         };
 
-        var roles = await _userManager.GetRolesAsync(user);
-        foreach (var role in roles)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, role));
-        }
-
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpireMinutes"] ?? "120")); // Define o tempo de expiração
+        var expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpireMinutes"] ?? "120"));
 
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
@@ -74,18 +66,13 @@ public class MedicoVeterinarioController  : ControllerBase
             expires: expires,
             signingCredentials: creds
         );
-        var login = new LoginResult
+
+        return Ok(new
         {
             Success = true,
             Token = new JwtSecurityTokenHandler().WriteToken(token),
             Message = "Login bem-sucedido!"
-        };
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var jwtToken = tokenHandler.ReadJwtToken(login.Token);
-        var claimsIdentity = new ClaimsIdentity(jwtToken.Claims,
-            CookieAuthenticationDefaults.AuthenticationScheme);
-        claimsIdentity.AddClaim(new Claim(user.Id, login.Token));
-        return Ok(login);
+        });
         
         return null;
     }

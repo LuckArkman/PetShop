@@ -5,19 +5,15 @@ namespace PetShop.Application.DTOs;
 
 public class AnimalGeolocationHistory
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = string.Empty;
-
-    // Referência ao animal
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string AnimalId { get; set; } = string.Empty;
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string AnimalId { get; set; }
 
     // Lista de registros de localização
-    public List<GeolocationRecord> Locations { get; set; } = new List<GeolocationRecord>();
+    public List<GeolocationRecord> Locations { get; set; }
 
-    public AnimalGeolocationHistory()
+    public AnimalGeolocationHistory(string animalId, GeolocationRecord locations)
     {
-        Id =  Guid.NewGuid().ToString();
+        AnimalId = animalId;
+        Locations = new List<GeolocationRecord>() { locations };
     }
 }

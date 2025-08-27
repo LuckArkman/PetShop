@@ -27,6 +27,13 @@ public class RelatorioClinicoController : ControllerBase
             var update = await _service.UpdateObject(register, CancellationToken.None) as  RelatorioClinico;
             return Ok(model);
         }
+        if (register is null)
+        {
+            register = new HistoricoClinico(model.AnimalId, model);
+            register.Relatorios.Add(model);
+            var update = await _service.UpdateObject(register, CancellationToken.None) as  RelatorioClinico;
+            return Ok(model);
+        }
 
         return BadRequest(model);
     }
