@@ -19,12 +19,16 @@ public class AnimalGeolocationController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] GeolocationRecord model)
     {
-        var register = await _geolocationRecordService.InsetObject(model, CancellationToken.None) as GeolocationRecord;
-        var _obj =
-            await _animalGeolocationHistoryService.GetObject(model.AnimalId, CancellationToken.None) as
-                AnimalGeolocationHistory;
+        var _obj = await _animalGeolocationHistoryService.GetObject(model.AnimalId, CancellationToken.None) as AnimalGeolocationHistory;
         if (_obj is not null)
         {
+            _obj.Locations.Add(model);
+            var history = await _animalGeolocationHistoryService.UpdateObject(_obj, CancellationToken.None) as AnimalGeolocationHistory;
+            if (history is not null)return Ok(model);
+        }
+        if (_obj is  null)
+        {
+            _obj = new AnimalGeolocationHistory(model.AnimalId, model);
             _obj.Locations.Add(model);
             var history = await _animalGeolocationHistoryService.UpdateObject(_obj, CancellationToken.None) as AnimalGeolocationHistory;
             if (history is not null)return Ok(model);

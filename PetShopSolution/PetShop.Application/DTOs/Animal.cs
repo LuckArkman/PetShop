@@ -6,7 +6,7 @@ namespace PetShop.Application.DTOs;
 
 public class Animal
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [Required, Display(Name = "Nome do Animal")]
     public string Nome { get; set; }
@@ -26,12 +26,6 @@ public class Animal
     [Display(Name = "Porte / Tamanho")]
     public string? Porte { get; set; }
     
-    [BsonRepresentation(BsonType.ObjectId)]
     [BsonElement("responsavel_id")]
     public ICollection<string> ResponsavelId { get; set; }
-
-    public Animal()
-    {
-        Id =  Guid.NewGuid().ToString();
-    }
 }
