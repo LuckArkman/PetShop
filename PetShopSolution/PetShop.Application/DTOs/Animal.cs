@@ -9,10 +9,10 @@ public class Animal
     public string Id { get; set; }
 
     [Required, Display(Name = "Nome do Animal")]
-    public string Nome { get; set; } = string.Empty;
+    public string Nome { get; set; }
 
     [Required, Display(Name = "Espécie")]
-    public string Especie { get; set; } = string.Empty;
+    public string Especie { get; set; }
 
     [Display(Name = "Raça")]
     public string? Raca { get; set; }

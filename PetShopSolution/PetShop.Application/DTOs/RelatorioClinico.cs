@@ -5,40 +5,29 @@ namespace PetShop.Application.DTOs;
 
 public class RelatorioClinico
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = string.Empty;
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [BsonElement("animalId")]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string AnimalId { get; set; } = string.Empty;
+    public string AnimalId { get; set; }
 
     [BsonElement("responsavelId")]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string ResponsavelId { get; set; } = string.Empty;
+    public string ResponsavelId { get; set; }
 
     [BsonElement("dataAtendimento")]
     public DateTime _dataAtendimento { get; set; } = DateTime.UtcNow;
 
     [BsonElement("sintomas")]
-    public string Sintomas { get; set; } = string.Empty;
+    public string Sintomas { get; set; }
 
     [BsonElement("diagnostico")]
-    public string Diagnostico { get; set; } = string.Empty;
+    public string Diagnostico { get; set; }
 
     [BsonElement("tratamento")]
-    public string Tratamento { get; set; } = string.Empty;
+    public string Tratamento { get; set; }
 
     [BsonElement("observacoes")]
     public string? Observacoes { get; set; }
 
     [BsonElement("veterinarioId")] // Quem atendeu o animal
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string VeterinarioId { get; set; } = string.Empty;
-
-    public RelatorioClinico()
-    {
-        Id =  Guid.NewGuid().ToString();
-        _dataAtendimento =  DateTime.UtcNow;
-    }
+    public string VeterinarioId { get; set; }
 }

@@ -14,8 +14,15 @@ public class QrCodeRegistroController  : ControllerBase
         _service = service;
     }
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] QrCodeRegistro model)
+    public async Task<IActionResult> Register(string id,string AnimalId)
     {
+        var model = new QrCodeRegistro
+        {
+            Id = id,
+            AnimalId = AnimalId,
+            DataGeracao = DateTime.UtcNow,
+        };
+        model.QrCodeBase64 = model.GenerateQrCodeAsBase64String();
         var register = await _service.InsetObject(model, CancellationToken.None) as QrCodeRegistro;
         return Ok(register);
     }
