@@ -24,6 +24,10 @@ builder.Services.AddScoped<IResponsavelService, ResponsavelService>();
 builder.Services.AddScoped<IRelatorioClinicoService, RelatorioClinicoService>();
 builder.Services.AddScoped<IHistoryVacinacaoService, HistoryVacinacaoService>();
 builder.Services.AddScoped<IVacinacaoService, VacinacaoService>();
+builder.Services.AddScoped<IRitmoCircadianoService, RitmoCircadianoService>();
+builder.Services.AddScoped<IHistoryFrequenciaCardiaca, HistoryFrequenciaCardiacaService>();
+builder.Services.AddScoped<IFrequenciaCardiaca, FrequenciaCardiacaService>();
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
