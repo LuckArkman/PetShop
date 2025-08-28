@@ -24,6 +24,13 @@ public class MedicoVeterinarioController  : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] MedicoVeterinario model)
     {
+        var check = await _service.FindByCRMVAsync(model.CRMV, CancellationToken.None) as MedicoVeterinario;
+        if (check is not null) return BadRequest(new
+        {
+            Success = false,
+            Token = "",
+            Message = "Veterinario ja cadastrado!"
+        });
         var register = await _service.InsetObject(model, CancellationToken.None) as MedicoVeterinario;
         return Ok(register);
     }
