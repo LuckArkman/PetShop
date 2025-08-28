@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -17,13 +18,16 @@ public class MedicoVeterinarioController  : ControllerBase
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _configuration;
     readonly IMedicoVeterinarioService _service;
-    public MedicoVeterinarioController(IMedicoVeterinarioService service)
+    public MedicoVeterinarioController(IMedicoVeterinarioService service, IConfiguration configuration)
     {
         _service = service;
+        _configuration = configuration;
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] MedicoVeterinario model)
     {
+        model.Password = GerarHashSenha(model.Password);
+        model.ConfirmPassword = model.Password;
         var check = await _service.FindByCRMVAsync(model.CRMV, CancellationToken.None) as MedicoVeterinario;
         if (check is not null) return BadRequest(new
         {
@@ -37,6 +41,7 @@ public class MedicoVeterinarioController  : ControllerBase
     [HttpGet("MedicoVeterinario")]
     public async Task<IActionResult> MedicoVeterinario(string crmv)
     {
+        
         var model = await _service.GetObject(crmv, CancellationToken.None) as MedicoVeterinario;
         return Ok(model);
     }
@@ -44,17 +49,14 @@ public class MedicoVeterinarioController  : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<LoginResult>> Login([FromBody] LoginRequest model)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(new LoginResult { Success = false, Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList() });
-        }
-
         var user = await _service.FindByCRMVAsync(model.credencial, CancellationToken.None) as MedicoVeterinario;
-        if (user == null || !BCrypt.Net.BCrypt.Verify(model.password, user.Password))
+        model.password =  GerarHashSenha(model.password);
+        Console.WriteLine($"{user == null}");
+        if (user == null || !Verify(model.password, user.Password))
         {
-            return Unauthorized(new LoginResult { Success = false, Message = "Credenciais inválidas." });
+            return Unauthorized(new { Success = false, Message = "Credenciais inválidas." });
         }
-
+        
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -82,5 +84,30 @@ public class MedicoVeterinarioController  : ControllerBase
         });
         
         return null;
+    }
+
+    private bool Verify(string modelPassword, string userPassword)
+        => modelPassword == userPassword;
+
+    string GerarHashSenha(string email)
+    {
+        // Combina o e-mail com a senha (você pode usar outro formato se preferir)
+        string entrada = $"{email}";
+
+        // Converte para bytes
+        byte[] bytesEntrada = Encoding.UTF8.GetBytes(entrada);
+
+        // Cria o hash SHA256
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            byte[] hashBytes = sha256.ComputeHash(bytesEntrada);
+
+            // Converte o hash para string hexadecimal
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hashBytes)
+                sb.Append(b.ToString("x2"));
+
+            return sb.ToString(); // Hash final em hexadecimal
+        }
     }
 }
