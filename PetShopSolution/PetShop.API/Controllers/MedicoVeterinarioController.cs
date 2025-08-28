@@ -44,17 +44,13 @@ public class MedicoVeterinarioController  : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<LoginResult>> Login([FromBody] LoginRequest model)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(new LoginResult { Success = false, Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList() });
-        }
-
         var user = await _service.FindByCRMVAsync(model.credencial, CancellationToken.None) as MedicoVeterinario;
+
         if (user == null || !BCrypt.Net.BCrypt.Verify(model.password, user.Password))
         {
-            return Unauthorized(new LoginResult { Success = false, Message = "Credenciais inválidas." });
+            return Unauthorized(new { Success = false, Message = "Credenciais inválidas." });
         }
-
+        
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
