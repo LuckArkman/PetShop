@@ -8,21 +8,21 @@ namespace PetShop.API.Controllers;
 [ApiController]
 public class RitmoCircadianoController : ControllerBase
 {
-    private readonly IAnimalService _animalService;
-    public RitmoCircadianoController(IAnimalService animalService)
+    private readonly IRitmoCircadianoService _animalService;
+    public RitmoCircadianoController(IRitmoCircadianoService animalService)
     {
         _animalService = animalService;
     }
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] Animal model)
+    public async Task<IActionResult> Register([FromBody] RitmoCircadiano model)
     {
-        var register = await _animalService.InsetObject(model, CancellationToken.None) as Animal;
+        var register = await _animalService.InsetObject(model, CancellationToken.None) as RitmoCircadiano;
         return Ok(register);
     }
     [HttpGet("animal")]
     public async Task<IActionResult> animal(string animal)
     {
-        var model = await _animalService.GetObject(animal, CancellationToken.None) as Animal;
+        var model = await _animalService.GetObject(animal, CancellationToken.None) as RitmoCircadiano;
         return Ok(model);
     }
 }

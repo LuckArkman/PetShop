@@ -48,6 +48,10 @@ public class FrequenciaCardiacaService : IFrequenciaCardiaca
             .Set(u => u.Id, _object.Id)
             .Set(u => u.AnimalId, _object.AnimalId)
             .Set(u => u.Horario, _object.Horario)
+            .Set(u => u.Peso, _object.Peso)
+            .Set(u => u.Especie, _object.Especie)
+            .Set(u => u.Raca, _object.Raca)
+            .Set(u => u.Porte, _object.Porte)
             .Set(u => u.BatimentosPorMinuto, _object.BatimentosPorMinuto)
             .Set(u => u.Observacao, _object.Observacao);
 

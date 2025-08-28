@@ -13,6 +13,7 @@ public class HistoryFrequenciaCardiacaController   : ControllerBase
     {
         _service = service;
     }
+    
     [HttpGet("animal")]
     public async Task<IActionResult> animal(string animal)
     {
