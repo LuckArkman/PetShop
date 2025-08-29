@@ -25,6 +25,13 @@ public class ResponsavelController : ControllerBase
     {
         model.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
         model.ConfirmPassword = model.Password;
+        var check = await _service.FindByEmailAsync(model.Email, CancellationToken.None) as Responsavel;
+        if (check is not null) return BadRequest(new
+        {
+            Success = false,
+            Token = "",
+            Message = "Usuario ja cadastrado!"
+        });
 
         var result = await _service.InsetObject(model, CancellationToken.None) as Responsavel;
         return Ok(new { Message = "Usuário registrado com sucesso!", User = result });
