@@ -3,8 +3,11 @@ const div_msg = document.getElementById("div_msg")
 
 btn_cad.addEventListener("click",async (e)=>{
     e.preventDefault()
-    const username_user = document.getElementById("username_user").value
+    const nome_user = document.getElementById("nome_user").value
     const email_user = document.getElementById("email_user").value
+    const crmv_user = document.getElementById("crmv_user").value
+    const especialidade_user = document.getElementById("especialidade_user").value
+    const telefone_user = document.getElementById("telefone_user").value
     const senha_user = document.getElementById("senha_user").value
     const confirm_senha_user = document.getElementById("confirm_senha_user").value
     if(senha_user!=confirm_senha_user){
@@ -15,7 +18,7 @@ btn_cad.addEventListener("click",async (e)=>{
         },2000)
         return
     }
-    if(username_user==""||email_user==""||senha_user==""||confirm_senha_user==""){
+    if(nome_user==""||email_user==""||senha_user==""||confirm_senha_user==""||crmv_user ==""||especialidade_user==""||telefone_user==""){
         div_msg.style.color = "red"
         div_msg.textContent = "Preencha todos os campos"
         setTimeout(()=>{
@@ -24,19 +27,19 @@ btn_cad.addEventListener("click",async (e)=>{
         return
     }
     try {
-        const req = await fetch("http://localhost:5280/api/Responsavel/register",{
+        const req = await fetch("http://localhost:5280/api/MedicoVeterinario/register",{
             method:"Post",
             headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({Email:email_user,Password:senha_user,ConfirmPassword:confirm_senha_user,UserName:username_user})
+            body:JSON.stringify({Nome:nome_user,CRMV:crmv_user,Password:senha_user,ConfirmPassword:confirm_senha_user,Especialidade:especialidade_user,Telefone:telefone_user,Email:email_user})
         })
         const res = await req.json()
-        if(res.Success){
+        if(res && res.Id){
             div_msg.style.color = "green"
             div_msg.textContent = "Cadastro realizado com sucesso"
             setTimeout(()=>{
-                div_msg.textContent = ""
+                div_msg.textContent = "" 
             },2000)
-            window.location.href = "../pages/Login.user.html"
+            window.location.href = "../../pages/pages_login/Login_vet.html"
         }else{
             div_msg.style.color = "red"
             div_msg.textContent = "Erro ao se cadastrar"
@@ -45,6 +48,7 @@ btn_cad.addEventListener("click",async (e)=>{
             },2000)
             return
         }
+        
         
     } catch (error) {
         div_msg.style.color = "red"
