@@ -22,12 +22,13 @@ btn_login.addEventListener("click",async(e)=>{
         })
         const res = await req.json()
         if(res.Success){
+            localStorage.setItem("token", res.Token)
             div_msg.textContent = res.Message
             div_msg.style.color = "green"
             setTimeout(()=>{
             div_msg.textContent = ""
             },2000)
-            window.location.href = "../../pages/pages_ini/Pagina_teste.html"
+            window.location.href = "../../pages/pages_ini/Dashboard.html"
         }else{
             div_msg.textContent = res.Message
             div_msg.style.color = "red"
