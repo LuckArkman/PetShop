@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Pet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="../../css/Perfil_pet.css">
+</head>
+<body>
+    <header>
+        <nav class="nav_itens">
+            <div class="header_content">
+            <div class="main_itens_header">
+                <div class="logo">
+                    <span class="class_logo">
+                        <i style="color: white;" class="fa-regular fa-heart"></i>
+                    </span>
+                    <h1>PetCare Monitor</h1>
+                </div>
+                    <div class="div_itens_01">
+                        <button class="button_item_01">
+                            <i style="color: white;" class="fa-regular fa-heart"></i>
+                            <p>Dashboard</p>
+                        </button>
+                   </div>
+                    <div class="div_itens_02">
+                        <button class="button_item_02">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <p>Localização</p>
+                        </button>
+                    </div>
+                    <div class="div_itens_03">
+                        <button class="button_item_03">
+                            <i class="fa-solid fa-user"></i>
+                            <p>Perfil do Pet</p>
+                        </button>
+                    </div>
+            </div>
+                <button id="btn_perfil" class="btn_perfil">JD</button>
+            </div>
+            <div id="card_perfil_config" class="card_perfil_config">
+                <div class="content_text">
+                   <i class="fa-solid fa-gear"></i>
+                   <p>Configurações</p> 
+                </div>
+                <div class="content_text">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <p>Sair</p> 
+                 </div>
+            </div>         
+        </nav>
+    </header>
+
+    <main>
+        <div class="main_title">
+            <div class="content_title">
+                <h1 id="title_main" class="title_main">Perfil do Pet</h1>
+                <p id="desc_main" class="desc_main">Informações completas sobre o seu pet</p>
+            </div>
+            <div class="div_pet">
+                <select id="select_pet">
+                    <option value="">Pet Atual</option>
+                </select>
+                <button>+ Novo Pet</button>
+            </div>
+        </div>
+
+        <section class="main_top">
+            <div class="main_esq">
+                <div class="avatar">
+                    <div style="font-size: 1.8em;" class="emoji" id="emoji">🐶</div>
+                </div>
+                <div class="camera">📷</div>
+                <div class="text_esq" style="margin-bottom: 2%; color: #6B7280;">
+                    <h1 id="animal_name">—</h1>
+                    <p id="race_animal">Sem Raça</p>
+                </div>
+
+                <div class="pet-stats">
+                    <div>
+                      <small class="muted">Espécie</small>
+                      <strong id="petSpecies">—</strong>
+                    </div>
+                    <div>
+                      <small class="muted">Idade</small>
+                      <strong id="petAge">—</strong>
+                    </div>
+                  </div>
+                  <div class="pet-stats">
+                    <div>
+                      <small class="muted">Peso</small>
+                      <strong id="petWeight">—</strong>
+                    </div>
+                    <div>
+                      <small class="muted">Sexo</small>
+                      <strong id="petSex">—</strong>
+                    </div>
+                    <div>
+                        <small class="muted">Altura</small>
+                        <strong id="petHeigth">—</strong>
+                    </div>
+                    <div>
+                        <small class="muted">Castrado</small>
+                        <strong id="petCastrated">—</strong>
+                    </div>
+                </div>
+                
+                <div class="info_bottom_pet">
+                    <div class="btn_info_bottom">
+                        <button>Editar Perfil Completo</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main_dir">
+                <div class="title_main_dir">
+                    <i class="fa-solid fa-heart" style="color: #68D790;"></i>
+                    <h1>Histórico de Saúde</h1>
+                </div>
+
+                <div class="card_add_vacina">
+                    <div class="text_vacina">
+                        <h1 id="h1_vacina">Vacinas</h1>
+                        <p id="p_vacina" class="p_vacina">Nenhuma página cadastrada</p>
+                    </div>
+                    <div class="button_vacina">
+                        <button class="btn_rem">Remover</button>
+                        <button class="btn_add">Adicionar</button>
+                    </div>
+                </div>
+
+                <div class="card_add_obs_med">
+                    <div class="text_obs_med">
+                        <h1 id="h1_obs_med">Observações médicas</h1>
+                        <p id="p_obs_med" class="p_obs_med">Nenhuma observação cadastrada.</p>
+                    </div>
+                    <div class="button_obs_med">
+                        <button class="btn_rem">Remover</button>
+                        <button class="btn_add">Adicionar</button>
+                    </div>
+                </div>
+
+                <div class="card_add_contato">
+                    <div class="text_contato">
+                        <h1 id="h1_contato">Observações médicas</h1>
+                        <p id="p_contato" class="p_contato">Nenhuma observação cadastrada.</p>
+                    </div>
+                    <div class="button_contato">
+                        <button class="btn_rem">Remover</button>
+                        <button class="btn_add">Adicionar</button>
+                    </div>
+                </div>
+                
+                <div class="card_obs_med">
+                    <h1>Observações Médicas</h1>
+                    <div class="contain_obs">
+                        <ul class="itens_obs">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
