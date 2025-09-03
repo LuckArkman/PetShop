@@ -6,7 +6,7 @@ namespace PetShop.Application.DTOs;
 
 public class Animal
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string id { get; set; } = Guid.NewGuid().ToString();
 
     [Required, Display(Name = "Nome do Animal")]
     public string Nome { get; set; }
@@ -16,6 +16,10 @@ public class Animal
 
     [Display(Name = "Raça")]
     public string? Raca { get; set; }
+    
+    public string? Sexo { get; set; }
+    
+    public bool? Castrado { get; set; }
 
     [Range(0, 100), Display(Name = "Idade (anos)")]
     public int Idade { get; set; }
