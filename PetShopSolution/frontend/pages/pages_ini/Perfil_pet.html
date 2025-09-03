@@ -62,11 +62,11 @@
                 <select id="select_pet">
                     <option value="">Pet Atual</option>
                 </select>
-                <button>+ Novo Pet</button>
+                <button id="btn_add_pet">+ Novo Pet</button>
             </div>
         </div>
 
-        <section class="main_top">
+        <section class="main_top" style="margin-bottom: 5%;">
             <div class="main_esq">
                 <div class="avatar">
                     <div style="font-size: 1.8em;" class="emoji" id="emoji">🐶</div>
@@ -119,49 +119,101 @@
                     <h1>Histórico de Saúde</h1>
                 </div>
 
-                <div class="card_add_vacina">
+                <div class="card_add_info">
                     <div class="text_vacina">
                         <h1 id="h1_vacina">Vacinas</h1>
-                        <p id="p_vacina" class="p_vacina">Nenhuma página cadastrada</p>
+                        <p id="p_vacina" class="p_vacina">Nenhuma vacina cadastrada</p>
                     </div>
-                    <div class="button_vacina">
+                    <div class="button_add_info">
                         <button class="btn_rem">Remover</button>
                         <button class="btn_add">Adicionar</button>
                     </div>
                 </div>
 
-                <div class="card_add_obs_med">
+                <div class="card_add_info">
                     <div class="text_obs_med">
                         <h1 id="h1_obs_med">Observações médicas</h1>
                         <p id="p_obs_med" class="p_obs_med">Nenhuma observação cadastrada.</p>
                     </div>
-                    <div class="button_obs_med">
+                    <div class="button_add_info">
                         <button class="btn_rem">Remover</button>
                         <button class="btn_add">Adicionar</button>
                     </div>
                 </div>
 
-                <div class="card_add_contato">
+                <div class="card_add_info">
                     <div class="text_contato">
-                        <h1 id="h1_contato">Observações médicas</h1>
-                        <p id="p_contato" class="p_contato">Nenhuma observação cadastrada.</p>
+                        <h1 id="h1_contato">Contato de emergência</h1>
+                        <p id="p_contato" class="p_contato">Nenhum contato registrado.</p>
                     </div>
-                    <div class="button_contato">
+                    <div class="button_add_info">
                         <button class="btn_rem">Remover</button>
                         <button class="btn_add">Adicionar</button>
                     </div>
                 </div>
                 
-                <div class="card_obs_med">
+                <!--<div class="card_obs_med">
                     <h1>Observações Médicas</h1>
                     <div class="contain_obs">
                         <ul class="itens_obs">
 
                         </ul>
                     </div>
-                </div>
+                </div>-->
             </div>
         </section>
     </main>
+    <!--Modal de cadastro pet_minimo-->
+    <div class="modal-backdrop" id="backdropSimple">
+        <div class="modal" role="dialog" aria-modal="true">
+          <h3>Cadastrar pet - informações essenciais</h3>
+          <p class="muted">Somente os campos mínimos para criar o perfil.</p>
+          <div class="form-grid" style="margin-top:12px">
+            <div>
+              <label>Nome</label>
+              <input id="fName" placeholder="Ex: Max" />
+            </div>
+            <div>
+              <label>Espécie</label>
+              <select id="fSpecies"><option value="">Selecione</option><option>Canino</option><option>Felino</option></select>
+            </div>
+            <div>
+              <label>Raça</label>
+              <input id="fBreed" placeholder="Ex: Golden Retriever" />
+            </div>
+            <div>
+              <label>Idade</label>
+              <input id="fAge" placeholder="3 anos" />
+            </div>
+            <div>
+              <label>Peso</label>
+              <input id="fWeight" placeholder="28 kg" />
+            </div>
+            <div>
+              <label>Porte</label>
+              <select id="fPorte">
+                <option value="">Selecione</option>
+                <option>Pequeno</option>
+                <option>Médio</option>
+                <option>Grande</option>
+            </select>
+            </div>
+            <div>
+              <label>Sexo</label>
+              <select id="fSex"><option value="">Selecione</option><option>Macho</option><option>Fêmea</option></select>
+            </div>
+            <div>
+              <label>Castrado?</label>
+              <select id="fCastrado"><option value="">Selecione</option><option>Sim</option><option>Não</option></select>
+            </div>
+          </div>
+          <div id="div_msg" style="text-align: center;"></div>
+          <div class="modal-actions">
+            <button id="cancelSimple" class="btn-ghost">Cancelar</button>
+            <button id="saveSimple">Criar perfil</button>
+          </div>
+        </div>
+      </div>
 </body>
 </html>
+<script src="../../js/Script_perfil_pet/Cad_pet.js"></script>
