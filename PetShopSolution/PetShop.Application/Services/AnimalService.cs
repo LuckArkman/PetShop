@@ -20,7 +20,7 @@ public class AnimalService : IAnimalService
         var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
 
         // Create a filter to find the document by Id
-        var filter = Builders<Animal>.Filter.Eq(u => u.Id, _object);
+        var filter = Builders<Animal>.Filter.Eq(u => u.id, _object);
 
         // Find the document matching the filter
         var character = collection.Find(filter).FirstOrDefault();
@@ -38,11 +38,11 @@ public class AnimalService : IAnimalService
 
     public async Task<object?> UpdateObject(Animal _object, CancellationToken cancellationToken)
     {
-        var obj = await GetObject(_object.Id, CancellationToken.None) as Animal;
+        var obj = await GetObject(_object.id, CancellationToken.None) as Animal;
         var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
 
         // Create a filter to find the document by Id
-        var filter = Builders<Animal>.Filter.Eq(u => u.Id, _object.Id);
+        var filter = Builders<Animal>.Filter.Eq(u => u.id, _object.id);
 
         var update = Builders<Animal>.Update
             .Set(u => u.Nome, _object.Nome)
@@ -64,7 +64,7 @@ public class AnimalService : IAnimalService
         {
             return null;
         }
-        var ob = await GetObject(_object.Id, CancellationToken.None) as Animal;
+        var ob = await GetObject(_object.id, CancellationToken.None) as Animal;
         return ob;
     }
 
