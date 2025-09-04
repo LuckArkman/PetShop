@@ -18,7 +18,7 @@ public class VacinacaoService : IVacinacaoService
     {
         var collection = _db.GetDatabase().GetCollection<Vacinacao>("Vacinacao");
         
-        var filter = Builders<Vacinacao>.Filter.Eq(u => u.Id, _object);
+        var filter = Builders<Vacinacao>.Filter.Eq(u => u.id, _object);
         
         var character = collection.Find(filter).FirstOrDefault();
 
@@ -34,14 +34,14 @@ public class VacinacaoService : IVacinacaoService
 
     public async Task<object?> UpdateObject(Vacinacao _object, CancellationToken cancellationToken)
     {
-        var obj = await GetObject(_object.Id, CancellationToken.None) as Vacinacao;
+        var obj = await GetObject(_object.id, CancellationToken.None) as Vacinacao;
         var collection = _db.GetDatabase().GetCollection<Vacinacao>("Animais");
 
         // Create a filter to find the document by Id
-        var filter = Builders<Vacinacao>.Filter.Eq(u => u.Id, _object.Id);
+        var filter = Builders<Vacinacao>.Filter.Eq(u => u.id, _object.id);
 
         var update = Builders<Vacinacao>.Update
-            .Set(u => u.Id, _object.Id)
+            .Set(u => u.id, _object.id)
             .Set(u => u.AnimalId, _object.AnimalId)
             .Set(u => u._dataVacinacao, _object._dataVacinacao)
             .Set(u => u.Tipo, _object.Tipo)
