@@ -51,7 +51,7 @@ public class AnimalService : IAnimalService
             .Set(u => u.Idade, _object.Idade)
             .Set(u => u.Peso, _object.Peso)
             .Set(u => u.Porte,  _object.Porte)
-            .Set(u => u.ResponsavelId, _object.ResponsavelId);
+            .Set(u => u.responsaveis, _object.responsaveis);
 
         // Perform the update
         var result = collection.UpdateOne(filter, update);

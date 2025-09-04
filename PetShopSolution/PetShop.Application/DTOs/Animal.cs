@@ -30,6 +30,6 @@ public class Animal
     [Display(Name = "Porte / Tamanho")]
     public string? Porte { get; set; }
     
-    [BsonElement("responsavel_id")]
-    public ICollection<string> ResponsavelId { get; set; }
+    [BsonElement("responsaveis")]
+    public ICollection<string> responsaveis { get; set; }
 }
