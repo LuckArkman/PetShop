@@ -3,9 +3,10 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace PetShop.Application.DTOs;
 
-public class Vacinacao
+public class Vacina
 {
     public string id { get; set; } = Guid.NewGuid().ToString();
+    
     public string AnimalId { get; set; }
 
     [Required, DataType(DataType.Date), Display(Name = "Data da Vacinação")]
