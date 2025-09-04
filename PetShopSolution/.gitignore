@@ -1,0 +1,7 @@
+# .gitignore
+**/bin/
+**/obj/
+*.dll
+*.pdb
+*.cache
+*.sourcelink.json
