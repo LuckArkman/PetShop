@@ -21,6 +21,14 @@ public class AnimalController : ControllerBase
         var register = await _animalService.InsetObject(model, CancellationToken.None) as Animal;
         return Ok(register);
     }
+
+    [HttpPost("update")]
+    public async Task<IActionResult> Update([FromBody] Animal model)
+    {
+        var register = await _animalService.UpdateObject(model, CancellationToken.None) as Animal;
+        return Ok(register);
+    }
+
     [HttpGet("animal")]
     public async Task<IActionResult> animal(string animal)
     {
