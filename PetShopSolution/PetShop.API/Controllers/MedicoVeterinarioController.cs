@@ -53,6 +53,14 @@ public class MedicoVeterinarioController  : ControllerBase
         return Ok(model);
     }
     
+    [HttpGet("MedicoVeterinarios")]
+    public async Task<IActionResult> MedicoVeterinarios()
+    {
+
+        var result = await _service.GetAllMedicoVeterinario(CancellationToken.None);
+        return Ok(result);
+    }
+    
     [HttpPost("login")]
     public async Task<ActionResult<LoginResult>> Login([FromBody] LoginRequest model)
     {
