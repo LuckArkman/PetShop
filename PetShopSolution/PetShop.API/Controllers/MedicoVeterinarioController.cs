@@ -38,6 +38,13 @@ public class MedicoVeterinarioController  : ControllerBase
         var register = await _service.InsetObject(model, CancellationToken.None) as MedicoVeterinario;
         return Ok(register);
     }
+    [HttpPost("update")]
+    public async Task<IActionResult> Update([FromBody] MedicoVeterinario model)
+    {
+        var register = await _service.UpdateObject(model, CancellationToken.None) as MedicoVeterinario;
+        return Ok(register);
+    }
+    
     [HttpGet("MedicoVeterinario")]
     public async Task<IActionResult> MedicoVeterinario(string crmv)
     {
