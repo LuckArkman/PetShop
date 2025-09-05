@@ -22,10 +22,19 @@ public class AnimalController : ControllerBase
         return Ok(register);
     }
 
-    [HttpPost("update")]
+    [HttpPut("update")]
     public async Task<IActionResult> Update([FromBody] Animal model)
     {
         var register = await _animalService.UpdateObject(model, CancellationToken.None) as Animal;
+        return Ok(register);
+    }
+    
+    [HttpDelete("delete")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var register = await _animalService.GetObject(id, CancellationToken.None) as Animal;
+        if (register == null) return BadRequest();
+        await _animalService.RemoveObject(register, CancellationToken.None);
         return Ok(register);
     }
 

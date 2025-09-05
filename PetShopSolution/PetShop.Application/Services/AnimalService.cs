@@ -69,5 +69,7 @@ public class AnimalService : IAnimalService
     }
 
     public async Task RemoveObject(object _object, CancellationToken cancellationToken)
-        => await Task.FromResult<object?>(null);
+    {
+        
+    }
 }
