@@ -44,6 +44,14 @@ public class ResponsavelController : ControllerBase
         var result = await _service.UpdateObject(model, CancellationToken.None) as Responsavel;
         return Ok(new { Message = "Usuário atualizado com sucesso!", User = result });
     }
+    
+    [HttpGet("Responsaveis")]
+    public async Task<IActionResult> Responsaveis()
+    {
+
+        var result = await _service.GetAllResponsavel(CancellationToken.None);
+        return Ok(result);
+    }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest model)

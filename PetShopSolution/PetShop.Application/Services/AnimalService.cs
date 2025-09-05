@@ -15,6 +15,18 @@ public class AnimalService : IAnimalService
         _animalDb = new AnimalDBMongo(Singleton.Instance().src, "Animal");
         _animalDb.GetOrCreateDatabase();
     }
+    public async Task<List<Animal>?> GetAllAnimals(CancellationToken cancellationToken)
+    {
+        var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
+
+        // Busca todos os animais
+        var animals = await collection
+            .Find(Builders<Animal>.Filter.Empty)
+            .ToListAsync(cancellationToken);
+
+        return animals;
+    }
+    
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
         var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
@@ -70,6 +82,29 @@ public class AnimalService : IAnimalService
 
     public async Task RemoveObject(object _object, CancellationToken cancellationToken)
     {
-        
+        var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
+
+        // Verifica se o objeto passado é um Animal ou uma string com o id
+        string id = _object switch
+        {
+            Animal animal => animal.id,
+            string strId => strId,
+            _ => throw new ArgumentException("O objeto deve ser um Animal ou um id válido.")
+        };
+
+        // Cria filtro para encontrar o documento pelo id
+        var filter = Builders<Animal>.Filter.Eq(u => u.id, id);
+
+        // Remove o documento
+        var result = await collection.DeleteOneAsync(filter, cancellationToken);
+
+        if (result.DeletedCount > 0)
+        {
+            Console.WriteLine($"Animal com id {id} removido com sucesso.");
+        }
+        else
+        {
+            Console.WriteLine($"Nenhum animal encontrado com id {id}.");
+        }
     }
 }

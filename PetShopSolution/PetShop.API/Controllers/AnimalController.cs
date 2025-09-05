@@ -37,6 +37,13 @@ public class AnimalController : ControllerBase
         await _animalService.RemoveObject(register, CancellationToken.None);
         return Ok(register);
     }
+    
+    [HttpGet("animais")]
+    public async Task<IActionResult> Animais(string id)
+    {
+        var register = await _animalService.GetAllAnimals(CancellationToken.None);
+        return Ok(register);
+    }
 
     [HttpGet("animal")]
     public async Task<IActionResult> animal(string animal)

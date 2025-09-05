@@ -14,6 +14,19 @@ public class MedicoVeterinarioService : IMedicoVeterinarioService
         _db = new MedicoVeterinarioDB(Singleton.Instance().src, "MedicoVeterinario");
         _db.GetOrCreateDatabase();
     }
+
+    public async Task<List<MedicoVeterinario>?> GetAllMedicoVeterinario(CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<MedicoVeterinario>("MedicoVeterinario");
+
+        // Busca todos os animais
+        var _objts = await collection
+            .Find(Builders<MedicoVeterinario>.Filter.Empty)
+            .ToListAsync(cancellationToken);
+
+        return _objts;
+    }
+
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
         var collection = _db.GetDatabase().GetCollection<MedicoVeterinario>("MedicoVeterinario");

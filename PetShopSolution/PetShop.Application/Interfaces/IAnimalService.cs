@@ -4,6 +4,7 @@ namespace PetShop.Application.Interfaces;
 
 public interface IAnimalService
 {
+    Task<List<Animal>?> GetAllAnimals(CancellationToken cancellationToken);
     Task<object?> GetObject(string _object, CancellationToken cancellationToken);
 
     Task<object?> InsetObject(Animal _object, CancellationToken cancellationToken);

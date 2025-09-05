@@ -15,6 +15,19 @@ public class ResponsavelService : IResponsavelService
         _dbMongo = new ResponsavelDBMongo(Singleton.Instance().src, "Responsavel");
         _dbMongo.GetOrCreateDatabase();
     }
+
+    public async Task<List<Responsavel>?> GetAllResponsavel(CancellationToken cancellationToken)
+    {
+        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
+
+        // Busca todos os animais
+        var _objts = await collection
+            .Find(Builders<Responsavel>.Filter.Empty)
+            .ToListAsync(cancellationToken);
+
+        return _objts;
+    }
+
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
         var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
