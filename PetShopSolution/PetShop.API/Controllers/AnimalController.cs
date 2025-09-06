@@ -39,7 +39,7 @@ public class AnimalController : ControllerBase
     }
     
     [HttpGet("animais")]
-    public async Task<IActionResult> Animais(string id)
+    public async Task<IActionResult> Animais()
     {
         var register = await _animalService.GetAllAnimals(CancellationToken.None);
         return Ok(register);
