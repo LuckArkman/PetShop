@@ -9,11 +9,13 @@ namespace PetShop.Application.Services;
 public class ResponsavelService : IResponsavelService
 {
     public ResponsavelDBMongo _dbMongo { get; set; }
+    private readonly IMongoCollection<Responsavel> _collection;
 
     public ResponsavelService()
     {
         _dbMongo = new ResponsavelDBMongo(Singleton.Instance().src, "Responsavel");
         _dbMongo.GetOrCreateDatabase();
+        _collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
     }
 
     public async Task<List<Responsavel>?> GetAllResponsavel(CancellationToken cancellationToken)
@@ -34,7 +36,7 @@ public class ResponsavelService : IResponsavelService
 
         // Create a filter to find the document by Id
         var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, _object);
-        
+
         // Find the document matching the filter
         var _responsavel = collection.Find(filter).FirstOrDefault();
 
@@ -63,7 +65,7 @@ public class ResponsavelService : IResponsavelService
             .Set(u => u.LastName, _object.LastName)
             .Set(u => u.CPF, _object.CPF)
             .Set(u => u.RG, _object.RG)
-            .Set(u => u.Address,  _object.Address)
+            .Set(u => u.Address, _object.Address)
             .Set(u => u.City, _object.City)
             .Set(u => u.State, _object.State)
             .Set(u => u.ZipCode, _object.ZipCode)
@@ -81,14 +83,20 @@ public class ResponsavelService : IResponsavelService
         {
             return null;
         }
+
         var ob = await GetObject(_object.Id, CancellationToken.None) as Animal;
         return ob;
     }
 
-    public async Task RemoveObject(object _object, CancellationToken cancellationToken)
-        => await Task.FromResult<object?>(null);
+    public async Task<bool> RemoveAsync(string _object, CancellationToken cancellationToken)
+    {
+        var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, _object);
+        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
 
-    public async Task<object?> FindByEmailAsync(string modelCredencial, CancellationToken cancellationToken)
+        return result.DeletedCount > 0;  
+    }
+
+public async Task<object?> FindByEmailAsync(string modelCredencial, CancellationToken cancellationToken)
     {
         var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
 
