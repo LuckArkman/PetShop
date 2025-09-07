@@ -9,10 +9,12 @@ namespace PetShop.Application.Services;
 public class MedicoVeterinarioService : IMedicoVeterinarioService
 {
     public MedicoVeterinarioDB _db { get; set; }
+    private readonly IMongoCollection<MedicoVeterinario> _collection;
     public MedicoVeterinarioService()
     {
         _db = new MedicoVeterinarioDB(Singleton.Instance().src, "MedicoVeterinario");
         _db.GetOrCreateDatabase();
+        _collection = _db.GetDatabase().GetCollection<MedicoVeterinario>("MedicoVeterinario");
     }
 
     public async Task<List<MedicoVeterinario>?> GetAllMedicoVeterinario(CancellationToken cancellationToken)
@@ -81,12 +83,13 @@ public class MedicoVeterinarioService : IMedicoVeterinarioService
         var ob = await GetObject(_object.Id, CancellationToken.None) as MedicoVeterinario;
         return ob;
     }
-    
-    
 
-    public Task RemoveObject(object _object, CancellationToken cancellationToken)
+    public async Task<bool> RemoveAsync(object _object, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var filter = Builders<MedicoVeterinario>.Filter.Eq(u => u.CRMV, _object);
+        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
+
+        return result.DeletedCount > 0;  
     }
 
     public async Task<object?> FindByCRMVAsync(string modelCredencial, CancellationToken cancellationToken)

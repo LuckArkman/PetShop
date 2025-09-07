@@ -52,6 +52,15 @@ public class ResponsavelController : ControllerBase
         var result = await _service.GetAllResponsavel(CancellationToken.None);
         return Ok(result);
     }
+    
+    [HttpDelete("delete")]
+    public async Task<IActionResult> Delete(string mail)
+    {
+        var register = await _service.GetObject(mail, CancellationToken.None) as Responsavel;
+        if (register == null) return BadRequest();
+        var rm = await _service.RemoveAsync(register.Email, CancellationToken.None);
+        return Ok(register);
+    }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest model)

@@ -53,6 +53,15 @@ public class MedicoVeterinarioController  : ControllerBase
         return Ok(model);
     }
     
+    [HttpDelete("delete")]
+    public async Task<IActionResult> Delete(string crmv)
+    {
+        var register = await _service.GetObject(crmv, CancellationToken.None) as MedicoVeterinario;
+        if (register == null) return BadRequest();
+        var rm = await _service.RemoveAsync(register, CancellationToken.None);
+        return Ok(register);
+    }
+    
     [HttpGet("MedicoVeterinarios")]
     public async Task<IActionResult> MedicoVeterinarios()
     {
