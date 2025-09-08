@@ -107,4 +107,19 @@ public class AnimalService : IAnimalService
             Console.WriteLine($"Nenhum animal encontrado com id {id}.");
         }
     }
+
+    public async Task<object?> GetAnimalsInList(ICollection<string> ids, CancellationToken cancellationToken)
+    {
+        var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
+
+        // Cria um filtro para pegar apenas os animais cujo id esteja na lista recebida
+        var filter = Builders<Animal>.Filter.In(a => a.id, ids);
+
+        // Busca todos os animais que correspondem
+        var animals = await collection
+            .Find(filter)
+            .ToListAsync(cancellationToken);
+
+        return animals;
+    }
 }

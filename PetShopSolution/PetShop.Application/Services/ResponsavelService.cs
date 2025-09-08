@@ -42,6 +42,19 @@ public class ResponsavelService : IResponsavelService
 
         return _responsavel as Responsavel;
     }
+    
+    public async Task<object?> GetResponsavelId(string _object, CancellationToken cancellationToken)
+    {
+        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
+
+        // Create a filter to find the document by Id
+        var filter = Builders<Responsavel>.Filter.Eq(u => u.Id, _object);
+
+        // Find the document matching the filter
+        var _responsavel = collection.Find(filter).FirstOrDefault();
+
+        return _responsavel as Responsavel;
+    }
 
     public async Task<object?> InsetObject(Responsavel _object, CancellationToken cancellationToken)
     {
