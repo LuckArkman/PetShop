@@ -9,6 +9,8 @@ public class Cirurgia
     public TipoCirurgia Tipo { get; set; } = TipoCirurgia.Outro;
     public string? Motivo { get; set; }
     public string? ProcedimentoRealizado { get; set; }
+    public ICollection<Relatorio> relatorios { get; set; }
     public string? PosOperatorioAcompanhamento { get; set; }
     public DateTime? DataAlta { get; set; }
+    
 }
