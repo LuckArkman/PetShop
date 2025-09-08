@@ -13,10 +13,14 @@ public class ResponsavelController : ControllerBase
 {
     private readonly IResponsavelService _service;
     private readonly IConfiguration _configuration;
+    private readonly IAnimalService _animalService;
 
-    public ResponsavelController(IResponsavelService service, IConfiguration configuration)
+    public ResponsavelController(IResponsavelService service,
+        IAnimalService animalService,
+        IConfiguration configuration)
     {
         _service = service;
+        _animalService = animalService;
         _configuration = configuration;
     }
 
@@ -51,6 +55,19 @@ public class ResponsavelController : ControllerBase
 
         var result = await _service.GetAllResponsavel(CancellationToken.None);
         return Ok(result);
+    }
+    
+    [HttpGet("animais")]
+    public async Task<IActionResult> Animais(string id)
+    {
+        var register = await _service.GetObject(id, CancellationToken.None) as Responsavel;
+        var animals = register.Animais;
+        if (animals is not null)
+        {
+            var animalsInList = _animalService.GetAnimalsInList(animals, CancellationToken.None);
+            return Ok(animalsInList);
+        }
+        return Ok(animals);
     }
     
     [HttpDelete("delete")]
