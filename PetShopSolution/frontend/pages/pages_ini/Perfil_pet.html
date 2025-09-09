@@ -68,10 +68,9 @@
 
         <section class="main_top" style="margin-bottom: 5%;">
             <div class="main_esq">
-                <div class="avatar">
+                <div class="avatar" id="avatar">
                     <div style="font-size: 1.8em;" class="emoji" id="emoji">🐶</div>
                 </div>
-                <div class="camera">📷</div>
                 <div class="text_esq" style="margin-bottom: 2%; color: #6B7280;">
                     <h1 id="animal_name">—</h1>
                     <p id="race_animal">Sem Raça</p>
@@ -97,18 +96,19 @@
                       <strong id="petSex">—</strong>
                     </div>
                     <div>
-                        <small class="muted">Altura</small>
-                        <strong id="petHeigth">—</strong>
+                        <small class="muted">Porte</small>
+                        <strong id="petPorte">—</strong>
                     </div>
                     <div>
                         <small class="muted">Castrado</small>
                         <strong id="petCastrated">—</strong>
                     </div>
                 </div>
-                
-                <div class="info_bottom_pet">
+
+                <div id="info_bottom_pet" class="info_bottom_pet" style="display: none;">
                     <div class="btn_info_bottom">
-                        <button>Editar Perfil Completo</button>
+                        <button class="btn_add_pet" id="btn_att_pet">Atualizar Pet</button>
+                        <button class="btn_remove_pet" id="btn_remove_pet">Excluir Pet</button>
                     </div>
                 </div>
             </div>
@@ -121,34 +121,39 @@
 
                 <div class="card_add_info">
                     <div class="text_vacina">
-                        <h1 id="h1_vacina">Vacinas</h1>
+                        <div class="accordion-header" id="toggleVacinas">
+                            <h1 id="h1_vacina">Vacinas</h1>
+                            <span id="vacinaCount">(0)</span>
+                        </div>
                         <p id="p_vacina" class="p_vacina">Nenhuma vacina cadastrada</p>
                     </div>
                     <div class="button_add_info">
-                        <button class="btn_rem">Remover</button>
-                        <button class="btn_add">Adicionar</button>
+                        <button id="btn_add_vacina" class="btn_add_vacina">Adicionar</button>
                     </div>
                 </div>
 
                 <div class="card_add_info">
                     <div class="text_obs_med">
-                        <h1 id="h1_obs_med">Observações médicas</h1>
+                        <div class="accordion-header" id="toggleObs">
+                            <h1 id="h1_Obs">Observações Médica</h1>
+                            <span id="obsCount">(0)</span>
+                        </div>
                         <p id="p_obs_med" class="p_obs_med">Nenhuma observação cadastrada.</p>
                     </div>
                     <div class="button_add_info">
-                        <button class="btn_rem">Remover</button>
-                        <button class="btn_add">Adicionar</button>
+                        <button id="btn_add_obs" class="btn_add">Adicionar</button>
                     </div>
                 </div>
 
                 <div class="card_add_info">
                     <div class="text_contato">
-                        <h1 id="h1_contato">Contato de emergência</h1>
-                        <p id="p_contato" class="p_contato">Nenhum contato registrado.</p>
+                        <div class="accordion-header" id="toggleContat">
+                            <h1 id="h1_Contato">Contato</h1>
+                            <span id="contatoCount">(0)</span>
+                        </div>
                     </div>
                     <div class="button_add_info">
-                        <button class="btn_rem">Remover</button>
-                        <button class="btn_add">Adicionar</button>
+                        <button id="btn_add_contato" class="btn_add">Adicionar</button>
                     </div>
                 </div>
                 
@@ -213,7 +218,168 @@
             <button id="saveSimple">Criar perfil</button>
           </div>
         </div>
+      </div> 
+
+  <!--Modal card vacina-->
+  <div class="modal-backdrop" id="backdropVacina">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3>Cadastrar vacina</h3>
+      <p class="muted">Preencha os dados da vacina aplicada.</p>
+      <div class="form-grid" style="margin-top:12px">
+        <div>
+          <label>Nome da Vacina</label>
+          <input id="vacinaNome" placeholder="Ex: V10" />
+        </div>
+        <div>
+          <label>Data da Aplicação</label>
+          <input type="date" id="vacinaData" />
+        </div>
+        <div>
+          <label>Veterinário</label>
+          <input id="vacinaVet" placeholder="Ex: Dr. Silva" />
+        </div>
       </div>
+      <div class="modal-actions">
+        <button id="cancelVacina" class="btn-ghost">Cancelar</button>
+        <button id="saveVacina">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+
+   <!-- Modal de Visualização de Vacinas -->
+   <div class="modal-backdrop" id="backdropVacinasView">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3>Vacinas Cadastradas</h3>
+      <ul id="lista_vacinas_view" class="lista_vacinas_modal">
+        <!-- Vacinas serão inseridas via JS -->
+      </ul>
+      <div class="modal-actions">
+        <button id="closeVacinasView" class="btn-ghost">Fechar</button>
+      </div>
+    </div>
+  </div>     
+
+  <!-- Modal para cadastrar Observação Médica -->
+<div class="modal-backdrop" id="backdropObs">
+    <div class="modal" role="dialog" aria-modal="true">
+        <h3>Cadastrar Observação Médica</h3>
+        <p class="muted">Preencha os dados da observação.</p>
+        <div class="form-grid" style="margin-top:12px">
+            <div>
+                <label>Descrição</label>
+                <input id="obsDescricao" placeholder="Ex: Pet apresentou febre..." />
+            </div>
+            <div>
+                <label>Data</label>
+                <input type="date" id="obsData" />
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button id="cancelObs" class="btn-ghost">Cancelar</button>
+            <button id="saveObs">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de visualização de Observações Médicas -->
+<div class="modal-backdrop" id="backdropObsMedView">
+    <div class="modal" role="dialog" aria-modal="true">
+        <h3>Observações Médicas</h3>
+        <ul id="lista_obs_med" class="lista_vacinas_modal">
+            <!-- Observações serão inseridas via JS -->
+        </ul>
+        <div class="modal-actions">
+            <button id="closeObsMedView" class="btn-ghost">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para cadastrar Contato de Emergência -->
+<div class="modal-backdrop" id="backdropContato">
+    <div class="modal" role="dialog" aria-modal="true">
+        <h3>Cadastrar Contato de Emergência</h3>
+        <p class="muted">Informe os dados do contato.</p>
+        <div class="form-grid" style="margin-top:12px">
+            <div>
+                <label>Nome</label>
+                <input id="contatoNome" placeholder="Ex: João Silva" />
+            </div>
+            <div>
+                <label>Telefone</label>
+                <input id="contatoTelefone" placeholder="(99) 99999-9999" />
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button id="cancelContato" class="btn-ghost">Cancelar</button>
+            <button id="saveContato">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de visualização de Contatos de Emergência -->
+<div class="modal-backdrop" id="backdropContatoView">
+    <div class="modal" role="dialog" aria-modal="true">
+        <h3>Contatos de Emergência</h3>
+        <ul id="lista_contato" class="lista_vacinas_modal">
+            <!-- Contatos serão inseridos via JS -->
+        </ul>
+        <div class="modal-actions">
+            <button id="closeContatoView" class="btn-ghost">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!--Modal de Atualização pet -->
+<div id="backdropUpdate" class="modal-backdrop" style="display:none;">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h2>Atualizar Pet</h2>
+      <form id="formUpdatePet">
+        <label for="updateName">Nome:</label>
+        <input type="text" id="updateName" required>
+  
+        <label for="updateSpecies">Espécie:</label>
+        <input type="text" id="updateSpecies" required>
+  
+        <label for="updateBreed">Raça:</label>
+        <input type="text" id="updateBreed" required>
+  
+        <label for="updateAge">Idade:</label>
+        <input type="number" id="updateAge" required>
+  
+        <label for="updateWeight">Peso (kg):</label>
+        <input type="number" id="updateWeight" required>
+  
+        <label for="updatePorte">Porte:</label>
+        <select id="updatePorte" required>
+          <option value="">Selecione</option>
+          <option value="Pequeno">Pequeno</option>
+          <option value="Médio">Médio</option>
+          <option value="Grande">Grande</option>
+        </select>
+  
+        <label for="updateSex">Sexo:</label>
+        <select id="updateSex" required>
+          <option value="">Selecione</option>
+          <option value="Macho">Macho</option>
+          <option value="Fêmea">Fêmea</option>
+        </select>
+  
+        <label for="updateCastrado">Castrado:</label>
+        <select id="updateCastrado" required>
+          <option value="">Selecione</option>
+          <option value="Sim">Sim</option>
+          <option value="Não">Não</option>
+        </select>
+  
+        <div class="modal-buttons" style="margin-top: 4%;">
+          <button type="button" id="cancelUpdate">Cancelar</button>
+          <button type="submit" id="saveUpdate">Atualizar Pet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>
 <script src="../../js/Script_perfil_pet/Cad_pet.js"></script>
