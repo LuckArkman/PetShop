@@ -56,20 +56,20 @@ public class ResponsavelController : ControllerBase
         var result = await _service.GetAllResponsavel(CancellationToken.None);
         return Ok(result);
     }
-    
+
     [HttpGet("animais")]
     public async Task<IActionResult> Animais(string mail)
     {
         var register = await _service.GetObject(mail, CancellationToken.None) as Responsavel;
-        Animal[] _animals = new Animal[]{};
-        var animals = register.Animais;
-        if (animals.Count > 0)
+        if (register?.Animais == null || register.Animais.Count == 0)
         {
-            var animalsInList = _animalService.GetAnimalsInList(animals, CancellationToken.None);
-            return Ok(animalsInList);
+            return Ok(Array.Empty<object>());
         }
-        return Ok(_animals);
+
+        var animals = await _animalService.GetAnimalsInList(register.Animais, CancellationToken.None);
+        return Ok(animals);
     }
+
     
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete(string mail)
