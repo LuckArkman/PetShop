@@ -58,16 +58,17 @@ public class ResponsavelController : ControllerBase
     }
     
     [HttpGet("animais")]
-    public async Task<IActionResult> Animais(string id)
+    public async Task<IActionResult> Animais(string mail)
     {
-        var register = await _service.GetObject(id, CancellationToken.None) as Responsavel;
+        var register = await _service.GetObject(mail, CancellationToken.None) as Responsavel;
+        Animal[] _animals = new Animal[]{};
         var animals = register.Animais;
-        if (animals is not null)
+        if (animals.Count > 0)
         {
             var animalsInList = _animalService.GetAnimalsInList(animals, CancellationToken.None);
             return Ok(animalsInList);
         }
-        return Ok(animals);
+        return Ok(_animals);
     }
     
     [HttpDelete("delete")]
