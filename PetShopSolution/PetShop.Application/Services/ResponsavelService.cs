@@ -30,12 +30,11 @@ public class ResponsavelService : IResponsavelService
         return _objts;
     }
 
-    public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
+    public async Task<object?> GetObject(string mail, CancellationToken cancellationToken)
     {
         var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
-
-        // Create a filter to find the document by Id
-        var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, _object);
+        
+        var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, mail);
 
         // Find the document matching the filter
         var _responsavel = collection.Find(filter).FirstOrDefault();
