@@ -29,7 +29,7 @@ public class ResponsavelController : ControllerBase
     {
         model.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
         model.ConfirmPassword = model.Password;
-        var check = await _service.FindByEmailAsync(model.Email, CancellationToken.None) as Responsavel;
+        var check = await _service.GetObject(model.Email!, CancellationToken.None) as Responsavel;
         if (check is not null) return BadRequest(new
         {
             Success = false,
@@ -46,7 +46,16 @@ public class ResponsavelController : ControllerBase
     {
 
         var result = await _service.UpdateObject(model, CancellationToken.None) as Responsavel;
+        Console.WriteLine($"{result == null}");
         return Ok(new { Message = "Usuário atualizado com sucesso!", User = result });
+    }
+    
+    [HttpGet("Responsavel")]
+    public async Task<IActionResult> Responsavel(string Id)
+    {
+
+        var result = await _service.GetResponsavelId(Id, CancellationToken.None) as Responsavel;
+        return Ok(result);
     }
     
     [HttpGet("Responsaveis")]
