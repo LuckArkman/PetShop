@@ -65,11 +65,15 @@ public class ResponsavelService : IResponsavelService
 
     public async Task<object?> UpdateObject(Responsavel _object, CancellationToken cancellationToken)
     {
-        var obj = await GetObject(_object.Id, CancellationToken.None) as Responsavel;
+        if (_object.Email != null)
+        {
+            var obj = await FindByEmailAsync(_object.Email, CancellationToken.None) as Responsavel;
+        }
+
         var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
 
         // Create a filter to find the document by Id
-        var filter = Builders<Responsavel>.Filter.Eq(u => u.Id, _object.Id);
+        var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, _object.Email);
 
         var update = Builders<Responsavel>.Update
             .Set(u => u.Email, _object.Email)
@@ -96,7 +100,7 @@ public class ResponsavelService : IResponsavelService
             return null;
         }
 
-        var ob = await GetObject(_object.Id, CancellationToken.None) as Animal;
+        var ob = await FindByEmailAsync(_object.Email, CancellationToken.None) as Responsavel;
         return ob;
     }
 
@@ -104,7 +108,6 @@ public class ResponsavelService : IResponsavelService
     {
         var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, _object);
         var result = await _collection.DeleteOneAsync(filter, cancellationToken);
-
         return result.DeletedCount > 0;  
     }
 
