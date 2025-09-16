@@ -46,7 +46,7 @@ public class VacinacaoService : IVacinacaoService
             .Set(u => u._dataVacinacao, _object._dataVacinacao)
             .Set(u => u.Tipo, _object.Tipo)
             .Set(u => u.Relatorio, _object.Relatorio)
-            .Set(u => u._veterinarioId, _object._veterinarioId);
+            .Set(u => u._veterinarioCRMV, _object._veterinarioCRMV);
 
         // Perform the update
         var result = collection.UpdateOne(filter, update);

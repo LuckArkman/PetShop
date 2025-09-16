@@ -4,6 +4,7 @@ using PetShop.Application.Interfaces;
 
 namespace PetShop.API.Controllers;
 
+public record VacinaRegister(string AnimalId, string vacinaId);
 public class VacinacaoController : ControllerBase
 {
     readonly IVacinacaoService _service;
@@ -30,6 +31,31 @@ public class VacinacaoController : ControllerBase
             var history = new HistoryVacinacao(Guid.NewGuid().ToString(), model.AnimalId, model);
             var _history = await _historyVacinacao.InsetObject(history, CancellationToken.None) as HistoryVacinacao;
             if (_history is not null)return Ok(model);
+        }
+        
+        return BadRequest(model);
+    }
+    
+    [HttpGet("historico")]
+    public async Task<IActionResult> Historico(string AnimalId)
+    {
+        var register = await _historyVacinacao.GetHistoricoAnimal(AnimalId, CancellationToken.None) as HistoryVacinacao;
+        return Ok(register);
+    }
+    
+    [HttpPost("remove")]
+    public async Task<IActionResult> remove([FromBody] VacinaRegister model)
+    {
+        var register = await _historyVacinacao.GetHistoricoAnimal(model.AnimalId, CancellationToken.None) as HistoryVacinacao;
+        if (register is not null)
+        {
+            var vacina = register._Vacinacao.FirstOrDefault(v => v.id == model.vacinaId);
+            if (vacina is not null)
+            {
+                register._Vacinacao.Remove(vacina);
+                var history = await _historyVacinacao.UpdateObject(register, CancellationToken.None) as HistoryVacinacao;
+                if (history is not null)return Ok(model);
+            }
         }
         
         return BadRequest(model);

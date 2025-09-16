@@ -18,7 +18,7 @@ public class Vacinacao
     public string? Relatorio { get; set; }
     
     [Display(Name = "veterinario responsavel")]
-    public string? _veterinarioId { get; set; }
+    public string? _veterinarioCRMV { get; set; }
     
     [BsonElement("responsaveis")]
     public ICollection<string> responsaveis { get; set; }

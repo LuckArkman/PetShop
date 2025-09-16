@@ -64,4 +64,15 @@ public class HistoryVacinacaoService : IHistoryVacinacaoService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<HistoryVacinacao?> GetHistoricoAnimal(string animalId, CancellationToken none)
+    {
+        var collection = _db.GetDatabase().GetCollection<HistoryVacinacao>("HistoryVacinacao");
+        
+        var filter = Builders<HistoryVacinacao>.Filter.Eq(u => u._animalId, animalId);
+        
+        var character = collection.Find(filter).FirstOrDefault();
+
+        return character as HistoryVacinacao;
+    }
 }
