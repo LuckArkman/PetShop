@@ -11,4 +11,5 @@ public interface IHistoryVacinacaoService
     Task<object?> UpdateObject(HistoryVacinacao _object, CancellationToken cancellationToken);
 
     Task RemoveObject(object _object, CancellationToken cancellationToken);
+    Task<HistoryVacinacao> GetHistoricoAnimal(string animalId, CancellationToken none);
 }
