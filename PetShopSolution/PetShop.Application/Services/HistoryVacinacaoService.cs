@@ -32,33 +32,25 @@ public class HistoryVacinacaoService : IHistoryVacinacaoService
         return _object as HistoryVacinacao;
     }
 
-    public async Task<object?> UpdateObject(HistoryVacinacao _object, CancellationToken cancellationToken)
+    public async Task<object?> UpdateObject(HistoryVacinacao obj, CancellationToken cancellationToken)
     {
-        var obj = await GetObject(_object.id, CancellationToken.None) as HistoryVacinacao;
-        var collection = _db.GetDatabase().GetCollection<HistoryVacinacao>("Animais");
+        var collection = _db.GetDatabase().GetCollection<HistoryVacinacao>("HistoryVacinacao");
 
-        // Create a filter to find the document by Id
-        var filter = Builders<HistoryVacinacao>.Filter.Eq(u => u.id, _object.id);
-
+        var filter = Builders<HistoryVacinacao>.Filter.Eq(u => u.id, obj.id);
         var update = Builders<HistoryVacinacao>.Update
-            .Set(u => u.id, _object.id)
-            .Set(u => u._animalId, _object._animalId)
-            .Set(u => u._Vacinacao, _object._Vacinacao);
+            .Set(u => u._animalId, obj._animalId)
+            .Set(u => u._Vacinacao, obj._Vacinacao);
 
-        // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = await collection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 
         if (result.ModifiedCount > 0)
         {
-            Console.WriteLine("User updated successfully.");
+            return await GetObject(obj.id, cancellationToken);
         }
-        else
-        {
-            return null;
-        }
-        var ob = await GetObject(_object.id, CancellationToken.None) as Animal;
-        return ob;
+
+        return null;
     }
+
 
     public Task RemoveObject(object _object, CancellationToken cancellationToken)
     {

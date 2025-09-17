@@ -19,7 +19,7 @@ public class VacinacaoController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Vacinacao model)
     {
-        var register = await _historyVacinacao.GetObject(model.AnimalId, CancellationToken.None) as HistoryVacinacao;
+        var register = await _historyVacinacao.GetHistoricoAnimal(model.AnimalId, CancellationToken.None) as HistoryVacinacao;
         if (register is not null)
         {
             register._Vacinacao.Add(model);
@@ -40,7 +40,7 @@ public class VacinacaoController : ControllerBase
     public async Task<IActionResult> Historico(string AnimalId)
     {
         var register = await _historyVacinacao.GetHistoricoAnimal(AnimalId, CancellationToken.None) as HistoryVacinacao;
-        return Ok(register);
+        return Ok(register._Vacinacao);
     }
     
     [HttpPost("remove")]
