@@ -6,14 +6,10 @@ using PetShop.Application.Interfaces;
 using PetShop.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<MongoDbService>(builder.Configuration.GetSection("MongoDbSettings"));
 builder.Services.AddSingleton<IMongoDbService, MongoDbService>();
-// Register Application Services
 builder.Services.AddScoped<IAnimalService, AnimalService>();
 builder.Services.AddScoped<IAnimalGeolocationHistoryService, AnimalGeolocationHistoryService>();
 builder.Services.AddScoped<IGeolocationRecordService, GeolocationRecordService>();
@@ -25,6 +21,8 @@ builder.Services.AddScoped<IRelatorioClinicoService, RelatorioClinicoService>();
 builder.Services.AddScoped<IHistoryVacinacaoService, HistoryVacinacaoService>();
 builder.Services.AddScoped<IVacinacaoService, VacinacaoService>();
 builder.Services.AddScoped<IMedicacaoService, MedicacaoService>();
+builder.Services.AddScoped<IDiagnosticoService, DiagnosticoService>();
+builder.Services.AddScoped<ICirurgiaService, CirurgiaService>();
 builder.Services.AddScoped<IRitmoCircadianoService, RitmoCircadianoService>();
 builder.Services.AddScoped<IHistoryFrequenciaCardiaca, HistoryFrequenciaCardiacaService>();
 builder.Services.AddScoped<IFrequenciaCardiaca, FrequenciaCardiacaService>();

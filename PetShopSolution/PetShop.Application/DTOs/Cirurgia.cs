@@ -4,13 +4,14 @@ namespace PetShop.Application.DTOs;
 
 public class Cirurgia
 {
-    public Guid Id { get; set; }
-    public DateTime Data { get; set; }
-    public TipoCirurgia Tipo { get; set; } = TipoCirurgia.Outro;
-    public string? Motivo { get; set; }
-    public string? ProcedimentoRealizado { get; set; }
-    public ICollection<Relatorio> relatorios { get; set; }
-    public string? PosOperatorioAcompanhamento { get; set; }
-    public DateTime? DataAlta { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string animalId { get; set; }
+    public DateTime data { get; set; }
+    public TipoCirurgia tipo { get; set; } = TipoCirurgia.Outro;
+    public string? motivo { get; set; }
+    public string? procedimentoRealizado { get; set; }
+    public Relatorio? relatorio { get; set; }
+    public string? posOperatorioAcompanhamento { get; set; }
+    public DateTime? dataAlta { get; set; }
     
 }

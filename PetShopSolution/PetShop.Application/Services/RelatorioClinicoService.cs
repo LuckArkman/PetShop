@@ -47,8 +47,6 @@ public class RelatorioClinicoService : IRelatorioClinicoService
             .Set(u => u.animalId, _object.animalId)
             .Set(u => u._data, _object._data)
             .Set(u => u.Sintomas, _object.Sintomas)
-            .Set(u => u.Diagnosticos, _object.Diagnosticos)
-            .Set(u => u.Medicacoes, _object.Medicacoes)
             .Set(u => u.Tratamento, _object.Tratamento)
             .Set(u => u.Observacoes, _object.Observacoes)
             .Set(u => u.VeterinarioId, _object.VeterinarioId);
