@@ -18,23 +18,39 @@ public class RelatorioClinicoController : ControllerBase
     }
     
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RelatorioClinico model)
+    public async Task<IActionResult> Register([FromBody] Relatorio model)
     {
-        var register = await _service.GetObject(model.AnimalId, CancellationToken.None) as HistoricoClinico;
-        if (register is not null)
-        {
-            register.Relatorios.Add(model);
-            var update = await _service.UpdateObject(register, CancellationToken.None) as  RelatorioClinico;
-            return Ok(model);
-        }
-        if (register is null)
-        {
-            register = new HistoricoClinico(model.AnimalId, model);
-            register.Relatorios.Add(model);
-            var update = await _service.UpdateObject(register, CancellationToken.None) as  RelatorioClinico;
-            return Ok(model);
-        }
+        var register = await _relatorioClinicoService.InsetRelatorio(model, CancellationToken.None) as Relatorio;
+        return Ok(register);
+    }
 
-        return BadRequest(model);
+    [HttpPut("update")]
+    public async Task<IActionResult> Update([FromBody] Relatorio model)
+    {
+        var register = await _relatorioClinicoService.UpdateRelatorio(model, CancellationToken.None) as Relatorio;
+        return Ok(register);
+    }
+    
+    [HttpDelete("delete")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var register = await _relatorioClinicoService.GetRelatorio(id, CancellationToken.None) as Relatorio;
+        if (register == null) return BadRequest();
+        await _relatorioClinicoService.RemoveRelatorio(register, CancellationToken.None);
+        return Ok(register);
+    }
+    
+    [HttpGet("Relatorios")]
+    public async Task<IActionResult> Relatorios(string animalId)
+    {
+        var register = await _relatorioClinicoService.GetAllRelatorios(animalId,CancellationToken.None);
+        return Ok(register);
+    }
+
+    [HttpGet("Relatorio")]
+    public async Task<IActionResult> Relatorio(string id)
+    {
+        var model = await _relatorioClinicoService.GetRelatorio(id, CancellationToken.None) as Relatorio;
+        return Ok(model);
     }
 }
