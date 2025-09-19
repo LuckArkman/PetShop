@@ -13,10 +13,12 @@ public class HistoricoClinicoController  : ControllerBase
     {
         _service = service;
     }
+    /*
     [HttpGet("HistoricoClinico")]
     public async Task<IActionResult> HistoricoClinico(string animal)
     {
         var model = await _service.GetObject(animal, CancellationToken.None) as HistoricoClinico;
         return Ok(model);
     }
+    */
 }

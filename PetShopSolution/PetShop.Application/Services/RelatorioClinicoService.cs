@@ -16,39 +16,39 @@ public class RelatorioClinicoService : IRelatorioClinicoService
         _db.GetOrCreateDatabase();
     }
 
-    public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
+    public async Task<object?> GetRelatorio(string _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<RelatorioClinico>("RelatorioClinico");
+        var collection = _db.GetDatabase().GetCollection<Relatorio>("RelatorioClinico");
         
-        var filter = Builders<RelatorioClinico>.Filter.Eq(u => u.Id, _object);
+        var filter = Builders<Relatorio>.Filter.Eq(u => u.Id, _object);
         
         var character = collection.Find(filter).FirstOrDefault();
 
-        return character as RelatorioClinico;
+        return character as Relatorio;
     }
 
-    public async Task<object?> InsetObject(RelatorioClinico _object, CancellationToken cancellationToken)
+    public async Task<object?> InsetRelatorio(Relatorio _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<RelatorioClinico>("RelatorioClinico");
+        var collection = _db.GetDatabase().GetCollection<Relatorio>("RelatorioClinico");
         collection.InsertOne(_object);
-        return _object as RelatorioClinico;
+        return _object as Relatorio;
     }
 
-    public async Task<object?> UpdateObject(RelatorioClinico _object, CancellationToken cancellationToken)
+    public async Task<object?> UpdateRelatorio(Relatorio _object, CancellationToken cancellationToken)
     {
-        var obj = await GetObject(_object.Id, CancellationToken.None) as RelatorioClinico;
-        var collection = _db.GetDatabase().GetCollection<RelatorioClinico>("RelatorioClinico");
+        var obj = await GetRelatorio(_object.Id, CancellationToken.None) as Relatorio;
+        var collection = _db.GetDatabase().GetCollection<Relatorio>("RelatorioClinico");
 
         // Create a filter to find the document by Id
-        var filter = Builders<RelatorioClinico>.Filter.Eq(u => u.Id, _object.Id);
+        var filter = Builders<Relatorio>.Filter.Eq(u => u.Id, _object.Id);
 
-        var update = Builders<RelatorioClinico>.Update
+        var update = Builders<Relatorio>.Update
             .Set(u => u.Id, _object.Id)
-            .Set(u => u.AnimalId, _object.AnimalId)
-            .Set(u => u.ResponsavelId, _object.ResponsavelId)
-            .Set(u => u._dataAtendimento, _object._dataAtendimento)
+            .Set(u => u.animalId, _object.animalId)
+            .Set(u => u._data, _object._data)
             .Set(u => u.Sintomas, _object.Sintomas)
-            .Set(u => u.Diagnostico, _object.Diagnostico)
+            .Set(u => u.Diagnosticos, _object.Diagnosticos)
+            .Set(u => u.Medicacoes, _object.Medicacoes)
             .Set(u => u.Tratamento, _object.Tratamento)
             .Set(u => u.Observacoes, _object.Observacoes)
             .Set(u => u.VeterinarioId, _object.VeterinarioId);
@@ -64,11 +64,33 @@ public class RelatorioClinicoService : IRelatorioClinicoService
         {
             return null;
         }
-        var ob = await GetObject(_object.Id, CancellationToken.None) as RelatorioClinico;
+        var ob = await GetRelatorio(_object.Id, CancellationToken.None) as Relatorio;
         return ob;
     }
 
-    public async Task RemoveObject(object _object, CancellationToken cancellationToken)
+    public async Task<List<Relatorio>?> GetAllRelatorios(string animalId, CancellationToken none)
+    {
+        try
+        {
+            var collection = _db.GetDatabase().GetCollection<Relatorio>("RelatorioClinico");
+
+            // Cria filtro para buscar apenas as medicações do animal
+            var filtro = Builders<Relatorio>.Filter.Eq(m => m.animalId, animalId);
+
+            var _relatorios = await collection
+                .Find(filtro)
+                .ToListAsync(none);
+
+            return _relatorios;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao buscar Relatorios para o animal {animalId}: {ex.Message}");
+            return new List<Relatorio>(); // Evita retornar null
+        }
+    }
+
+    public async Task<bool?> RemoveRelatorio(Relatorio _object, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

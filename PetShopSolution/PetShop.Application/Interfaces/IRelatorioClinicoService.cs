@@ -4,11 +4,12 @@ namespace PetShop.Application.Interfaces;
 
 public interface IRelatorioClinicoService
 {
-    Task<object?> GetObject(string _object, CancellationToken cancellationToken);
+    Task<object?> GetRelatorio(string _object, CancellationToken cancellationToken);
 
-    Task<object?> InsetObject(RelatorioClinico _object, CancellationToken cancellationToken);
+    Task<object?> InsetRelatorio(Relatorio _object, CancellationToken cancellationToken);
 
-    Task<object?> UpdateObject(RelatorioClinico _object, CancellationToken cancellationToken);
+    Task<object?> UpdateRelatorio(Relatorio _object, CancellationToken cancellationToken);
 
-    Task RemoveObject(object _object, CancellationToken cancellationToken);
+    Task<bool?> RemoveRelatorio(Relatorio _object, CancellationToken cancellationToken);
+    Task<List<Relatorio>?> GetAllRelatorios(string animalId, CancellationToken none);
 }
