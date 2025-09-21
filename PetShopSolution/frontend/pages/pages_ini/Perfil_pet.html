@@ -42,11 +42,11 @@
             <div id="card_perfil_config" class="card_perfil_config">
                 <div class="content_text">
                    <i class="fa-solid fa-gear"></i>
-                   <p>Configurações</p> 
+                   <p id="config_user">Configurações</p> 
                 </div>
                 <div class="content_text">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <p>Sair</p> 
+                    <p id="remove_user">Sair</p> 
                  </div>
             </div>         
         </nav>
@@ -125,7 +125,6 @@
                             <h1 id="h1_vacina">Vacinas</h1>
                             <span id="vacinaCount">(0)</span>
                         </div>
-                        <p id="p_vacina" class="p_vacina">Nenhuma vacina cadastrada</p>
                     </div>
                     <div class="button_add_info">
                         <button id="btn_add_vacina" class="btn_add_vacina">Adicionar</button>
@@ -133,42 +132,63 @@
                 </div>
 
                 <div class="card_add_info">
-                    <div class="text_obs_med">
-                        <div class="accordion-header" id="toggleObs">
-                            <h1 id="h1_Obs">Observações Médica</h1>
-                            <span id="obsCount">(0)</span>
+                    <div class="text_diagnosticos">
+                        <div class="accordion-header" id="toggleDiagnosticos">
+                            <h1 id="h1_Diagnosticos">Diagnósticos</h1>
+                            <span id="diagnosticoCount">(0)</span>
                         </div>
-                        <p id="p_obs_med" class="p_obs_med">Nenhuma observação cadastrada.</p>
                     </div>
                     <div class="button_add_info">
-                        <button id="btn_add_obs" class="btn_add">Adicionar</button>
+                        <button id="btn_add_diagnostico" class="btn_add">Adicionar</button>
                     </div>
                 </div>
 
                 <div class="card_add_info">
-                    <div class="text_contato">
-                        <div class="accordion-header" id="toggleContat">
-                            <h1 id="h1_Contato">Contato</h1>
-                            <span id="contatoCount">(0)</span>
+                    <div class="text_medicamentos">
+                        <div class="accordion-header" id="toggleMedicamentos">
+                            <h1 id="h1_Medicamentos">Medicações</h1>
+                            <span id="medicamentoCount">(0)</span>
                         </div>
                     </div>
                     <div class="button_add_info">
-                        <button id="btn_add_contato" class="btn_add">Adicionar</button>
+                        <button id="btn_add_medicamento" class="btn_add">Adicionar</button>
                     </div>
                 </div>
-                
-                <!--<div class="card_obs_med">
-                    <h1>Observações Médicas</h1>
-                    <div class="contain_obs">
-                        <ul class="itens_obs">
 
-                        </ul>
+                <div class="card_add_info">
+                    <div class="text_cirurgias">
+                        <div class="accordion-header" id="toggleCirurgias">
+                            <h1 id="h1_Cirurgias">Cirurgias</h1>
+                            <span id="cirurgiaCount">(0)</span>
+                        </div>
                     </div>
-                </div>-->
+                    <div class="button_add_info">
+                        <button id="btn_add_cirurgia" class="btn_add">Adicionar</button>
+                    </div>
+                </div>
+
+                <!--<div id="additional-cards" class="additional_cards" style="display: none;">
+                  <div class="card_add_info">
+                        <div class="text_consultas">
+                            <div class="accordion-header" id="toggleConsultas">
+                                <h1 id="h1_Consultas">Consultas</h1>
+                                <span id="consultaCount">(0)</span>
+                            </div>
+                        </div>
+                        <div class="button_add_info">
+                            <button id="btn_add_consulta" class="btn_add">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+ 
+                <div class="more_info_button">
+                    <button id="btn_view_more" class="btn_view_more">Ver mais</button>
+                </div>
+                -->
             </div>
         </section>
     </main>
-    <!--Modal de cadastro pet_minimo-->
+
     <div class="modal-backdrop" id="backdropSimple">
         <div class="modal" role="dialog" aria-modal="true">
           <h3>Cadastrar pet - informações essenciais</h3>
@@ -176,7 +196,7 @@
           <div class="form-grid" style="margin-top:12px">
             <div>
               <label>Nome</label>
-              <input id="fName" placeholder="Ex: Max" />
+              <input id="fName" placeholder="Ex: Max" maxlength="12" />
             </div>
             <div>
               <label>Espécie</label>
@@ -212,7 +232,6 @@
               <select id="fCastrado"><option value="">Selecione</option><option>Sim</option><option>Não</option></select>
             </div>
           </div>
-          <div id="div_msg" style="text-align: center;"></div>
           <div class="modal-actions">
             <button id="cancelSimple" class="btn-ghost">Cancelar</button>
             <button id="saveSimple">Criar perfil</button>
@@ -220,7 +239,6 @@
         </div>
       </div> 
 
-  <!--Modal card vacina-->
   <div class="modal-backdrop" id="backdropVacina">
     <div class="modal" role="dialog" aria-modal="true">
       <h3>Cadastrar vacina</h3>
@@ -235,8 +253,12 @@
           <input type="date" id="vacinaData" />
         </div>
         <div>
-          <label>Veterinário</label>
-          <input id="vacinaVet" placeholder="Ex: Dr. Silva" />
+            <label>Crmv do veterinário</label>
+            <input id="crmvVet" placeholder="CRMV-SP 12345">
+          </div>
+        <div>
+          <label>Relatório</label>
+          <input id="relVet" placeholder="Ex: Pet melhorou" />
         </div>
       </div>
       <div class="modal-actions">
@@ -247,109 +269,249 @@
   </div>
 
 
-   <!-- Modal de Visualização de Vacinas -->
    <div class="modal-backdrop" id="backdropVacinasView">
     <div class="modal" role="dialog" aria-modal="true">
       <h3>Vacinas Cadastradas</h3>
-      <ul id="lista_vacinas_view" class="lista_vacinas_modal">
-        <!-- Vacinas serão inseridas via JS -->
-      </ul>
+      <ul id="lista_vacinas_view" class="lista_vacinas_modal"></ul>
       <div class="modal-actions">
         <button id="closeVacinasView" class="btn-ghost">Fechar</button>
       </div>
     </div>
   </div>     
-
-  <!-- Modal para cadastrar Observação Médica -->
-<div class="modal-backdrop" id="backdropObs">
+  
+<div class="modal-backdrop" id="backdropDiagnostico">
     <div class="modal" role="dialog" aria-modal="true">
-        <h3>Cadastrar Observação Médica</h3>
-        <p class="muted">Preencha os dados da observação.</p>
+        <h3>Cadastrar Diagnóstico / Doença</h3>
+        <p class="muted">Informe os detalhes do diagnóstico.</p>
         <div class="form-grid" style="margin-top:12px">
-            <div>
-                <label>Descrição</label>
-                <input id="obsDescricao" placeholder="Ex: Pet apresentou febre..." />
-            </div>
             <div>
                 <label>Data</label>
-                <input type="date" id="obsData" />
+                <input type="date" id="diagnosticoData" />
+            </div>
+            <div>
+                <label>Doença / Condição</label>
+                <input id="diagnosticoCondicao" placeholder="Ex: Otite crônica" />
+            </div>
+            <div>
+                <label>Sintomas apresentados</label>
+                <input id="diagnosticoSintomas" placeholder="Ex: Coceira e dor no ouvido" />
+            </div>
+            <div>
+                <label>Exames solicitados</label>
+                <input id="diagnosticoExames" placeholder="Ex: Exame de sangue" />
+            </div>
+            <div>
+                <label>Tratamento</label>
+                <input id="diagnosticoTratamento" placeholder="Ex: Antibióticos por 10 dias" />
             </div>
         </div>
         <div class="modal-actions">
-            <button id="cancelObs" class="btn-ghost">Cancelar</button>
-            <button id="saveObs">Salvar</button>
+            <button id="cancelDiagnostico" class="btn-ghost">Cancelar</button>
+            <button id="saveDiagnostico">Salvar</button>
         </div>
     </div>
 </div>
 
-<!-- Modal de visualização de Observações Médicas -->
-<div class="modal-backdrop" id="backdropObsMedView">
+<div class="modal-backdrop" id="backdropDiagnosticoView">
     <div class="modal" role="dialog" aria-modal="true">
-        <h3>Observações Médicas</h3>
-        <ul id="lista_obs_med" class="lista_vacinas_modal">
-            <!-- Observações serão inseridas via JS -->
+        <h3>Diagnósticos</h3>
+        <ul id="lista_diagnosticos_view" class="lista_vacinas_modal">
         </ul>
         <div class="modal-actions">
-            <button id="closeObsMedView" class="btn-ghost">Fechar</button>
+            <button id="closeDiagnosticoView" class="btn-ghost">Fechar</button>
         </div>
     </div>
 </div>
 
-<!-- Modal para cadastrar Contato de Emergência -->
-<div class="modal-backdrop" id="backdropContato">
+<div class="modal-backdrop" id="backdropMedicamento">
     <div class="modal" role="dialog" aria-modal="true">
-        <h3>Cadastrar Contato de Emergência</h3>
-        <p class="muted">Informe os dados do contato.</p>
+        <h3>Cadastrar Medicação</h3>
+        <p class="muted">Informe os detalhes da medicação.</p>
         <div class="form-grid" style="margin-top:12px">
             <div>
-                <label>Nome</label>
-                <input id="contatoNome" placeholder="Ex: João Silva" />
+                <label>Data</label>
+                <input type="date" id="medicamentoData" />
             </div>
             <div>
-                <label>Telefone</label>
-                <input id="contatoTelefone" placeholder="(99) 99999-9999" />
+                <label>Medicação</label>
+                <input id="medicamentoNome" placeholder="Ex: Atropina" />
+            </div>
+            <div>
+                <label>Dosagem</label>
+                <input id="medicamentoDosagem" placeholder="Ex: 50mg" />
+            </div>
+            <div>
+                <label>Duração</label>
+                <input id="medicamentoDuracao" placeholder="Ex: 7 dias" />
+            </div>
+            <div>
+                <label>Indicação</label>
+                <input id="medicamentoIndicacao" placeholder="Ex: Para dor pós-operatória" />
+            </div>
+            <div>
+                <label>Observações</label>
+                <input id="medicamentoReacoes_o1" placeholder="Ex: Pet ficou sonolento" />
             </div>
         </div>
         <div class="modal-actions">
-            <button id="cancelContato" class="btn-ghost">Cancelar</button>
-            <button id="saveContato">Salvar</button>
+            <button id="cancelMedicamento" class="btn-ghost">Cancelar</button>
+            <button id="saveMedicamento">Salvar</button>
         </div>
     </div>
 </div>
 
-<!-- Modal de visualização de Contatos de Emergência -->
-<div class="modal-backdrop" id="backdropContatoView">
+<div class="modal-backdrop" id="backdropMedicamentoView">
     <div class="modal" role="dialog" aria-modal="true">
-        <h3>Contatos de Emergência</h3>
-        <ul id="lista_contato" class="lista_vacinas_modal">
-            <!-- Contatos serão inseridos via JS -->
+        <h3>Medicações Cadastradas</h3>
+        <ul id="lista_medicamentos_view" class="lista_vacinas_modal">
         </ul>
         <div class="modal-actions">
-            <button id="closeContatoView" class="btn-ghost">Fechar</button>
+            <button id="closeMedicamentosView" class="btn-ghost">Fechar</button>
         </div>
     </div>
 </div>
 
-<!--Modal de Atualização pet -->
+<div class="modal-backdrop" id="backdropCirurgia">
+    <div class="modal" role="dialog" aria-modal="true">
+        <h3>Cadastrar Cirurgia</h3>
+        <p class="muted">Informe os detalhes da cirurgia realizada.</p>
+        <div class="form-grid" style="margin-top:12px">
+            <div>
+                <label>Data</label>
+                <input type="date" id="cirurgiaData" />
+            </div>
+
+            <div>
+                <label for="tipoCirurgia">Tipo da cirurgia:</label>
+                <select id="tipoCirurgia" name="tipoCirurgia">
+                  <option value="1">Preventiva</option>
+                  <option value="2">Reparadora</option>
+                  <option value="3">Diagnóstica</option>
+                  <option value="4">Emergência</option>
+                  <option value="5">Outro</option>
+                </select>
+              </div>
+
+            <div>
+                <label>Motivo</label>
+                <input id="cirurgiaMotivo" placeholder="Ex: Prevenção de tumores" />
+            </div>
+            <div>
+                <label>Procedimento realizado</label>
+                <input id="cirurgiaProcedimento" placeholder="Ex: Ovariohisterectomia" />
+            </div>
+            <div>
+                <label>Pós-operatório</label>
+                <input id="cirurgiaPos" placeholder="Ex: Retorno em 7 dias" />
+            </div>
+            <div>
+                <label>Data de alta</label>
+                <input type="date" id="cirurgiaAlta"/>
+            </div>
+        </div>
+        <hr style="margin:15px 0">
+
+        <h4>Relatório Médico</h4>
+        <div class="form-grid" style="margin-top:12px">
+          <div>
+            <label>Sintomas</label>
+            <input id="relSintomas" placeholder="Ex: Dor, febre" />
+          </div>
+          <div>
+            <label>Tratamento</label>
+            <input id="relTratamento" placeholder="Ex: Antibióticos 7 dias" />
+          </div>
+          <div>
+            <label>Observações</label>
+            <input id="relObservacoes" placeholder="Ex: Animal se recuperando bem" />
+          </div>
+          <div>
+            <label>Veterinário (CRMV)</label>
+            <input id="relVeterinario" placeholder="Ex: CRMV-SP 12345" />
+          </div>
+        </div>
+        <div class="modal-actions">
+            <button id="cancelCirurgia" class="btn-ghost">Cancelar</button>
+            <button id="saveCirurgia">Salvar</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="backdropCirurgiaView">
+    <div class="modal" role="dialog" aria-modal="true">
+        <h3>Cirurgias Cadastradas</h3>
+        <ul id="lista_cirurgias_view" class="lista_vacinas_modal">
+        </ul>
+        <div class="modal-actions">
+            <button id="closeCirurgiasView" class="btn-ghost">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!--<div class="modal-backdrop" id="backdropConsulta">
+    <div class="modal" role="dialog" aria-modal="true">
+        <h3>Cadastrar Consulta / Acompanhamento</h3>
+        <p class="muted">Descreva a consulta do seu pet.</p>
+        <div class="form-grid" style="margin-top:12px">
+            <div>
+                <label>Data</label>
+                <input type="date" id="consultaData" />
+            </div>
+            <div>
+                <label>Motivo da consulta</label>
+                <input id="consultaMotivo" placeholder="Ex: Avaliação de rotina" />
+            </div>
+            <div>
+                <label>Avaliação do veterinário</label>
+                <input id="consultaAvaliacao" placeholder="Ex: Pet saudável e ativo" />
+            </div>
+            <div>
+                <label>Recomendações</label>
+                <input id="consultaRecomendacoes" placeholder="Ex: Reforçar a dieta com vitaminas" />
+            </div>
+            <div>
+                <label>Data de retorno</label>
+                <input type="date" id="consultaRetorno" />
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button id="cancelConsulta" class="btn-ghost">Cancelar</button>
+            <button id="saveConsulta">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="backdropConsultaView">
+    <div class="modal" role="dialog" aria-modal="true">
+        <h3>Consultas Cadastradas</h3>
+        <ul id="lista_consultas_view" class="lista_vacinas_modal">
+        </ul>
+        <div class="modal-actions">
+            <button id="closeConsultaView" class="btn-ghost">Fechar</button>
+        </div>
+    </div>
+</div>
+-->
 <div id="backdropUpdate" class="modal-backdrop" style="display:none;">
     <div class="modal" role="dialog" aria-modal="true">
       <h2>Atualizar Pet</h2>
       <form id="formUpdatePet">
         <label for="updateName">Nome:</label>
-        <input type="text" id="updateName" required>
-  
+        <input type="text" id="updateName" required maxlength="12">
+
         <label for="updateSpecies">Espécie:</label>
         <input type="text" id="updateSpecies" required>
-  
+
         <label for="updateBreed">Raça:</label>
         <input type="text" id="updateBreed" required>
-  
+
         <label for="updateAge">Idade:</label>
         <input type="number" id="updateAge" required>
-  
+
         <label for="updateWeight">Peso (kg):</label>
         <input type="number" id="updateWeight" required>
-  
+
         <label for="updatePorte">Porte:</label>
         <select id="updatePorte" required>
           <option value="">Selecione</option>
@@ -357,21 +519,21 @@
           <option value="Médio">Médio</option>
           <option value="Grande">Grande</option>
         </select>
-  
+
         <label for="updateSex">Sexo:</label>
         <select id="updateSex" required>
           <option value="">Selecione</option>
           <option value="Macho">Macho</option>
           <option value="Fêmea">Fêmea</option>
         </select>
-  
+
         <label for="updateCastrado">Castrado:</label>
         <select id="updateCastrado" required>
           <option value="">Selecione</option>
           <option value="Sim">Sim</option>
           <option value="Não">Não</option>
         </select>
-  
+
         <div class="modal-buttons" style="margin-top: 4%;">
           <button type="button" id="cancelUpdate">Cancelar</button>
           <button type="submit" id="saveUpdate">Atualizar Pet</button>
@@ -382,4 +544,4 @@
 
 </body>
 </html>
-<script src="../../js/Script_perfil_pet/Cad_pet.js"></script>
+<script src="../../js/Script_perfil/Cad_pet.js"></script>

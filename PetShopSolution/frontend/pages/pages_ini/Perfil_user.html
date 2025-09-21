@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações de Perfil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../../css/Perfil_user.css">
+</head>
+<body>
+
+    <main class="profile_main show_section">
+        <div class="profile_title">
+            <h1 class="h1_profile_title">Atualizar Perfil</h1>
+            <p>Altere suas informações pessoais, de contato e documentos.</p>
+            
+             <div>
+                  <a href="../pages_ini/Dashboard.html">Voltar</a>
+          </div>
+        </div>
+
+        <div class="profile_content">
+            <div class="profile_form">
+                <div class="form_title">
+                    <i class="fas fa-user-edit"></i>
+                    <h2>Dados Pessoais e de Acesso</h2>
+                </div>
+
+                <div class="form_group">
+                    <label for="update_first_name">Nome</label>
+                    <input type="text" id="update_first_name" placeholder="Nome">
+                </div>
+                
+                <div class="form_group">
+                    <label for="update_last_name">Sobrenome</label>
+                    <input type="text" id="update_last_name" placeholder="Sobrenome">
+                </div>
+
+                <div class="form_group">
+                    <label for="update_email">Email</label>
+                    <input type="email" id="update_email" placeholder="Email">
+                </div>
+
+                <div class="form_group">
+                    <label for="update_phone_number">Telefone</label>
+                    <input type="tel" id="update_phone_number" placeholder="(XX) XXXXX-XXXX">
+                </div>
+            </div>
+
+            <div class="profile_form">
+                <div class="form_title">
+                    <i class="fas fa-id-card"></i>
+                    <h2>Documentos e Senha</h2>
+                </div>
+
+                <div class="form_group">
+                    <label for="update_cpf">CPF</label>
+                    <input type="text" id="update_cpf" placeholder="CPF">
+                </div>
+                
+                <div class="form_group">
+                    <label for="update_rg">RG</label>
+                    <input type="text" id="update_rg" placeholder="RG">
+                </div>
+
+                <div class="form_group">
+                    <label for="update_password">Senha</label>
+                    <input type="password" id="update_password" placeholder="Digite uma nova senha">
+                </div>
+
+                <div class="form_group">
+                    <label for="update_confirm_password">Confirmar Senha</label>
+                    <input type="password" id="update_confirm_password" placeholder="Confirme a nova senha">
+                </div>
+            </div>
+
+            <div class="profile_form full_width">
+                <div class="form_title">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h2>Endereço</h2>
+                </div>
+                <div class="form_group">
+                    <label for="update_address">Endereço</label>
+                    <input type="text" id="update_address" placeholder="Rua, número e complemento">
+                </div>
+                
+                <div class="form_group">
+                    <label for="update_city">Cidade</label>
+                    <input type="text" id="update_city" placeholder="Cidade">
+                </div>
+
+                <div class="form_group">
+                    <label for="update_state">Estado</label>
+                    <input type="text" id="update_state" placeholder="Estado">
+                </div>
+
+                <div class="form_group">
+                    <label for="update_zip_code">CEP</label>
+                    <input type="text" id="update_zip_code" placeholder="CEP">
+                </div>
+            </div>
+            <div id="div_msg" style="text-align: center;"></div>
+        </div>
+
+        <div class="profile_actions">
+            <button class="btn_save_profile" id="btn_save">
+                <i class="fas fa-save"></i> Salvar Alterações
+            </button>
+        </div>
+    </main>
+
+</body>
+</html>
+<script src="../../js/Script_perfil/Atualizar_user.js"></script>
