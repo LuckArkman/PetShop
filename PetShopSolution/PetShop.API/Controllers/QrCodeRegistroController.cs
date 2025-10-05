@@ -27,9 +27,9 @@ public class QrCodeRegistroController  : ControllerBase
         return Ok(register);
     }
     [HttpGet("QrCode")]
-    public async Task<IActionResult> animal(string animal)
+    public async Task<IActionResult> animal(string animalId)
     {
-        var model = await _service.GetObject(animal, CancellationToken.None) as QrCodeRegistro;
+        var model = await _service.GetObject(animalId, CancellationToken.None) as QrCodeRegistro;
         return Ok(model);
     }
 }
