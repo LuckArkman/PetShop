@@ -18,7 +18,7 @@ public class QrCodeRegistroService : IQrCodeRegistroService
     {
         var collection = _db.GetDatabase().GetCollection<QrCodeRegistro>("QrCodeRegistro");
         
-        var filter = Builders<QrCodeRegistro>.Filter.Eq(u => u.Id, _object);
+        var filter = Builders<QrCodeRegistro>.Filter.Eq(u => u.AnimalId, _object);
         
         var character = collection.Find(filter).FirstOrDefault();
 
