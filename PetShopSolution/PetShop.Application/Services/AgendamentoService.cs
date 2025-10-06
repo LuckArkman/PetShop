@@ -1,0 +1,57 @@
+using MongoDB.Driver;
+using PetShop.Application.Data;
+using PetShop.Application.DTOs;
+using PetShop.Application.Enums;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Singletons;
+
+namespace PetShop.Application.Services;
+
+public class AgendamentoService : IAgendamentoService
+{
+    private readonly AgendamentoDB _db;
+
+    public AgendamentoService()
+    {
+        _db = new AgendamentoDB(Singleton.Instance()!.src, "Agendamento");
+        _db.GetOrCreateDatabase();
+    }
+
+    public async Task<Agendamento?> GetById(string id, CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
+        var filter = Builders<Agendamento>.Filter.Eq(a => a.id, id);
+        return await collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Agendamento>> GetByCliente(string clienteId, CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
+        var filter = Builders<Agendamento>.Filter.Eq(a => a.clienteId, clienteId);
+        return await collection.Find(filter).ToListAsync(cancellationToken);
+    }
+
+    public async Task<Agendamento> Create(Agendamento agendamento, CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
+        await collection.InsertOneAsync(agendamento, cancellationToken: cancellationToken);
+        return agendamento;
+    }
+
+    public async Task<Agendamento?> UpdateStatus(string id, Status status, CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
+        var filter = Builders<Agendamento>.Filter.Eq(a => a.id, id);
+        var update = Builders<Agendamento>.Update.Set<Status>(a => a.status, status);
+
+        var result = await collection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+        return result.ModifiedCount > 0 ? await GetById(id, cancellationToken) : null;
+    }
+
+    public async Task<bool> Delete(string id, CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
+        var result = await collection.DeleteOneAsync(a => a.id == id, cancellationToken);
+        return result.DeletedCount > 0;
+    }
+}

@@ -26,6 +26,8 @@ builder.Services.AddScoped<ICirurgiaService, CirurgiaService>();
 builder.Services.AddScoped<IRitmoCircadianoService, RitmoCircadianoService>();
 builder.Services.AddScoped<IHistoryFrequenciaCardiaca, HistoryFrequenciaCardiacaService>();
 builder.Services.AddScoped<IFrequenciaCardiaca, FrequenciaCardiacaService>();
+builder.Services.AddScoped<IAgendamentoService, AgendamentoService>();
+builder.Services.AddScoped<IAtendimentoService, AtendimentoService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
