@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.Linq;
 using PetShop.Application.DTOs;
 using PetShop.Application.Enums;
 using PetShop.Application.Services;
@@ -94,6 +95,76 @@ public class AgendamentoController : ControllerBase
 
         await _disponibilidadeService.RemoverIndisponivel(parsed, cancellationToken);
         return Ok(new { message = $"Dia {parsed:dd/MM/yyyy} removido da lista de indisponíveis." });
+    }
+    
+    // ===========================================================
+    // 🔹 NOVA ROTA: Retorna dias + horários disponíveis
+    // ===========================================================
+    /// <summary>
+    /// Retorna todos os dias disponíveis do calendário com seus respectivos horários disponíveis.
+    /// </summary>
+    [HttpGet("disponibilidades-detalhadas")]
+    public async Task<IActionResult> GetDiasComHorariosDisponiveis(CancellationToken cancellationToken)
+    {
+        var indisponiveis = await _disponibilidadeService.GetIndisponiveis(cancellationToken);
+        var diasIndisponiveis = indisponiveis.Select(d => d.Data.Date).ToHashSet();
+
+        var hoje = DateTime.Today;
+        var lista = new List<DisponibilidadeDiaDTO>();
+
+        // Avalia os próximos 30 dias
+        for (int i = 0; i < 30; i++)
+        {
+            var dia = hoje.AddDays(i);
+
+            // Ignora domingos
+            if (dia.DayOfWeek == DayOfWeek.Sunday)
+                continue;
+
+            // Ignora dias marcados como indisponíveis
+            if (diasIndisponiveis.Contains(dia.Date))
+                continue;
+
+            // Calcula os horários livres
+            var horarios = await GetHorariosDisponiveisInterno(dia, cancellationToken);
+
+            // Se houver horários disponíveis, adiciona o dia à lista
+            if (horarios.Any())
+            {
+                lista.Add(new DisponibilidadeDiaDTO
+                {
+                    Data = dia.ToString("yyyy-MM-dd"),
+                    HorariosDisponiveis = horarios
+                });
+            }
+        }
+
+        return Ok(lista);
+    }
+    
+    // ===========================================================
+    // 🔧 Função interna de apoio para cálculo de horários livres
+    // ===========================================================
+    private async Task<List<string>> GetHorariosDisponiveisInterno(DateTime dataConsulta, CancellationToken cancellationToken)
+    {
+        var inicioExpediente = new TimeSpan(8, 0, 0);  // 08:00
+        var fimExpediente = new TimeSpan(17, 0, 0);    // 17:00
+        var duracaoConsulta = TimeSpan.FromHours(1);
+
+        var horarios = new List<string>();
+        for (var hora = inicioExpediente; hora < fimExpediente; hora += duracaoConsulta)
+            horarios.Add(hora.ToString(@"hh\:mm"));
+
+        // Obtém agendamentos já existentes para esse dia
+        var agendamentos = await _disponibilidadeService.GetByDate(dataConsulta, cancellationToken);
+
+        foreach (var ag in agendamentos)
+        {
+            var horaMarcada = Convert.ToDateTime(ag.dataConsulta).ToString("yyyy-MM-dd");
+            horarios.Remove(horaMarcada);
+        }
+
+        return horarios;
     }
 
     /// <summary>

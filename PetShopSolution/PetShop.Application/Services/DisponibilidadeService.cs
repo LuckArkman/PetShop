@@ -37,6 +37,19 @@ public class DisponibilidadeService : IDisponibilidadeService
 
         await collection.InsertOneAsync(dia, cancellationToken: cancellationToken);
     }
+    
+    public async Task<IEnumerable<Agendamento>> GetByDate(DateTime date, CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
+
+        var dataInicio = date.Date;
+        var dataFim = dataInicio.AddDays(1);
+
+        var filter = Builders<Agendamento>.Filter.Gte(a => a.dataConsulta, dataInicio) &
+                     Builders<Agendamento>.Filter.Lt(a => a.dataConsulta, dataFim);
+
+        return await collection.Find(filter).ToListAsync(cancellationToken);
+    }
 
     // 🔹 Remove um dia da lista de indisponíveis
     public async Task RemoverIndisponivel(DateTime data, CancellationToken cancellationToken)
