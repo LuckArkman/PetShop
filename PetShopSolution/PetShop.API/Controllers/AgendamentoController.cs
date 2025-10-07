@@ -11,11 +11,16 @@ public class AgendamentoController : ControllerBase
 {
     private readonly AgendamentoService _service;
     private readonly AtendimentoService _atendimentoService;
+    private readonly DisponibilidadeService _disponibilidadeService;
 
-    public AgendamentoController(AgendamentoService service, AtendimentoService atendimentoService)
+    public AgendamentoController(
+        AgendamentoService service,
+        AtendimentoService atendimentoService,
+        DisponibilidadeService disponibilidadeService)
     {
         _service = service;
         _atendimentoService = atendimentoService;
+        this._disponibilidadeService = disponibilidadeService;
     }
 
     /// <summary>
@@ -29,6 +34,66 @@ public class AgendamentoController : ControllerBase
             return NotFound(new { message = "Agendamento não encontrado." });
 
         return Ok(agendamento);
+    }
+    
+    // ===========================================================
+    // 🔹 ROTA 1: Retorna dias disponíveis no calendário
+    // ===========================================================
+    [HttpGet("disponiveis")]
+    public async Task<IActionResult> GetDiasDisponiveis(CancellationToken cancellationToken)
+    {
+        var indisponiveis = await _disponibilidadeService.GetIndisponiveis(cancellationToken);
+        var diasIndisponiveis = indisponiveis.Select(d => d.Data.Date).ToHashSet();
+
+        var hoje = DateTime.Today;
+        var dias = new List<string>();
+
+        // Exibir os próximos 30 dias
+        for (int i = 0; i < 30; i++)
+        {
+            var dia = hoje.AddDays(i);
+            // Ignora domingos
+            if (dia.DayOfWeek == DayOfWeek.Sunday)
+                continue;
+
+            // Se o dia estiver marcado como indisponível, pula
+            if (diasIndisponiveis.Contains(dia.Date))
+                continue;
+
+            dias.Add(dia.ToString("yyyy-MM-dd"));
+        }
+
+        return Ok(dias);
+    }
+
+    // ===========================================================
+    // 🔹 ROTA 2: Marcar dia como indisponível
+    // ===========================================================
+    [HttpPost("indisponiveis")]
+    public async Task<IActionResult> PostDiaIndisponivel([FromBody] DiasIndisponiveis dia, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _disponibilidadeService.AddIndisponivel(dia, cancellationToken);
+            return Ok(new { message = $"Dia {dia.Data:dd/MM/yyyy} marcado como indisponível." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    // ===========================================================
+    // 🔹 ROTA 3 (Opcional): Remover dia da lista de indisponíveis
+    // ===========================================================
+    [HttpDelete("indisponiveis/{data}")]
+    public async Task<IActionResult> DeleteDiaIndisponivel(string data, CancellationToken cancellationToken)
+    {
+        if (!DateTime.TryParse(data, out var parsed))
+            return BadRequest(new { message = "Formato de data inválido. Use yyyy-MM-dd." });
+
+        await _disponibilidadeService.RemoverIndisponivel(parsed, cancellationToken);
+        return Ok(new { message = $"Dia {parsed:dd/MM/yyyy} removido da lista de indisponíveis." });
     }
 
     /// <summary>

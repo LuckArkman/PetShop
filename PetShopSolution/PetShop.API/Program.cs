@@ -28,6 +28,7 @@ builder.Services.AddScoped<IHistoryFrequenciaCardiaca, HistoryFrequenciaCardiaca
 builder.Services.AddScoped<IFrequenciaCardiaca, FrequenciaCardiacaService>();
 builder.Services.AddScoped<IAgendamentoService, AgendamentoService>();
 builder.Services.AddScoped<IAtendimentoService, AtendimentoService>();
+builder.Services.AddScoped<IDisponibilidadeService, DisponibilidadeService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
