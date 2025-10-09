@@ -58,4 +58,10 @@ public class DisponibilidadeService : IDisponibilidadeService
         var filter = Builders<DiasIndisponiveis>.Filter.Eq(d => d.Data, data.Date);
         await collection.DeleteOneAsync(filter, cancellationToken);
     }
+
+    public async Task<List<DiasIndisponiveis>> Getdisponiveis(CancellationToken cancellationToken)
+    {
+        var collection = GetCollection();
+        return await collection.Find(_ => true).ToListAsync(cancellationToken);
+    }
 }

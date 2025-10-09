@@ -14,11 +14,11 @@ public class QrCodeRegistroController  : ControllerBase
         _service = service;
     }
     [HttpPost("register")]
-    public async Task<IActionResult> Register(string id,string AnimalId)
+    public async Task<IActionResult> Register(string AnimalId)
     {
         var model = new QrCodeRegistro
         {
-            Id = id,
+            Id = Guid.NewGuid().ToString(),
             AnimalId = AnimalId,
             DataGeracao = DateTime.UtcNow,
         };
