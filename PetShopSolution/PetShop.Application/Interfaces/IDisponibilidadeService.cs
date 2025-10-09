@@ -10,4 +10,5 @@ public interface IDisponibilidadeService
     Task AddIndisponivel(DiasIndisponiveis dia, CancellationToken cancellationToken);
     Task<IEnumerable<Agendamento>> GetByDate(DateTime date, CancellationToken cancellationToken);
     Task RemoverIndisponivel(DateTime data, CancellationToken cancellationToken);
+    Task<List<DiasIndisponiveis>> Getdisponiveis(CancellationToken cancellationToken);
 }
