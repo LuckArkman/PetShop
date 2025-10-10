@@ -1,3 +1,4 @@
+using System.Collections;
 using MongoDB.Driver;
 using PetShop.Application.Data;
 using PetShop.Application.DTOs;
@@ -53,5 +54,46 @@ public class AgendamentoService : IAgendamentoService
         var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
         var result = await collection.DeleteOneAsync(a => a.id == id, cancellationToken);
         return result.DeletedCount > 0;
+    }
+    
+    public async Task<IEnumerable<Agendamento>> GetByVeterinario(string veterinarioId, CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
+
+        var filter = Builders<Agendamento>.Filter.Eq(a => a.veterinarioId, veterinarioId) &
+                     Builders<Agendamento>.Filter.Ne(a => a.status, Status.Cancelado);
+
+        return await collection.Find(filter).ToListAsync(cancellationToken);
+    }
+
+
+    /// <summary>
+    /// Retorna todos os agendamentos de um dia específico (UTC ou Local),
+    /// excluindo automaticamente os que estiverem Cancelados ou Concluídos.
+    /// </summary>
+    /// <param name="dataConsulta">Dia a ser consultado (somente parte da data é usada)</param>
+    /// <param name="cancellationToken">Token de cancelamento</param>
+    /// <returns>Lista de agendamentos existentes naquele dia</returns>
+    public async Task<List<Agendamento>> GetByDate(DateTime dataConsulta, CancellationToken cancellationToken)
+    {
+        // Normaliza o dia (remove horas)
+        var inicioDoDia = dataConsulta.Date;
+        var fimDoDia = inicioDoDia.AddDays(1);
+
+        // Cria filtro Mongo para pegar qualquer agendamento que ocorra entre 00:00 e 23:59
+        var filtro = Builders<Agendamento>.Filter.And(
+            Builders<Agendamento>.Filter.Gte(a => a.dataConsulta, inicioDoDia),
+            Builders<Agendamento>.Filter.Lt(a => a.dataConsulta, fimDoDia),
+            Builders<Agendamento>.Filter.Ne(a => a.status, Status.Cancelado),
+            Builders<Agendamento>.Filter.Ne(a => a.status, Status.Concluído)
+        );
+
+        // ✅ Correção: remover o ponto e vírgula antes do .Find()
+        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
+        var resultado = await collection
+            .Find(filtro)
+            .ToListAsync(cancellationToken);
+
+        return resultado;
     }
 }

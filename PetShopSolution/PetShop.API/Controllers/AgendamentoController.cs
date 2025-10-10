@@ -37,44 +37,47 @@ public class AgendamentoController : ControllerBase
         return Ok(agendamento);
     }
     
-    [HttpGet("disponiveis")]
-    public async Task<IActionResult> GetDiasDisponiveis(CancellationToken cancellationToken)
+    [HttpGet("disponibilidades/{data}")]
+    [ProducesResponseType(typeof(List<string>), 200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> GetHorariosDisponiveisPorDia(string data, CancellationToken cancellationToken)
     {
-        var indisponiveis = await _disponibilidadeService.GetIndisponiveis(cancellationToken);
-        var diasIndisponiveis = indisponiveis.Select(d => d.Data.Date).ToHashSet();
+        if (!DateTime.TryParse(data, out var dataConsulta))
+            return BadRequest(new { message = "Formato de data inválido. Use yyyy-MM-dd." });
 
-        var hoje = DateTime.Today;
-        var diasDisponiveis = new List<string>();
+        // 1️⃣ Se for domingo, não há expediente
+        if (dataConsulta.DayOfWeek == DayOfWeek.Sunday)
+            return Ok(new List<string>());
 
-        for (int i = 0; i < 30; i++)
+        // 2️⃣ Se o dia estiver bloqueado manualmente (indisponível)
+        var diasIndisponiveis = await _disponibilidadeService.GetIndisponiveis(cancellationToken);
+        if (diasIndisponiveis.Any(d => d.Data.Date == dataConsulta.Date))
+            return Ok(new List<string>());
+
+        // 3️⃣ Monta lista base de horários (08:00 → 17:00, intervalos de 1h)
+        var inicioExpediente = new TimeSpan(8, 0, 0);
+        var fimExpediente = new TimeSpan(17, 0, 0);
+        var duracaoConsulta = TimeSpan.FromHours(1);
+
+        var horarios = new List<string>();
+        for (var hora = inicioExpediente; hora < fimExpediente; hora += duracaoConsulta)
+            horarios.Add(hora.ToString(@"hh\:mm"));
+
+        // 4️⃣ Busca agendamentos já existentes no banco para esse dia
+        var agendamentos = await _service.GetByDate(dataConsulta, cancellationToken);
+
+        // 5️⃣ Remove da lista os horários já ocupados
+        foreach (var agendamento in agendamentos)
         {
-            var dia = hoje.AddDays(i);
-
-            // Ignora domingos automaticamente
-            if (dia.DayOfWeek == DayOfWeek.Sunday)
+            if (agendamento.dataConsulta.HasValue)
             {
-                diasIndisponiveis.Add(dia.Date);
-                continue;
+                var horaMarcada = agendamento.dataConsulta.Value.ToLocalTime().ToString("HH:mm");
+                horarios.Remove(horaMarcada);
             }
-
-            // Ignora dias marcados como indisponíveis
-            if (diasIndisponiveis.Contains(dia.Date))
-                continue;
-
-            // Busca horários livres para o dia
-            var horariosLivres = await GetHorariosDisponiveisInterno(dia, cancellationToken);
-
-            // Ignora dias sem horários livres
-            if (!horariosLivres.Any())
-            {
-                diasIndisponiveis.Add(dia.Date);
-                continue;
-            }
-
-            diasDisponiveis.Add(dia.ToString("yyyy-MM-dd"));
         }
 
-        return Ok(diasDisponiveis);
+        // 6️⃣ Retorna lista final de horários livres
+        return Ok(horarios);
     }
 
     // ===========================================================
@@ -107,13 +110,14 @@ public class AgendamentoController : ControllerBase
         return Ok(new { message = $"Dia {parsed:dd/MM/yyyy} removido da lista de indisponíveis." });
     }
     
-    // ===========================================================
-    // 🔹 NOVA ROTA: Retorna dias + horários Indisponíveis
-    // ===========================================================
     /// <summary>
-    /// Retorna todos os dias disponíveis do calendário com seus respectivos horários disponíveis.
+    /// Retorna todos os dias indisponíveis do calendário, com seus respectivos horários ocupados.
+    /// Inclui tanto dias bloqueados manualmente quanto dias parcialmente ocupados.
     /// </summary>
-    [HttpGet("Indisponibilidades-detalhadas")]
+    /// <param name="cancellationToken">Token de cancelamento</param>
+    /// <returns>Lista de dias indisponíveis com detalhes de horários ocupados</returns>
+    [HttpGet("indisponibilidades-detalhadas")]
+    [ProducesResponseType(typeof(List<DisponibilidadeDiaDTO>), 200)]
     public async Task<IActionResult> GetDiasComHorariosIndisponiveis(CancellationToken cancellationToken)
     {
         var indisponiveis = await _disponibilidadeService.GetIndisponiveis(cancellationToken);
@@ -127,24 +131,31 @@ public class AgendamentoController : ControllerBase
         {
             var dia = hoje.AddDays(i);
 
-            // Ignora domingos
+            // Ignora domingos (sem expediente)
             if (dia.DayOfWeek == DayOfWeek.Sunday)
                 continue;
 
-            // Ignora dias marcados como indisponíveis
+            // Se o dia está marcado como totalmente indisponível
             if (diasIndisponiveis.Contains(dia.Date))
-                continue;
-
-            // Calcula os horários livres
-            var horarios = await GetHorariosIndisponiveisInterno(dia, cancellationToken);
-
-            // Se houver horários disponíveis, adiciona o dia à lista
-            if (horarios.Any())
             {
                 lista.Add(new DisponibilidadeDiaDTO
                 {
                     Data = dia.ToString("yyyy-MM-dd"),
-                    HorariosDisponiveis = horarios
+                    HorariosDisponiveis = new List<string>() // nenhum horário disponível
+                });
+                continue;
+            }
+
+            // Caso não esteja bloqueado, buscamos horários já ocupados
+            var horariosOcupados = await GetHorariosIndisponiveisInterno(dia, cancellationToken);
+
+            // Se o dia estiver parcialmente indisponível (alguns horários ocupados)
+            if (horariosOcupados.Any())
+            {
+                lista.Add(new DisponibilidadeDiaDTO
+                {
+                    Data = dia.ToString("yyyy-MM-dd"),
+                    HorariosDisponiveis = horariosOcupados
                 });
             }
         }
@@ -196,34 +207,37 @@ public class AgendamentoController : ControllerBase
         return Ok(lista);
     }
     
-    // ===========================================================
-    // 🔧 Função interna de apoio para cálculo de horários livres
-    // ===========================================================
-    private async Task<List<string>> GetHorariosIndisponiveisInterno(DateTime dataConsulta, CancellationToken cancellationToken)
+    /// <summary>
+    /// Retorna todos os agendamentos de um veterinário específico.
+    /// </summary>
+    /// <param name="veterinarioId">ID do veterinário</param>
+    /// <param name="cancellationToken">Token de cancelamento</param>
+    /// <returns>Lista de agendamentos do veterinário</returns>
+    [HttpGet("veterinario/{veterinarioId}")]
+    public async Task<IActionResult> GetByVeterinario(string veterinarioId, CancellationToken cancellationToken)
     {
-        var inicioExpediente = new TimeSpan(8, 0, 0);  // 08:00
-        var fimExpediente = new TimeSpan(17, 0, 0);    // 17:00
-        var duracaoConsulta = TimeSpan.FromHours(1);
+        var lista = await _service.GetByVeterinario(veterinarioId, cancellationToken);
+    
+        if (!lista.Any())
+            return NotFound(new { message = "Nenhum agendamento encontrado para este veterinário." });
 
-        var horarios = new List<string>();
-        for (var hora = inicioExpediente; hora < fimExpediente; hora += duracaoConsulta)
-            horarios.Add(hora.ToString(@"hh\:mm"));
-
-        // Obtém agendamentos já existentes para esse dia
-        var agendamentos = await _disponibilidadeService.GetByDate(dataConsulta, cancellationToken);
-
-        foreach (var ag in agendamentos)
-        {
-            var horaMarcada = Convert.ToDateTime(ag.dataConsulta).ToString("yyyy-MM-dd");
-            horarios.Remove(horaMarcada);
-        }
-
-        return horarios;
+        return Ok(lista);
     }
     
-    // ===========================================================
-    // 🔧 Função interna de apoio para cálculo de horários livres
-    // ===========================================================
+    /// <summary>
+    /// Retorna a lista de horários ocupados (indisponíveis) em um determinado dia.
+    /// </summary>
+    private async Task<List<string>> GetHorariosIndisponiveisInterno(DateTime dataConsulta, CancellationToken cancellationToken)
+    {
+        var agendamentos = await _disponibilidadeService.GetByDate(dataConsulta, cancellationToken);
+
+        // Extrai apenas o horário (HH:mm) dos agendamentos existentes
+        return agendamentos
+            .Select(ag => Convert.ToDateTime(ag.dataConsulta).ToString("HH:mm"))
+            .Distinct()
+            .ToList();
+    }
+    
     private async Task<List<string>> GetHorariosDisponiveisInterno(DateTime dataConsulta, CancellationToken cancellationToken)
     {
         var inicioExpediente = new TimeSpan(8, 0, 0);  // 08:00
@@ -234,13 +248,20 @@ public class AgendamentoController : ControllerBase
         for (var hora = inicioExpediente; hora < fimExpediente; hora += duracaoConsulta)
             horarios.Add(hora.ToString(@"hh\:mm"));
 
-        // Obtém agendamentos já existentes para esse dia
-        var agendamentos = await _disponibilidadeService.GetByDate(dataConsulta, cancellationToken);
+        // Pega agendamentos existentes para o dia
+        var agendamentos = await _service.GetByDate(dataConsulta, cancellationToken);
 
         foreach (var ag in agendamentos)
         {
-            var horaMarcada = Convert.ToDateTime(ag.dataConsulta).ToString("yyyy-MM-dd");
-            horarios.Remove(horaMarcada);
+            if (!ag.dataConsulta.HasValue)
+                continue;
+
+            // Extrai apenas a hora do agendamento
+            var horaAgendada = ag.dataConsulta.Value.TimeOfDay;
+            var horaStr = horaAgendada.ToString(@"hh\:mm");
+
+            // Remove horário já ocupado
+            horarios.Remove(horaStr);
         }
 
         return horarios;
@@ -262,7 +283,23 @@ public class AgendamentoController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] Agendamento agendamento, CancellationToken cancellationToken)
     {
-        var criado = await _service.Create(agendamento, cancellationToken);
+        if (agendamento == null)
+            return BadRequest("O corpo da requisição não pode ser nulo.");
+
+        if (agendamento.dataConsulta == null)
+            return BadRequest("O campo 'dataConsulta' é obrigatório.");
+
+        var novoAgendamento = new Agendamento
+        {
+            id = Guid.NewGuid().ToString(),
+            animalId = agendamento.animalId,
+            clienteId = agendamento.clienteId,
+            veterinarioId = agendamento.veterinarioId,
+            dataConsulta = agendamento.dataConsulta,
+            status = Status.Agendado
+        };
+
+        var criado = await _service.Create(novoAgendamento, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = criado.id }, criado);
     }
 
