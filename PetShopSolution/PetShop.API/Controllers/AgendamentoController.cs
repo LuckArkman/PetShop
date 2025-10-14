@@ -36,7 +36,7 @@ public class AgendamentoController : ControllerBase
 
         return Ok(agendamento);
     }
-    
+
     [HttpGet("disponibilidades/{data}")]
     [ProducesResponseType(typeof(List<string>), 200)]
     [ProducesResponseType(400)]
@@ -45,38 +45,36 @@ public class AgendamentoController : ControllerBase
         if (!DateTime.TryParse(data, out var dataConsulta))
             return BadRequest(new { message = "Formato de data inválido. Use yyyy-MM-dd." });
 
-        // 1️⃣ Se for domingo, não há expediente
         if (dataConsulta.DayOfWeek == DayOfWeek.Sunday)
             return Ok(new List<string>());
 
-        // 2️⃣ Se o dia estiver bloqueado manualmente (indisponível)
         var diasIndisponiveis = await _disponibilidadeService.GetIndisponiveis(cancellationToken);
         if (diasIndisponiveis.Any(d => d.Data.Date == dataConsulta.Date))
             return Ok(new List<string>());
 
-        // 3️⃣ Monta lista base de horários (08:00 → 17:00, intervalos de 1h)
         var inicioExpediente = new TimeSpan(8, 0, 0);
         var fimExpediente = new TimeSpan(17, 0, 0);
         var duracaoConsulta = TimeSpan.FromHours(1);
 
         var horarios = new List<string>();
         for (var hora = inicioExpediente; hora < fimExpediente; hora += duracaoConsulta)
-            horarios.Add(hora.ToString(@"hh\:mm"));
+        {
+            // Construir a string manualmente para garantir o formato HH:mm
+            string horaStr = $"{hora.Hours:D2}:{hora.Minutes:D2}";
+            horarios.Add(horaStr);
+        }
 
-        // 4️⃣ Busca agendamentos já existentes no banco para esse dia
         var agendamentos = await _service.GetByDate(dataConsulta, cancellationToken);
 
-        // 5️⃣ Remove da lista os horários já ocupados
         foreach (var agendamento in agendamentos)
         {
             if (agendamento.dataConsulta.HasValue)
             {
-                var horaMarcada = agendamento.dataConsulta.Value.ToLocalTime().ToString("HH:mm");
+                var horaMarcada = agendamento.dataConsulta.Value.ToString("HH:mm");
                 horarios.Remove(horaMarcada);
             }
         }
 
-        // 6️⃣ Retorna lista final de horários livres
         return Ok(horarios);
     }
 

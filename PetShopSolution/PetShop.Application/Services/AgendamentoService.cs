@@ -68,32 +68,28 @@ public class AgendamentoService : IAgendamentoService
 
 
     /// <summary>
-    /// Retorna todos os agendamentos de um dia específico (UTC ou Local),
+    /// Retorna todos os agendamentos de um dia específico,
+    /// considerando corretamente o fuso horário (UTC) e
     /// excluindo automaticamente os que estiverem Cancelados ou Concluídos.
     /// </summary>
-    /// <param name="dataConsulta">Dia a ser consultado (somente parte da data é usada)</param>
-    /// <param name="cancellationToken">Token de cancelamento</param>
-    /// <returns>Lista de agendamentos existentes naquele dia</returns>
     public async Task<List<Agendamento>> GetByDate(DateTime dataConsulta, CancellationToken cancellationToken)
     {
-        // Normaliza o dia (remove horas)
-        var inicioDoDia = dataConsulta.Date;
-        var fimDoDia = inicioDoDia.AddDays(1);
+        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
 
-        // Cria filtro Mongo para pegar qualquer agendamento que ocorra entre 00:00 e 23:59
+        // normaliza a data local e converte para UTC
+        var inicioLocal = DateTime.SpecifyKind(dataConsulta.Date, DateTimeKind.Local);
+        var fimLocal = DateTime.SpecifyKind(dataConsulta.Date.AddDays(1), DateTimeKind.Local);
+
+        var inicioUtc = inicioLocal.ToUniversalTime();
+        var fimUtc = fimLocal.ToUniversalTime();
+
         var filtro = Builders<Agendamento>.Filter.And(
-            Builders<Agendamento>.Filter.Gte(a => a.dataConsulta, inicioDoDia),
-            Builders<Agendamento>.Filter.Lt(a => a.dataConsulta, fimDoDia),
+            Builders<Agendamento>.Filter.Gte(a => a.dataConsulta, inicioUtc),
+            Builders<Agendamento>.Filter.Lt(a => a.dataConsulta, fimUtc),
             Builders<Agendamento>.Filter.Ne(a => a.status, Status.Cancelado),
             Builders<Agendamento>.Filter.Ne(a => a.status, Status.Concluído)
         );
 
-        // ✅ Correção: remover o ponto e vírgula antes do .Find()
-        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
-        var resultado = await collection
-            .Find(filtro)
-            .ToListAsync(cancellationToken);
-
-        return resultado;
+        return await collection.Find(filtro).ToListAsync(cancellationToken);
     }
 }
