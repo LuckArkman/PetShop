@@ -37,6 +37,26 @@ public class AgendamentoController : ControllerBase
         return Ok(agendamento);
     }
 
+    /// <summary>
+    /// Retorna todos os agendamentos do dia atual (entre 00:00 e 23:59).
+    /// Exclui automaticamente agendamentos Cancelados ou Concluídos.
+    /// </summary>
+    [HttpGet("hoje")]
+    [ProducesResponseType(typeof(List<Agendamento>), 200)]
+    [ProducesResponseType(204)]
+    public async Task<IActionResult> GetAgendamentosDoDiaAtual(CancellationToken cancellationToken)
+    {
+        var hoje = DateTime.Now.Date;
+
+        var agendamentos = await _service.GetByDate(hoje, cancellationToken);
+
+        if (agendamentos == null || !agendamentos.Any())
+            return NoContent();
+
+        return Ok(agendamentos);
+    }
+
+
     [HttpGet("disponibilidades/{data}")]
     [ProducesResponseType(typeof(List<string>), 200)]
     [ProducesResponseType(400)]
