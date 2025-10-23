@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using PetShop.Application.DTOs;
 using PetShop.Application.Enums;
 using PetShop.Application.Services;
+using PetShop.Application.Singletons;
 
 namespace PetShop.API.Controllers;
 
@@ -179,6 +181,26 @@ public class AgendamentoController : ControllerBase
         }
 
         return Ok(lista);
+    }
+    
+    /// <summary>
+    /// Remove um agendamento específico com base na data e horário informados.
+    /// </summary>
+    /// <param name="data">Data no formato yyyy-MM-dd</param>
+    /// <param name="hora">Horário no formato HH:mm</param>
+    /// <returns>Mensagem de sucesso ou erro</returns>
+    [HttpDelete("por-data/{data}/{hora}")]
+    public async Task<IActionResult> DeletePorDataHora(string data, string hora, CancellationToken cancellationToken)
+    {
+        if (!DateTime.TryParse($"{data} {hora}", out var dataHora))
+            return BadRequest(new { message = "Formato de data ou hora inválido. Use yyyy-MM-dd e HH:mm." });
+
+        var removido = await _service.DeleteByDateTime(dataHora, cancellationToken);
+
+        if (!removido)
+            return NotFound(new { message = "Nenhum agendamento encontrado para esta data e hora." });
+
+        return Ok(new { message = $"Agendamento de {dataHora:dd/MM/yyyy HH:mm} removido com sucesso." });
     }
     
     // ===========================================================
