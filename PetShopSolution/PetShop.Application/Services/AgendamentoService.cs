@@ -56,6 +56,21 @@ public class AgendamentoService : IAgendamentoService
         return result.DeletedCount > 0;
     }
     
+    /// <summary>
+    /// Remove um agendamento específico com base na data e horário exatos.
+    /// </summary>
+    /// <param name="dataHora">Data e hora da consulta</param>
+    /// <param name="cancellationToken">Token de cancelamento</param>
+    /// <returns>True se removido com sucesso, False se não encontrado</returns>
+    public async Task<bool> DeleteByDateTime(DateTime dataHora, CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
+        var filter = Builders<Agendamento>.Filter.Eq(a => a.dataConsulta, dataHora);
+
+        var result = await collection.DeleteOneAsync(filter, cancellationToken);
+        return result.DeletedCount > 0;
+    }
+    
     public async Task<IEnumerable<Agendamento>> GetByVeterinario(string veterinarioId, CancellationToken cancellationToken)
     {
         var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
@@ -65,6 +80,8 @@ public class AgendamentoService : IAgendamentoService
 
         return await collection.Find(filter).ToListAsync(cancellationToken);
     }
+    
+    
 
 
     /// <summary>
