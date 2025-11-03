@@ -93,20 +93,14 @@ public class AgendamentoService : IAgendamentoService
     {
         var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
 
-        // Normaliza o início e o fim do dia SEM converter fuso
         var inicioDoDia = dataConsulta.Date;
         var fimDoDia = inicioDoDia.AddDays(1);
 
-        // Filtro direto pela faixa de horários do dia
         var filtro = Builders<Agendamento>.Filter.And(
             Builders<Agendamento>.Filter.Gte(a => a.dataConsulta, inicioDoDia),
-            Builders<Agendamento>.Filter.Lt(a => a.dataConsulta, fimDoDia),
-            Builders<Agendamento>.Filter.Ne(a => a.status, Status.Agendado),
-            Builders<Agendamento>.Filter.Ne(a => a.status, Status.Cancelado),
-            Builders<Agendamento>.Filter.Ne(a => a.status, Status.Concluído)
+            Builders<Agendamento>.Filter.Lt(a => a.dataConsulta, fimDoDia)
         );
 
-        var resultado = await collection.Find(filtro).ToListAsync(cancellationToken);
-        return resultado;
+        return await collection.Find(filtro).ToListAsync(cancellationToken);
     }
 }
