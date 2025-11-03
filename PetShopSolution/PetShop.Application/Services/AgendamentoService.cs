@@ -101,6 +101,7 @@ public class AgendamentoService : IAgendamentoService
         var filtro = Builders<Agendamento>.Filter.And(
             Builders<Agendamento>.Filter.Gte(a => a.dataConsulta, inicioDoDia),
             Builders<Agendamento>.Filter.Lt(a => a.dataConsulta, fimDoDia),
+            Builders<Agendamento>.Filter.Ne(a => a.status, Status.Agendado),
             Builders<Agendamento>.Filter.Ne(a => a.status, Status.Cancelado),
             Builders<Agendamento>.Filter.Ne(a => a.status, Status.Concluído)
         );
