@@ -9,10 +9,10 @@ public class Agendamento
 {
     public string id { get; set; }
     public string? animalId { get; set; }
-    public string? clienteId { get; set; }
+    public string? rg { get; set; }
 
     [Required(ErrorMessage = "O campo veterinarioId é obrigatório.")]
-    public string veterinarioId { get; set; } = null!;
+    public string crmv { get; set; } = null!;
 
     [Required(ErrorMessage = "A data da consulta é obrigatória.")]
     public DateTime? dataConsulta { get; set; }
@@ -24,11 +24,11 @@ public class Agendamento
     public Agendamento() { }
 
     // Construtor auxiliar (opcional)
-    public Agendamento(string? animalId, string? clienteId, string veterinarioId, DateTime dataConsulta, Status status = Status.Agendado)
+    public Agendamento(string? animalId, string? rg, string crmv, DateTime dataConsulta, Status status = Status.Agendado)
     {
         this.animalId = animalId;
-        this.clienteId = clienteId;
-        this.veterinarioId = veterinarioId;
+        this.rg = rg;
+        this.crmv = crmv;
         this.dataConsulta = dataConsulta;
         this.status = status;
     }
