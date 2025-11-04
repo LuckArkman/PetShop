@@ -253,10 +253,10 @@ public class AgendamentoController : ControllerBase
     /// <param name="veterinarioId">ID do veterinário</param>
     /// <param name="cancellationToken">Token de cancelamento</param>
     /// <returns>Lista de agendamentos do veterinário</returns>
-    [HttpGet("veterinario/{veterinarioId}")]
-    public async Task<IActionResult> GetByVeterinario(string veterinarioId, CancellationToken cancellationToken)
+    [HttpGet("veterinario/{crmv}")]
+    public async Task<IActionResult> GetByVeterinario(string crmv, CancellationToken cancellationToken)
     {
-        var lista = await _service.GetByVeterinario(veterinarioId, cancellationToken);
+        var lista = await _service.GetByVeterinario(crmv, cancellationToken);
     
         if (!lista.Any())
             return NotFound(new { message = "Nenhum agendamento encontrado para este veterinário." });
@@ -310,10 +310,10 @@ public class AgendamentoController : ControllerBase
     /// <summary>
     /// Retorna todos os agendamentos de um cliente.
     /// </summary>
-    [HttpGet("cliente/{clienteId}")]
-    public async Task<IActionResult> GetByCliente(string clienteId, CancellationToken cancellationToken)
+    [HttpGet("cliente/{rg}")]
+    public async Task<IActionResult> GetByCliente(string rg, CancellationToken cancellationToken)
     {
-        var lista = await _service.GetByCliente(clienteId, cancellationToken);
+        var lista = await _service.GetByCliente(rg, cancellationToken);
         return Ok(lista);
     }
 
@@ -333,8 +333,8 @@ public class AgendamentoController : ControllerBase
         {
             id = Guid.NewGuid().ToString(),
             animalId = agendamento.animalId,
-            clienteId = agendamento.clienteId,
-            veterinarioId = agendamento.veterinarioId,
+            rg = agendamento.rg,
+            crmv = agendamento.crmv,
             dataConsulta = agendamento.dataConsulta,
             status = Status.Agendado
         };
@@ -360,8 +360,8 @@ public class AgendamentoController : ControllerBase
             await _atendimentoService.Create(new Atendimento
             {
                 animalId = atualizado.animalId,
-                clienteId = atualizado.clienteId,
-                veterinarioId = atualizado.veterinarioId,
+                rg = atualizado.rg,
+                crmv = atualizado.crmv,
                 descricao = "Consulta concluída a partir de agendamento.",
                 dataAtendimento = DateTime.UtcNow
             }, cancellationToken);

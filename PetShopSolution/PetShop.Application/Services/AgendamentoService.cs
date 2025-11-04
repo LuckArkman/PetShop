@@ -25,10 +25,10 @@ public class AgendamentoService : IAgendamentoService
         return await collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Agendamento>> GetByCliente(string clienteId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Agendamento>> GetByCliente(string rg, CancellationToken cancellationToken)
     {
         var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
-        var filter = Builders<Agendamento>.Filter.Eq(a => a.clienteId, clienteId);
+        var filter = Builders<Agendamento>.Filter.Eq(a => a.rg, rg);
         return await collection.Find(filter).ToListAsync(cancellationToken);
     }
 
@@ -71,11 +71,11 @@ public class AgendamentoService : IAgendamentoService
         return result.DeletedCount > 0;
     }
     
-    public async Task<IEnumerable<Agendamento>> GetByVeterinario(string veterinarioId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Agendamento>> GetByVeterinario(string crmv, CancellationToken cancellationToken)
     {
         var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
 
-        var filter = Builders<Agendamento>.Filter.Eq(a => a.veterinarioId, veterinarioId) &
+        var filter = Builders<Agendamento>.Filter.Eq(a => a.crmv, crmv) &
                      Builders<Agendamento>.Filter.Ne(a => a.status, Status.Cancelado);
 
         return await collection.Find(filter).ToListAsync(cancellationToken);
