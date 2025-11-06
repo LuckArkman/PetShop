@@ -26,6 +26,7 @@ builder.Services.AddScoped<ICirurgiaService, CirurgiaService>();
 builder.Services.AddScoped<IRitmoCircadianoService, RitmoCircadianoService>();
 builder.Services.AddScoped<IHistoryFrequenciaCardiaca, HistoryFrequenciaCardiacaService>();
 builder.Services.AddScoped<IFrequenciaCardiaca, FrequenciaCardiacaService>();
+builder.Services.AddScoped<ICaixaService, CaixaService>();
 builder.Services.AddScoped<AgendamentoService>();
 builder.Services.AddScoped<AtendimentoService>();
 builder.Services.AddScoped<DisponibilidadeService>();
