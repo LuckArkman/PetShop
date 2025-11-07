@@ -37,7 +37,7 @@
       MONGO_INITDB_ROOT_PASSWORD: 3702959
       MONGO_INITDB_DATABASE: PetShopDB
     ports:
-      - "27018:27017"   # Porta externa 27018 → interna 27017
+      - "27017:27017"   # Porta externa 27018 → interna 27017
     volumes:
       - mongo_data:/data/db  # Persistência
     networks:
