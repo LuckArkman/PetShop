@@ -50,11 +50,11 @@ public class ResponsavelController : ControllerBase
         return Ok(new { Message = "Usuário atualizado com sucesso!", User = result });
     }
     
-    [HttpGet("Responsavel{cpf}")]
-    public async Task<IActionResult> Responsavel(string cpf)
+    [HttpGet("Responsavel{id}")]
+    public async Task<IActionResult> Responsavel(string id)
     {
 
-        var result = await _service.GetResponsavelId(cpf, CancellationToken.None) as Responsavel;
+        var result = await _service.GetResponsavelId(id, CancellationToken.None) as Responsavel;
         return Ok(result);
     }
     
