@@ -19,7 +19,7 @@
       - "5087:8080"
       - "7151:443"
     volumes:
-      - ./Cambui.Account/temp/certificate.pfx:/app/certs/certificate.pfx:ro
+      - ./PetShop.API/temp/certificate.pfx:/app/certs/certificate.pfx:ro
     depends_on:
       - mongo
     networks:
