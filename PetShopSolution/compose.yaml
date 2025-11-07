@@ -7,7 +7,7 @@
       args:
         BUILD_CERT_PASSWORD: "3702959"
     environment:
-      - ASPNETCORE_URLS="http://+:8080;https://+:443"
+      - ASPNETCORE_URLS=http://+:8080;https://+:443
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/certificate.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=3702959
       - MONGO_HOST=mongo
@@ -20,8 +20,6 @@
       - "7151:443"
     volumes:
       - ./PetShop.API/temp/certificate.pfx:/app/certs/certificate.pfx:ro
-    depends_on:
-      - mongo
     networks:
       - PetShop_network
 
