@@ -5,94 +5,77 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PetShop.Application.DTOs;
 using PetShop.Application.Interfaces;
-using BCrypt.Net;
+
+namespace PetShop.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ResponsavelController : ControllerBase
+public class AtendenteController : ControllerBase
 {
-    private readonly IResponsavelService _service;
+    readonly IAtendenteService _service;
     private readonly IConfiguration _configuration;
-    private readonly IAnimalService _animalService;
-
-    public ResponsavelController(IResponsavelService service,
-        IAnimalService animalService,
+    public AtendenteController(IAtendenteService atendenteService,
         IConfiguration configuration)
     {
-        _service = service;
-        _animalService = animalService;
+        _service = atendenteService;
         _configuration = configuration;
     }
-
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] Responsavel model)
+    public async Task<IActionResult> Register([FromBody] Atendente model)
     {
         model.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
         model.ConfirmPassword = model.Password;
-        var check = await _service.GetObject(model.Email!, CancellationToken.None) as Responsavel;
+        var check = await _service.FindByEmailAsync(model.email!, CancellationToken.None) as Atendente;
         if (check is not null) return BadRequest(new
         {
             Success = false,
             Token = "",
-            Message = "Usuario ja cadastrado!"
+            Message = "Atendente ja cadastrado!"
         });
 
-        var result = await _service.InsetObject(model, CancellationToken.None) as Responsavel;
-        return Ok(new { Message = "Usuário registrado com sucesso!", User = result });
+        var result = await _service.InsetObject(model, CancellationToken.None) as Atendente;
+        return Ok(new { Message = "Atendente registrado com sucesso!", User = result });
     }
     
     [HttpPut("update")]
-    public async Task<IActionResult> Update([FromBody] Responsavel model)
+    public async Task<IActionResult> Update([FromBody] Atendente model)
     {
 
-        var result = await _service.UpdateObject(model, CancellationToken.None) as Responsavel;
+        var result = await _service.UpdateObject(model, CancellationToken.None) as Atendente;
         Console.WriteLine($"{result == null}");
-        return Ok(new { Message = "Usuário atualizado com sucesso!", User = result });
+        return Ok(new { Message = "Atendente atualizado com sucesso!", User = result });
     }
     
-    [HttpGet("Responsavel{_rg}")]
-    public async Task<IActionResult> Responsavel(string _rg)
+    [HttpGet("Atendente{_rg}")]
+    public async Task<IActionResult> Atendente(string _rg)
     {
 
-        var result = await _service.GetResponsavelId(_rg, CancellationToken.None) as Responsavel;
+        var result = await _service.GetAtendenteRG(_rg, CancellationToken.None) as Atendente;
         return Ok(result);
     }
     
-    [HttpGet("Responsaveis")]
-    public async Task<IActionResult> Responsaveis()
+    [HttpGet("Atendentes")]
+    public async Task<IActionResult> Atendentes()
     {
 
-        var result = await _service.GetAllResponsavel(CancellationToken.None);
+        var result = await _service.GetAllAtendente(CancellationToken.None);
         return Ok(result);
-    }
-
-    [HttpGet("animais")]
-    public async Task<IActionResult> Animais(string mail)
-    {
-        var register = await _service.GetObject(mail, CancellationToken.None) as Responsavel;
-        if (register?.Animais == null || register.Animais.Count == 0)
-        {
-            return Ok(Array.Empty<object>());
-        }
-
-        var animals = await _animalService.GetAnimalsInList(register.Animais, CancellationToken.None);
-        return Ok(animals);
     }
 
     
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete(string mail)
     {
-        var register = await _service.GetObject(mail, CancellationToken.None) as Responsavel;
+        var register = await _service.FindByEmailAsync(mail, CancellationToken.None) as Atendente;
         if (register == null) return BadRequest();
-        var rm = await _service.RemoveAsync(register.Email, CancellationToken.None);
+        var rm = await _service.RemoveAsync(register.email, CancellationToken.None);
         return Ok(register);
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest model)
     {
-        var user = await _service.FindByEmailAsync(model.credencial, CancellationToken.None) as Responsavel;
+        var user = await _service.FindByEmailAsync(model.credencial, CancellationToken.None) as Atendente;
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(model.password, user.Password))
         {
@@ -102,8 +85,8 @@ public class ResponsavelController : ControllerBase
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Name, user.FirstName),
-            new Claim(ClaimTypes.Email, user.Email)
+            new Claim(ClaimTypes.Name, user.nome),
+            new Claim(ClaimTypes.Email, user.email)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
@@ -125,4 +108,5 @@ public class ResponsavelController : ControllerBase
             Message = "Login bem-sucedido!"
         });
     }
+    
 }
