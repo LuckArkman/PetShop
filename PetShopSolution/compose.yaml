@@ -17,7 +17,7 @@
       - MONGO_PASS=3702959
     ports:
       - "5087:8080"
-      - "7151:443"
+      - "7231:443"
     volumes:
       - ./PetShop.API/temp/certificate.pfx:/app/certs/certificate.pfx:ro
     networks:
