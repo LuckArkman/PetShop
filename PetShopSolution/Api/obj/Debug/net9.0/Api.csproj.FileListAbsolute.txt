@@ -57,7 +57,6 @@
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/System.Drawing.Common.dll
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/ZstdSharp.dll
-/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/Controllers.dll
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/Data.dll
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/DTOs.dll
@@ -70,3 +69,6 @@
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/Data.pdb
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/DTOs.pdb
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/Enums.pdb
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/runtimes/win/lib/net6.0/Microsoft.Win32.SystemEvents.dll
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/runtimes/unix/lib/net6.0/System.Drawing.Common.dll
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/bin/Debug/net9.0/runtimes/win/lib/net6.0/System.Drawing.Common.dll
