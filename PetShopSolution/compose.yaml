@@ -19,7 +19,7 @@
       - "5087:8080"
       - "7231:443"
     volumes:
-      - ./PetShop.API/temp/certificate.pfx:/app/certs/certificate.pfx:ro
+      - ./Api/temp/certificate.pfx:/app/certs/certificate.pfx:ro
     networks:
       - PetShop_network
 
