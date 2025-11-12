@@ -1,0 +1,16 @@
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/bin/Debug/net8.0/DTOs.deps.json
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/bin/Debug/net8.0/DTOs.dll
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/bin/Debug/net8.0/DTOs.pdb
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/bin/Debug/net8.0/Enums.dll
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/bin/Debug/net8.0/Enums.pdb
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/DTOs.csproj.AssemblyReference.cache
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/DTOs.GeneratedMSBuildEditorConfig.editorconfig
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/DTOs.AssemblyInfoInputs.cache
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/DTOs.AssemblyInfo.cs
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/DTOs.csproj.CoreCompileInputs.cache
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/DTOs.sourcelink.json
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/DTOs.csproj.Up2Date
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/DTOs.dll
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/refint/DTOs.dll
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/DTOs.pdb
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/Debug/net8.0/ref/DTOs.dll
