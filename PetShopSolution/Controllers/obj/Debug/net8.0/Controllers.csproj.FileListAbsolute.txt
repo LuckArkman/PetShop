@@ -7,8 +7,6 @@
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/bin/Debug/net8.0/Controllers.deps.json
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/bin/Debug/net8.0/Controllers.dll
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/bin/Debug/net8.0/Controllers.pdb
-/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/bin/Debug/net8.0/Microsoft.Extensions.Http.dll
-/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/bin/Debug/net8.0/Microsoft.Extensions.Http.xml
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/obj/Debug/net8.0/Controll.01F35609.Up2Date
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/obj/Debug/net8.0/Controllers.dll
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/obj/Debug/net8.0/refint/Controllers.dll

@@ -1,11 +1,21 @@
 using Interfaces;
 using Services;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo 
+    { 
+        Title = "Pet Monitoring API", // Give your API a descriptive title
+        Version = "v1", 
+        Description = "API for managing animal health and geolocation records."
+    });
+});
+
+// Dependency Injection Setup
 builder.Services.AddScoped<IAnimalService, AnimalService>();
 builder.Services.AddScoped<IAnimalGeolocationHistoryService, AnimalGeolocationHistoryService>();
 builder.Services.AddScoped<IGeolocationRecordService, GeolocationRecordService>();
@@ -27,26 +37,18 @@ builder.Services.AddScoped<IAtendenteService, AtendenteService>();
 builder.Services.AddScoped<AgendamentoService>();
 builder.Services.AddScoped<AtendimentoService>();
 builder.Services.AddScoped<DisponibilidadeService>();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "AllowBlazorClient",
-        policy =>
-        {
-            policy.WithOrigins("http://72.61.44.192", "http://72.61.44.192:80", "http://petrakka.com/")
-                .WithOrigins("https://72.61.44.192", "https://petrakka.com/")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
+
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // 1. Enable the Swagger middleware to generate the Swagger JSON document
     app.UseSwagger();
-    
-    // 2. Enable the Swagger UI middleware to serve the interactive UI
-    app.UseSwaggerUI();
+    // Update UseSwaggerUI to explicitly reference the "v1" document for clarity
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pet Monitoring API v1");
+    });
 }
 
 app.UseHttpsRedirection();
