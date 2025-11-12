@@ -37,6 +37,28 @@ builder.Services.AddScoped<IAtendenteService, AtendenteService>();
 builder.Services.AddScoped<AgendamentoService>();
 builder.Services.AddScoped<AtendimentoService>();
 builder.Services.AddScoped<DisponibilidadeService>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorClient", policy =>
+    {
+        // Lista completa de origens permitidas
+        var origins = new[]
+        {
+            "http://localhost",
+            "http://127.0.0.1",
+            "http://72.61.44.192",
+            "http://72.61.44.192",
+            "http://petrakka.com",
+            "https://72.61.44.192",
+            "https://petrakka.com"
+        };
+
+        policy.WithOrigins(origins)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // Necessário para cookies, JWT em cookies, etc.
+    });
+});
 
 var app = builder.Build();
 
@@ -44,13 +66,17 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    // Update UseSwaggerUI to explicitly reference the "v1" document for clarity
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pet Monitoring API v1");
     });
 }
 
+// ORDEM CRÍTICA: UseCors ANTES de MapControllers
 app.UseHttpsRedirection();
+
+app.UseCors("AllowBlazorClient"); // ESSA LINHA ESTAVA FALTANDO!
+
 app.MapControllers();
+
 app.Run();
