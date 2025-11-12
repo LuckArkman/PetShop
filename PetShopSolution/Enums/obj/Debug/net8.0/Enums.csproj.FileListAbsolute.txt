@@ -1,0 +1,12 @@
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/bin/Debug/net8.0/Enums.deps.json
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/bin/Debug/net8.0/Enums.dll
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/bin/Debug/net8.0/Enums.pdb
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.GeneratedMSBuildEditorConfig.editorconfig
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.AssemblyInfoInputs.cache
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.AssemblyInfo.cs
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.csproj.CoreCompileInputs.cache
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.sourcelink.json
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.dll
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/refint/Enums.dll
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.pdb
+/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/ref/Enums.dll

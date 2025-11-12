@@ -1,9 +1,9 @@
 ﻿services:
-  petshop.api:
-    image: petshop.api
+  api:
+    image: api
     build:
       context: .
-      dockerfile: PetShop.API/Dockerfile
+      dockerfile: Api/Dockerfile
       args:
         BUILD_CERT_PASSWORD: "3702959"
     environment:

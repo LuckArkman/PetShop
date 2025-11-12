@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "87NO/pWtqCo=",
+  "success": true,
+  "projectFilePath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
+  "expectedPackageFiles": [
+    "/home/mplopes/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.16/microsoft.aspnetcore.app.ref.8.0.16.nupkg.sha512"
+  ],
+  "logs": []
+}
