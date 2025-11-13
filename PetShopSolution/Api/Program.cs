@@ -43,8 +43,7 @@ builder.Services.AddCors(options =>
     {
         policy.SetIsOriginAllowed(origin => true) // Aceita QUALQUER origem
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials(); // Funciona com cookies
+            .AllowAnyMethod();
     });
 });
 
