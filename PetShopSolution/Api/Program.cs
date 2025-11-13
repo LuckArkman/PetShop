@@ -39,24 +39,12 @@ builder.Services.AddScoped<AtendimentoService>();
 builder.Services.AddScoped<DisponibilidadeService>();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowBlazorClient", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        // Lista completa de origens permitidas
-        var origins = new[]
-        {
-            "http://localhost",
-            "http://127.0.0.1",
-            "http://72.61.44.192",
-            "http://72.61.44.192",
-            "http://petrakka.com",
-            "https://72.61.44.192",
-            "https://petrakka.com"
-        };
-
-        policy.WithOrigins(origins)
+        policy.SetIsOriginAllowed(origin => true) // Aceita QUALQUER origem
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials(); // Necessário para cookies, JWT em cookies, etc.
+            .AllowCredentials(); // Funciona com cookies
     });
 });
 
@@ -75,7 +63,7 @@ if (app.Environment.IsDevelopment())
 // ORDEM CRÍTICA: UseCors ANTES de MapControllers
 app.UseHttpsRedirection();
 
-app.UseCors("AllowBlazorClient"); // ESSA LINHA ESTAVA FALTANDO!
+app.UseCors("AllowAll"); // ESSA LINHA ESTAVA FALTANDO!
 
 app.MapControllers();
 
