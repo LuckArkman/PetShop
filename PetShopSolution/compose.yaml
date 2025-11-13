@@ -23,6 +23,6 @@
     networks:
       - PetShop_network
 
-networks:
-  PetShop_network:
-    driver: bridge
+  networks:
+    PetShop_network:
+      driver: bridge
