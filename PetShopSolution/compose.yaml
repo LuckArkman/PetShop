@@ -4,22 +4,8 @@
     build:
       context: .
       dockerfile: Api/Dockerfile
-      args:
-        BUILD_CERT_PASSWORD: "3702959"
-    environment:
-      - ASPNETCORE_URLS=http://+:8080;https://+:443
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/certificate.pfx
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=3702959
-      - MONGO_HOST=mongo
-      - MONGO_PORT=27017
-      - MONGO_DB=PetShopDB
-      - MONGO_USER=petrakka
-      - MONGO_PASS=3702959
     ports:
       - "5087:8080"
-      - "7231:443"
-    volumes:
-      - ./Api/temp/certificate.pfx:/app/certs/certificate.pfx:ro
     networks:
       - PetShop_network
 
