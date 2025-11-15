@@ -9,6 +9,7 @@ namespace Services;
 public class AnimalService : IAnimalService
 {
     public AnimalDBMongo _animalDb { get; set; }
+    private readonly IMongoCollection<Animal> _collection;
     private readonly IConfiguration _cfg;
 
     public AnimalService(IConfiguration configuration)
@@ -16,6 +17,7 @@ public class AnimalService : IAnimalService
         _cfg = configuration;
         _animalDb = new AnimalDBMongo(_cfg["MongoDbSettings:ConnectionString"], "Animal");
         _animalDb.GetOrCreateDatabase();
+        _collection = _animalDb.GetDatabase().GetCollection<Animal>("Animal");
     }
     public async Task<List<Animal>?> GetAllAnimals(CancellationToken cancellationToken)
     {
@@ -82,9 +84,11 @@ public class AnimalService : IAnimalService
         return ob;
     }
 
-    public Task RemoveObject(Animal _object, CancellationToken cancellationToken)
+    public async Task<bool> RemoveObject(string _object, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var filter = Builders<Animal>.Filter.Eq(u => u.id, _object);
+        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
+        return result.DeletedCount > 0;  
     }
 
     public async Task<List<Animal>?> GetAnimalsInList(ICollection<string> ids, CancellationToken cancellationToken)

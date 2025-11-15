@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "6b+t3FgG004=",
-  "success": true,
+  "dgSpecHash": "my91ezNIQLA=",
+  "success": false,
   "projectFilePath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/Api.csproj",
   "expectedPackageFiles": [
     "/home/mplopes/.nuget/packages/bcrypt.net-core/1.6.0/bcrypt.net-core.1.6.0.nupkg.sha512",
@@ -215,5 +215,17 @@
     "/home/mplopes/.nuget/packages/system.xml.xpath.xdocument/4.3.0/system.xml.xpath.xdocument.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/zstdsharp.port/0.7.3/zstdsharp.port.0.7.3.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1104",
+      "level": "Error",
+      "message": "Unable to find project '/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj'. Check that the project reference is valid and that the project file exists.",
+      "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/Api.csproj",
+      "filePath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/Api.csproj",
+      "libraryId": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
 }
