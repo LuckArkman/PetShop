@@ -30,10 +30,8 @@ public class AnimalController : ControllerBase
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete(string id)
     {
-        var register = await _animalService.GetObject(id, CancellationToken.None) as Animal;
-        if (register == null) return BadRequest();
-        await _animalService.RemoveObject(register, CancellationToken.None);
-        return Ok(register);
+        var remove = await _animalService.RemoveObject(id, CancellationToken.None);
+        return Ok(remove);
     }
     
     [HttpGet("animais")]

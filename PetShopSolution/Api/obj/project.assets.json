@@ -3754,6 +3754,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj": "1.0.0",
           "BCrypt.Net-Core": "1.6.0",
           "DTOs": "1.0.0",
           "Enums": "1.0.0",
@@ -10508,5 +10509,16 @@
         "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1104",
+      "level": "Error",
+      "message": "Unable to find project '/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj'. Check that the project reference is valid and that the project file exists.",
+      "libraryId": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
 }

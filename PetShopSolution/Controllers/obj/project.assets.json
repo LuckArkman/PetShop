@@ -9939,6 +9939,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj",
       "BCrypt.Net-Core >= 1.6.0",
       "DTOs >= 1.0.0",
       "Enums >= 1.0.0",
@@ -9987,6 +9988,9 @@
             },
             "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj": {
               "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj"
+            },
+            "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj": {
+              "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj"
             },
             "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj": {
               "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj"
@@ -10068,5 +10072,16 @@
         "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1104",
+      "level": "Error",
+      "message": "Unable to find project '/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj'. Check that the project reference is valid and that the project file exists.",
+      "libraryId": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }
