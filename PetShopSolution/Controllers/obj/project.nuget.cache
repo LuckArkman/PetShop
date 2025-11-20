@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "oii9jzTM6+k=",
-  "success": false,
+  "dgSpecHash": "/P3wsDRMilM=",
+  "success": true,
   "projectFilePath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/Controllers.csproj",
   "expectedPackageFiles": [
     "/home/mplopes/.nuget/packages/bcrypt.net-core/1.6.0/bcrypt.net-core.1.6.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/dnsclient/1.6.1/dnsclient.1.6.1.nupkg.sha512",
+    "/home/mplopes/.nuget/packages/mercadopago-sdk/2.10.1/mercadopago-sdk.2.10.1.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.aspnetcore/2.3.0/microsoft.aspnetcore.2.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.aspnetcore.antiforgery/2.3.0/microsoft.aspnetcore.antiforgery.2.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.aspnetcore.authentication/2.3.0/microsoft.aspnetcore.authentication.2.3.0.nupkg.sha512",
@@ -107,7 +108,7 @@
     "/home/mplopes/.nuget/packages/microsoft.identitymodel.logging/8.14.0/microsoft.identitymodel.logging.8.14.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.identitymodel.tokens/8.14.0/microsoft.identitymodel.tokens.8.14.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.net.http.headers/2.3.0/microsoft.net.http.headers.2.3.0.nupkg.sha512",
-    "/home/mplopes/.nuget/packages/microsoft.netcore.platforms/5.0.0/microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "/home/mplopes/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.netcore.targets/1.1.0/microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.win32.registry/5.0.0/microsoft.win32.registry.5.0.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.win32.systemevents/6.0.0/microsoft.win32.systemevents.6.0.0.nupkg.sha512",
@@ -140,6 +141,7 @@
     "/home/mplopes/.nuget/packages/system.collections.concurrent/4.3.0/system.collections.concurrent.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.collections.immutable/1.3.1/system.collections.immutable.1.3.1.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.componentmodel.annotations/5.0.0/system.componentmodel.annotations.5.0.0.nupkg.sha512",
+    "/home/mplopes/.nuget/packages/system.configuration.configurationmanager/6.0.0/system.configuration.configurationmanager.6.0.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.console/4.3.0/system.console.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.diagnostics.debug/4.3.0/system.diagnostics.debug.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.diagnostics.diagnosticsource/8.0.1/system.diagnostics.diagnosticsource.8.0.1.nupkg.sha512",
@@ -179,7 +181,7 @@
     "/home/mplopes/.nuget/packages/system.runtime.interopservices/4.3.0/system.runtime.interopservices.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.runtime.interopservices.runtimeinformation/4.0.0/system.runtime.interopservices.runtimeinformation.4.0.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.runtime.numerics/4.3.0/system.runtime.numerics.4.3.0.nupkg.sha512",
-    "/home/mplopes/.nuget/packages/system.security.accesscontrol/5.0.0/system.security.accesscontrol.5.0.0.nupkg.sha512",
+    "/home/mplopes/.nuget/packages/system.security.accesscontrol/6.0.0/system.security.accesscontrol.6.0.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.security.cryptography.algorithms/4.3.0/system.security.cryptography.algorithms.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.security.cryptography.cng/5.0.0/system.security.cryptography.cng.5.0.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.security.cryptography.csp/4.3.0/system.security.cryptography.csp.4.3.0.nupkg.sha512",
@@ -187,8 +189,10 @@
     "/home/mplopes/.nuget/packages/system.security.cryptography.openssl/4.3.0/system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.security.cryptography.pkcs/8.0.1/system.security.cryptography.pkcs.8.0.1.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.security.cryptography.primitives/4.3.0/system.security.cryptography.primitives.4.3.0.nupkg.sha512",
+    "/home/mplopes/.nuget/packages/system.security.cryptography.protecteddata/6.0.0/system.security.cryptography.protecteddata.6.0.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.security.cryptography.x509certificates/4.3.0/system.security.cryptography.x509certificates.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.security.cryptography.xml/8.0.2/system.security.cryptography.xml.8.0.2.nupkg.sha512",
+    "/home/mplopes/.nuget/packages/system.security.permissions/6.0.0/system.security.permissions.6.0.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.security.principal.windows/5.0.0/system.security.principal.windows.5.0.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.text.encoding/4.3.0/system.text.encoding.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.text.encoding.codepages/4.3.0/system.text.encoding.codepages.4.3.0.nupkg.sha512",
@@ -201,6 +205,7 @@
     "/home/mplopes/.nuget/packages/system.threading.tasks.parallel/4.3.0/system.threading.tasks.parallel.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.threading.thread/4.3.0/system.threading.thread.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.valuetuple/4.3.0/system.valuetuple.4.3.0.nupkg.sha512",
+    "/home/mplopes/.nuget/packages/system.windows.extensions/6.0.0/system.windows.extensions.6.0.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.xml.readerwriter/4.3.0/system.xml.readerwriter.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/system.xml.xmldocument/4.3.0/system.xml.xmldocument.4.3.0.nupkg.sha512",
@@ -209,17 +214,5 @@
     "/home/mplopes/.nuget/packages/zstdsharp.port/0.7.3/zstdsharp.port.0.7.3.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.16/microsoft.aspnetcore.app.ref.8.0.16.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Unable to find project '/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj'. Check that the project reference is valid and that the project file exists.",
-      "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/Controllers.csproj",
-      "filePath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/Controllers.csproj",
-      "libraryId": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  "logs": []
 }

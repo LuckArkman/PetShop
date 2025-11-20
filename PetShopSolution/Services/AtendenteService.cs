@@ -119,7 +119,7 @@ public class AtendenteService : IAtendenteService
         // Create a filter to find the document by Id
         var filter = Builders<Atendente>.Filter.Eq(u => u.email, modelCredencial);
         // Find the document matching the filter
-        var _responsavel = collection.Find(filter).FirstOrDefault();
-        return _responsavel as Atendente;
+        var _atendente = collection.Find(filter).FirstOrDefault();
+        return _atendente as Atendente;
     }
 }

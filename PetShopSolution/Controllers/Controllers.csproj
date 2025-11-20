@@ -25,12 +25,12 @@
       <ProjectReference Include="..\DTOs\DTOs.csproj" />
       <ProjectReference Include="..\Enums\Enums.csproj" />
       <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
-      <ProjectReference Include="..\PetShop.Application\PetShop.Application.csproj" />
       <ProjectReference Include="..\Services\Services.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
+      <PackageReference Include="mercadopago-sdk" Version="2.10.1" />
       <PackageReference Include="Microsoft.AspNetCore" Version="2.3.0" />
       <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />

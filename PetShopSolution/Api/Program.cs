@@ -1,8 +1,15 @@
 using Interfaces;
+using MercadoPago.Config;
 using Services;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+var accessToken = builder.Configuration["MercadoPago:AccessToken"]
+                  ?? Environment.GetEnvironmentVariable("MERCADOPAGO_ACCESS_TOKEN")
+                  ?? throw new InvalidOperationException("MercadoPago AccessToken não configurado.");
+
+// Configuração global do SDK
+MercadoPagoConfig.AccessToken = accessToken;
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
