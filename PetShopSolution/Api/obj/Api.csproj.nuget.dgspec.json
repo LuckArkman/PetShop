@@ -17,15 +17,15 @@
           "/home/mplopes/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net9.0"
+          "net8.0"
         ],
         "sources": {
           "/usr/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net9.0": {
-            "targetAlias": "net9.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {
               "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/Controllers.csproj": {
                 "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/Controllers.csproj"
@@ -52,16 +52,20 @@
         "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[9.0.5, )"
+              "version": "[8.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "mercadopago-sdk": {
+              "target": "Package",
+              "version": "[2.10.1, )"
             }
           },
           "imports": [
@@ -75,6 +79,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -118,9 +128,6 @@
               },
               "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj": {
                 "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj"
-              },
-              "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj": {
-                "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj"
               },
               "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj": {
                 "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj"
@@ -175,6 +182,10 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[8.14.0, )"
+            },
+            "mercadopago-sdk": {
+              "target": "Package",
+              "version": "[2.10.1, )"
             }
           },
           "imports": [

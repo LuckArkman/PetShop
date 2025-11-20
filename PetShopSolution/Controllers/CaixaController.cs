@@ -68,14 +68,6 @@ public class CaixaController  : ControllerBase
         if (pg == null) return new NotFoundResult();
         return Ok(pg);
     }
-    [HttpDelete("DeleteByDataHoraAsync/{dataHora}")]
-    public async Task<IActionResult> DeleteByDataHoraAsync(DateTime dataHora, CancellationToken cancellationToken)
-    {
-        var hoje = dataHora.Date;
-        var pg = await _caixaService.DeleteByDateTime(hoje, cancellationToken);
-        if (pg) return new NotFoundResult();
-        return Ok(pg);
-    }
     [HttpDelete("DeleteAsync/{id}")]
     public async Task<IActionResult> DeleteAsync(string id, CancellationToken cancellationToken)
     {

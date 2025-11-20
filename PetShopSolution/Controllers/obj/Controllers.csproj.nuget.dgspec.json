@@ -36,9 +36,6 @@
               "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj": {
                 "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj"
               },
-              "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj": {
-                "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/PetShop.Application/PetShop.Application.csproj"
-              },
               "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj": {
                 "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj"
               }
@@ -92,6 +89,10 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[8.14.0, )"
+            },
+            "mercadopago-sdk": {
+              "target": "Package",
+              "version": "[2.10.1, )"
             }
           },
           "imports": [

@@ -34,7 +34,7 @@ public class CaixaService : ICaixaService
 
         var filtro = Builders<Pagamento>.Filter.And(
             Builders<Pagamento>.Filter.Gte(a => a.createdAt, inicioDoDia),
-            Builders<Pagamento>.Filter.Lt(a => a.status, PaidStatus.Complete)
+            Builders<Pagamento>.Filter.Lt(a => a.Status, PaidStatus.Complete)
         );
 
         return await collection.Find(filtro).ToListAsync(cancellationToken);
@@ -49,7 +49,7 @@ public class CaixaService : ICaixaService
 
         var filtro = Builders<Pagamento>.Filter.And(
             Builders<Pagamento>.Filter.Gte(a => a.createdAt, inicioDoDia),
-            Builders<Pagamento>.Filter.Lt(a => a.status, PaidStatus.pending)
+            Builders<Pagamento>.Filter.Lt(a => a.Status, PaidStatus.pending)
         );
 
         return await collection.Find(filtro).ToListAsync(cancellationToken);
@@ -64,7 +64,7 @@ public class CaixaService : ICaixaService
 
         var filtro = Builders<Pagamento>.Filter.And(
             Builders<Pagamento>.Filter.Gte(a => a.createdAt, inicioDoDia),
-            Builders<Pagamento>.Filter.Lt(a => a.status, PaidStatus.Canceled)
+            Builders<Pagamento>.Filter.Lt(a => a.Status, PaidStatus.Canceled)
         );
 
         return await collection.Find(filtro).ToListAsync(cancellationToken);
@@ -84,23 +84,39 @@ public class CaixaService : ICaixaService
         return agendamento;
     }
 
+    public async Task<Pagamento?> UpdateStatusWebhook(long id, PaidStatus status, CancellationToken cancellationToken)
+    {
+        var collection = _db.GetDatabase().GetCollection<Pagamento>("Caixa");
+        var filter = Builders<Pagamento>.Filter.Eq(a => a.payment, id);
+        var update = Builders<Pagamento>.Update.Set<PaidStatus>(a => a.Status, status);
+
+        var result = await collection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+        return result.ModifiedCount > 0 ? await GetPaymentId(id, cancellationToken) : null;
+    }
+
     public async Task<Pagamento?> UpdateStatus(string id, PaidStatus status, CancellationToken cancellationToken)
     {
         var collection = _db.GetDatabase().GetCollection<Pagamento>("Caixa");
         var filter = Builders<Pagamento>.Filter.Eq(a => a.id, id);
-        var update = Builders<Pagamento>.Update.Set<PaidStatus>(a => a.status, status);
+        var update = Builders<Pagamento>.Update.Set<PaidStatus>(a => a.Status, status);
 
         var result = await collection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
         return result.ModifiedCount > 0 ? await GetById(id, cancellationToken) : null;
     }
 
-    public async Task<bool> DeleteByDateTime(DateTime dataHora, CancellationToken cancellationToken)
+    public async Task<Pagamento?> GetPaymentId(long id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var collection = _db.GetDatabase().GetCollection<Pagamento>("Caixa");
+        var filter = Builders<Pagamento>.Filter.Eq(a => a.payment, id);
+        return await collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<bool> Delete(string id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var collection = _db.GetDatabase().GetCollection<Pagamento>("Caixa");
+        // Create a filter to find the document by Id
+        var filter = Builders<Pagamento>.Filter.Eq(u => u.id, id);
+        var result = await collection.DeleteManyAsync(filter, cancellationToken);
+        return result.DeletedCount > 0;  
     }
 }
