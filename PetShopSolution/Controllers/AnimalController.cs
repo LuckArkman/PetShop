@@ -41,10 +41,10 @@ public class AnimalController : ControllerBase
         return Ok(register);
     }
 
-    [HttpGet("animal")]
-    public async Task<IActionResult> animal(string animal)
+    [HttpGet("animal/{id}")]
+    public async Task<IActionResult> animal(string id)
     {
-        var model = await _animalService.GetObject(animal, CancellationToken.None) as Animal;
+        var model = await _animalService.GetObject(id, CancellationToken.None) as Animal;
         return Ok(model);
     }
 }

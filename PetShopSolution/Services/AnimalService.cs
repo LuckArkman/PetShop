@@ -15,9 +15,9 @@ public class AnimalService : IAnimalService
     public AnimalService(IConfiguration configuration)
     {
         _cfg = configuration;
-        _animalDb = new AnimalDBMongo(_cfg["MongoDbSettings:ConnectionString"], "Animal");
+        _animalDb = new AnimalDBMongo(_cfg["MongoDbSettings:ConnectionString"], "Animal", "Animais");
         _animalDb.GetOrCreateDatabase();
-        _collection = _animalDb.GetDatabase().GetCollection<Animal>("Animal");
+        _collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
     }
     public async Task<List<Animal>?> GetAllAnimals(CancellationToken cancellationToken)
     {
