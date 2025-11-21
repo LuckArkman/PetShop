@@ -10,5 +10,5 @@ public interface IVacinacaoService
 
     Task<object?> UpdateObject(Vacinacao _object, CancellationToken cancellationToken);
 
-    Task RemoveObject(object _object, CancellationToken cancellationToken);
+    Task<bool> RemoveObject(Vacinacao _object, CancellationToken cancellationToken);
 }
