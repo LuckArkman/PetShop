@@ -61,4 +61,11 @@ public class VacinacaoController : ControllerBase
         
         return BadRequest(model);
     }
+    
+    [HttpPut("update")]
+    public async Task<IActionResult> Update([FromBody] Vacinacao model)
+    {
+        var register = await _service.UpdateObject(model, CancellationToken.None) as VacinaRegister;
+        return Ok(register);
+    }
 }

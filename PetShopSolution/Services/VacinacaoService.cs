@@ -65,8 +65,11 @@ public class VacinacaoService : IVacinacaoService
         return ob;
     }
 
-    public Task RemoveObject(object _object, CancellationToken cancellationToken)
+    public async Task<bool> RemoveObject(Vacinacao _object, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var filter = Builders<Vacinacao>.Filter.Eq(u => u.id, _object.id);
+        var _collection = _db.GetDatabase().GetCollection<Vacinacao>("Vacinacao");
+        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
+        return result.DeletedCount > 0;  
     }
 }
