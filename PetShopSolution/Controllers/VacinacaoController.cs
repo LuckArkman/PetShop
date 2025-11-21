@@ -40,7 +40,8 @@ public class VacinacaoController : ControllerBase
     public async Task<IActionResult> Historico(string AnimalId)
     {
         var register = await _historyVacinacao.GetHistoricoAnimal(AnimalId, CancellationToken.None) as HistoryVacinacao;
-        return Ok(register._Vacinacao);
+        if(register != null) return Ok(register._Vacinacao);
+        return BadRequest();
     }
     
     [HttpPost("remove")]

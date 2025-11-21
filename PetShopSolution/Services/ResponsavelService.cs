@@ -112,7 +112,7 @@ public class ResponsavelService : IResponsavelService
         return result.DeletedCount > 0;  
     }
 
-public async Task<Responsavel?> FindByEmailAsync(string modelCredencial, CancellationToken cancellationToken)
+    public async Task<Responsavel?> FindByEmailAsync(string modelCredencial, CancellationToken cancellationToken)
     {
         var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
 
@@ -123,5 +123,20 @@ public async Task<Responsavel?> FindByEmailAsync(string modelCredencial, Cancell
         var _responsavel = collection.Find(filter).FirstOrDefault();
 
         return _responsavel as Responsavel;
+    }
+
+    public async Task<List<Responsavel>?> GetAllResponsaveis(ICollection<string> resResponsaveis, CancellationToken none)
+    {
+        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
+
+        // Cria um filtro para pegar apenas os animais cujo id esteja na lista recebida
+        var filter = Builders<Responsavel>.Filter.In(a => a.Id, resResponsaveis);
+
+        // Busca todos os animais que correspondem
+        var responsaveis = await collection
+            .Find(filter)
+            .ToListAsync(none);
+
+        return responsaveis;
     }
 }

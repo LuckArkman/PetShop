@@ -9,9 +9,11 @@ namespace PetShop.API.Controllers;
 public class AnimalController : ControllerBase
 {
     private readonly IAnimalService _animalService;
-    public AnimalController(IAnimalService animalService)
+    private readonly IResponsavelService _responsavel;
+    public AnimalController(IAnimalService animalService, IResponsavelService responsavel)
     {
         _animalService = animalService;
+        _responsavel = responsavel;
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Animal model)
@@ -30,8 +32,22 @@ public class AnimalController : ControllerBase
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete(string id)
     {
+        var res = await _animalService.GetObject(id, CancellationToken.None);
         var remove = await _animalService.RemoveObject(id, CancellationToken.None);
-        return Ok(remove);
+        if (res != null)
+        {
+            var _resUp = await _responsavel.GetAllResponsaveis(res.responsaveis, CancellationToken.None);
+            if (_resUp != null)
+            {
+                _resUp.ForEach(async r =>
+                {
+                    r.Animais.Remove(id);
+                    await _responsavel.UpdateObject(r, CancellationToken.None);
+                });
+                return Ok(remove);
+            }
+        }
+        return BadRequest();
     }
     
     [HttpGet("animais")]
