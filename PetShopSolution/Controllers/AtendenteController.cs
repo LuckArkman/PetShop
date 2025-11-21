@@ -82,12 +82,12 @@ public class AtendenteController : ControllerBase
         {
             return BadRequest(new { Success = false, Message = "Credenciais inválidas." });
         }
-
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.nome),
-            new Claim(ClaimTypes.Email, user.email)
+            new Claim(ClaimTypes.Email, user.email),
+            new Claim(ClaimTypes.Role, "atendente")
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
