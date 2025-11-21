@@ -15,16 +15,15 @@ public class AnimalService : IAnimalService
     public AnimalService(IConfiguration configuration)
     {
         _cfg = configuration;
-        _animalDb = new AnimalDBMongo(_cfg["MongoDbSettings:ConnectionString"], "Animal", "Animais");
+        _animalDb = new AnimalDBMongo(_cfg["MongoDbSettings:ConnectionString"], "Animal");
         _animalDb.GetOrCreateDatabase();
         _collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
     }
     public async Task<List<Animal>?> GetAllAnimals(CancellationToken cancellationToken)
     {
-        var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
 
         // Busca todos os animais
-        var animals = await collection
+        var animals = await _collection
             .Find(Builders<Animal>.Filter.Empty)
             .ToListAsync(cancellationToken);
 
@@ -33,29 +32,24 @@ public class AnimalService : IAnimalService
     
     public async Task<Animal?> GetObject(string _object, CancellationToken cancellationToken)
     {
-        var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
-
         // Create a filter to find the document by Id
         var filter = Builders<Animal>.Filter.Eq(u => u.id, _object);
 
         // Find the document matching the filter
-        var character = collection.Find(filter).FirstOrDefault();
+        var character = _collection.Find(filter).FirstOrDefault();
 
         return character as Animal;
     }
 
     public async Task<Animal?> InsetObject(Animal _object, CancellationToken cancellationToken)
     {
-        var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
-        // Insert the user object into the collection
-        collection.InsertOne(_object);
+        _collection.InsertOne(_object);
         return _object as Animal;
     }
 
     public async Task<Animal?> UpdateObject(Animal _object, CancellationToken cancellationToken)
     {
         var obj = await GetObject(_object.id, CancellationToken.None) as Animal;
-        var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
 
         // Create a filter to find the document by Id
         var filter = Builders<Animal>.Filter.Eq(u => u.id, _object.id);
@@ -70,7 +64,7 @@ public class AnimalService : IAnimalService
             .Set(u => u.responsaveis, _object.responsaveis);
 
         // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = _collection.UpdateOne(filter, update);
 
         if (result.ModifiedCount > 0)
         {
@@ -91,18 +85,11 @@ public class AnimalService : IAnimalService
         return result.DeletedCount > 0;  
     }
 
-    public async Task<List<Animal>?> GetAnimalsInList(ICollection<string> ids, CancellationToken cancellationToken)
+    public async Task<List<Animal>?> GetAnimalsInList(List<string> ids, CancellationToken cancellationToken)
     {
-        var collection = _animalDb.GetDatabase().GetCollection<Animal>("Animais");
-
-        // Cria um filtro para pegar apenas os animais cujo id esteja na lista recebida
         var filter = Builders<Animal>.Filter.In(a => a.id, ids);
-
-        // Busca todos os animais que correspondem
-        var animals = await collection
-            .Find(filter)
-            .ToListAsync(cancellationToken);
-
+        var animals = await _collection.Find(filter).ToListAsync(cancellationToken);
+        Console.WriteLine($"Mongo retornou {animals.Count} animais.");
         return animals;
     }
 }

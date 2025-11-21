@@ -6,17 +6,15 @@ public class AnimalDBMongo
 {
     IMongoClient client;
     string databaseName;
-    string collectionName;
     IMongoDatabase _database;
     public AnimalDBMongo()
     {
         
     }
-    public AnimalDBMongo(string connectionString, string _databaseName, string _collectionName)
+    public AnimalDBMongo(string connectionString, string _databaseName)
     {
         this.client = new MongoClient(connectionString);
         this.databaseName = _databaseName;
-        this.collectionName = _collectionName;
         GetOrCreateDatabase();
     }
 

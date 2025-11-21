@@ -12,5 +12,5 @@ public interface IAnimalService
     Task<Animal?> UpdateObject(Animal _object, CancellationToken cancellationToken);
 
     Task<bool> RemoveObject(string _object, CancellationToken cancellationToken);
-    Task<List<Animal>?> GetAnimalsInList(ICollection<string> animals, CancellationToken none);
+    Task<List<Animal>?> GetAnimalsInList(List<string> animals, CancellationToken none);
 }

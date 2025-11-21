@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using DTOs;
 using Interfaces;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -67,16 +68,15 @@ public class ResponsavelController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("animais")]
-    public async Task<IActionResult> Animais(string mail)
+    [HttpPost("animais")]
+    public async Task<IActionResult> Animais([FromBody]Mail mail)
     {
-        Console.WriteLine($"{nameof(Animais)}: {mail}");
-        var register = await _service.GetObject(mail, CancellationToken.None) as Responsavel;
-        if (register?.Animais == null || register.Animais.Count == 0)
+        Console.WriteLine($"{nameof(Animais)}: {mail.mail}");
+        var register = await _service.GetObject(mail.mail, CancellationToken.None) as Responsavel;
+        if (register!.Animais.Count <= 0)
         {
             return Ok(Array.Empty<object>());
         }
-
         var animals = await _animalService.GetAnimalsInList(register.Animais, CancellationToken.None);
         return Ok(animals);
     }
