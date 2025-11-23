@@ -1,14 +1,14 @@
-const btn_cad = document.getElementById("btn_cad")
+const btn_cad = document.getElementById("btn_cad_rec")
 const div_msg = document.getElementById("div_msg")
 
 btn_cad.addEventListener("click",async (e)=>{
     e.preventDefault()
-    const username_user = document.getElementById("username_user").value
-    const email_user = document.getElementById("email_user").value
-    const senha_user = document.getElementById("senha_user").value
-    const confirm_senha_user = document.getElementById("confirm_senha_user").value
-    const rg_user = document.getElementById("rg_user").value
-    if(senha_user!=confirm_senha_user){
+    const username_rec = document.getElementById("username_rec").value
+    const email_rec = document.getElementById("email_rec").value
+    const senha_rec = document.getElementById("senha_rec").value
+    const confirm_senha_rec = document.getElementById("confirm_senha_rec").value
+    const rg_rec = document.getElementById("rg_rec").value
+    if(senha_rec!=confirm_senha_rec){
         div_msg.style.color = "red"
         div_msg.textContent = "Senhas não coincidem"
         setTimeout(()=>{
@@ -16,7 +16,7 @@ btn_cad.addEventListener("click",async (e)=>{
         },2000)
         return
     }
-    if(username_user==""||email_user==""||senha_user==""||confirm_senha_user=="" || rg_user==""){
+    if(username_rec==""||email_rec==""||senha_rec==""||confirm_senha_rec=="" || rg_rec==""){
         div_msg.style.color = "red"
         div_msg.textContent = "Preencha todos os campos"
         setTimeout(()=>{
@@ -25,10 +25,10 @@ btn_cad.addEventListener("click",async (e)=>{
         return
     }
     try {
-        const req = await fetch("https://petrakka.com:7231/api/Responsavel/register",{
+        const req = await fetch("https://petrakka.com:7231/api/Atendente/register",{
             method:"Post",
             headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({Email:email_user,Password:senha_user,ConfirmPassword:confirm_senha_user,FirstName:username_user,RG:rg_user})
+            body:JSON.stringify({email:email_rec,password:senha_rec,confirmPassword:confirm_senha_rec,nome:username_rec,rg:rg_rec})
         })
         const res = await req.json()
         console.log(res)
@@ -38,7 +38,7 @@ btn_cad.addEventListener("click",async (e)=>{
             setTimeout(()=>{
                 div_msg.textContent = ""
             },2000)
-            window.location.href = "../../pages/pages_login/Login_user.html"
+            window.location.href = "../../pages/pages_login/Login_rec.html"
         }else{
             div_msg.style.color = "red"
             div_msg.textContent = "Erro ao se cadastrar"

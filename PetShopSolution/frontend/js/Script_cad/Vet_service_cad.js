@@ -27,13 +27,13 @@ btn_cad.addEventListener("click",async (e)=>{
         return
     }
     try {
-        const req = await fetch("http://localhost:5280/api/MedicoVeterinario/register",{
+        const req = await fetch("https://petrakka.com:7231/api/MedicoVeterinario/register",{
             method:"Post",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({Nome:nome_user,CRMV:crmv_user,Password:senha_user,ConfirmPassword:confirm_senha_user,Especialidade:especialidade_user,Telefone:telefone_user,Email:email_user})
         })
         const res = await req.json()
-        if(res && res.Id){
+        if(res && res.id){
             div_msg.style.color = "green"
             div_msg.textContent = "Cadastro realizado com sucesso"
             setTimeout(()=>{

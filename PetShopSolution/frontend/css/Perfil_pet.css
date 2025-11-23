@@ -74,6 +74,7 @@ header{
     background-color: #3182edd9;
 }
 
+
 .button_item_01{
     display: flex;
     justify-content: center;
@@ -628,3 +629,211 @@ button{
 }
   
 /*Fim estilo modal*/
+
+
+/*Responsividade
+/* Tablets (até ~1024px) */
+@media (max-width: 1024px) {
+    .main_itens_header{
+        position: relative;
+        flex-direction: column;
+    }
+    .btn_perfil{
+        position: absolute;
+        top: 4%;
+        right: 1%;
+    }
+    .card_perfil_config{
+        top: 12%;
+        margin: auto;
+        text-align: center;
+        right: 3%;
+    }
+
+    .main_title {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+  
+    .content_title {
+      width: 100%;
+    }
+  
+    .div_pet {
+      width: 100%;
+      justify-content: flex-start;
+      gap: 15px;
+    }
+  
+    .main_top {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .main_esq, .main_dir {
+      width: 100%;
+    }
+  
+    .main_dir {
+      margin-top: 20px;
+    }
+  
+    .card_add_info {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+    }
+  
+    .button_add_info {
+      width: 100%;
+    }
+  
+    .button_add_info button {
+      width: 100%;
+    }
+  }
+  
+  /* Celulares grandes e pequenos (até ~768px) */
+  @media (max-width: 768px) {
+    .main_title {
+      width: 80%;
+      margin-left: 3%;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: auto;
+    }
+    
+    .div_pet {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      margin-bottom: 10%;
+      gap: 10px;
+    }
+  
+    .div_pet select,
+    .div_pet button {
+      width: 100%;
+      font-size: 15px;
+      height: 42px;
+    }
+  
+    .main_top {
+      width: 94%;
+      margin-left: 3%;
+      flex-direction: column;
+    }
+  
+    .main_esq {
+      width: 100%;
+      align-items: center;
+    }
+  
+    .pet-stats {
+      flex-direction: column;
+      align-items: flex-start;
+      padding-left: 0;
+    }
+  
+    .pet-stats div {
+      flex: none;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+  
+    .btn_info_bottom {
+      flex-direction: column;
+    }
+  
+    .btn_add_pet,
+    .btn_remove_pet {
+      width: 100%;
+    }
+  
+    .main_dir {
+      width: 100%;
+    }
+  
+    .title_main_dir {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10%;
+    }
+    .title_main_dir h1{
+        font-size: 1.3em;
+    }
+  
+    .card_add_info {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 10px;
+      gap: 8px;
+    }
+  
+    .button_add_info button {
+      width: 100%;
+    }
+  
+    /* Modais */
+    .modal {
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+  
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .form-grid div {
+      width: 100%;
+    }
+  
+    .modal-actions {
+      flex-direction: column;
+      gap: 8px;
+    }
+  
+    .modal-actions button {
+      width: 100%;
+    }
+  }
+  
+  /* Celulares muito pequenos (até ~480px) */
+  @media (max-width: 480px) {
+    .content_title h1 {
+      font-size: 1.4em;
+    }
+  
+    .content_title p {
+      font-size: 0.95em;
+    }
+  
+    .div_pet select,
+    .div_pet button {
+      font-size: 14px;
+      height: 40px;
+    }
+  
+    .pet-stats strong {
+      font-size: 0.95em;
+    }
+  
+    .card_add_info h1 {
+      font-size: 1em;
+    }
+  
+    .modal h3 {
+      font-size: 1.1em;
+    }
+  
+    .modal p {
+      font-size: 0.9em;
+    }
+  }
+  

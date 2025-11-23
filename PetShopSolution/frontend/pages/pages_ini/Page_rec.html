@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recepção</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js'></script>
+  <link rel="stylesheet" href="../../css/Page_rec.css">
+</head>
+<body>
+  <header>
+    <div class="itens_header">
+      <span class="class_logo">
+        <i style="color: white;" class="fa-regular fa-heart"></i>
+      </span>
+      <h1 style="font-size: 1.5em;">Recepção - Clínica Veterinária</h1>
+      <button id="btn_perfil" class="btn_perfil">JD</button>
+      <div id="card_perfil_config" class="card_perfil_config">
+        <div class="content_text">
+           <i class="fa-solid fa-gear"></i>
+           <p>Configurações</p> 
+        </div>
+        <div class="content_text">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <p>Sair</p> 
+         </div>
+      </div>         
+    </div>  
+  </header>
+  <main>
+    <div class="content_search">
+      <div class="search-box">
+           <input id="value_rg" type="text" placeholder="Digite o RG do tutor Para agendar">
+           <button id="btn_search">Buscar</button>
+           <button id="btn_data">Mostrar dados</button>
+           <button id="btn_delete" class="btn_info_user">Excluir agendamento</button>
+      </div>
+    </div>
+
+    <div id="calendar" class="calendar">
+      <div class="calendar-content">
+        <span class="close-calendar">&times;</span>
+        <div id="calendar-inner"></div>
+      </div>
+    </div>
+
+    <!--Esturutura de teste-->
+    <div class="resultado-tutor-container" id="resultado_tutor_container">
+      <div class="tutor-info">
+          <h2 class="tutor-nome" id="tutor_name">Tutor(a): <span id="spantutor_name"></span></h2>
+          <button id="btn_info_user" class="btn_info_user">Ver mais</button>
+      </div>
+  
+      <div class="pets-lista" id="pet_lista">
+          <h3>Pets de <span id="tutor_name_pet"></span>:</h3>
+      </div>
+  
+      <!--<button class="btn-agendar-geral" id="btn_agendar_consulta" type="button">Agendar Consulta</button>-->
+    </div>
+    <!--Fim-->
+
+    <section class="dashboard">
+
+      <div id="data_container" class="metrics-container">
+          <div class="metric-card consultations-done">
+              <span class="metric-value" id="total-consultas">0</span>
+              <span class="metric-label">Consultas Realizadas (Mês)</span>
+          </div>
+          <!--<div class="metric-card consultations-paid">
+              <span class="metric-value" id="consultas-pagas">0</span>
+              <span class="metric-label">Consultas Pagas (Mês)</span>
+          </div>-->
+          <div class="metric-card consultations-to-return">
+              <span class="metric-value" id="consultas-retorno">0</span>
+              <span class="metric-label">Pets para Retorno (Próx. 7 dias)</span>
+          </div>
+      </div>
+
+      <div class="today-appointments-container">
+          <h2>Consultas de Hoje <span id="appointment-count">(0)</span></h2>
+          <div class="appointment-list">
+              <p id="no-appointments-message" style="display:none; text-align: center; color: #666; padding: 20px;">Nenhuma consulta agendada para hoje.</p>
+          </div>
+      </div>
+    </section>
+
+
+<!-- Modal Delete agendamento -->
+<div id="modal-delete" class="modal">
+  <div class="modal-content-delete">
+    <span id="close-delete" style="align-self: flex-end; cursor: pointer;">&times;</span>
+    <h2>Preencha os dados do cancelamento</h2>
+    <input type="date" id="data_delete" placeholder="Dia do agendamento cancelado">
+    <select id="horario_delete">
+        <option value="">Selecione o horário</option>
+        <option value="08:00">08:00</option>
+        <option value="09:00">09:00</option>
+        <option value="10:00">10:00</option>
+        <option value="11:00">11:00</option>
+        <option value="12:00">12:00</option>
+        <option value="13:00">13:00</option>
+        <option value="14:00">14:00</option>
+        <option value="15:00">15:00</option>
+        <option value="16:00">16:00</option>
+    </select>
+    <button id="btn_confirm_delete" class="btn_info_user">Confirmar exclusão</button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal-user" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Informações do Tutor</h2>
+    <p><strong>Nome:</strong> <span id="modal_nome"></span></p>
+    <p><strong>Email:</strong> <span id="modal_email"></span></p>
+    <p><strong>RG:</strong> <span id="modal_rg"></span></p>
+    <p><strong>CPF:</strong> <span id="modal_cpf"></span></p>
+    <p><strong>Telefone:</strong> <span id="modal_telefone"></span></p>
+    <p><strong>Cidade:</strong> <span id="modal_city"></span></p>
+    <p><strong>Estado:</strong> <span id="modal_state"></span></p>
+  </div>
+</div>
+
+<!-- Modal PET -->
+<div id="modal-pet" class="modal">
+  <div class="modal-content">
+    <span class="close-pet">&times;</span>
+    <h2>Informações do Pet</h2>
+    <p><strong>Nome:</strong> <span id="modal_pet_nome"></span></p>
+    <p><strong>Espécie:</strong> <span id="modal_pet_especie"></span></p>
+    <p><strong>Raça:</strong> <span id="modal_pet_raca"></span></p>
+    <p><strong>Sexo:</strong> <span id="modal_pet_sexo"></span></p>
+    <p><strong>Idade:</strong> <span id="modal_pet_idade"></span> anos</p>
+    <p><strong>Peso:</strong> <span id="modal_pet_peso"></span> kg</p>
+    <p><strong>Porte:</strong> <span id="modal_pet_porte"></span></p>
+    <p><strong>Castrado:</strong> <span id="modal_pet_castrado"></span></p>
+  </div>
+</div>
+
+<!-- Modal lateral de horários -->
+<div id="modal-horarios" class="modal-horarios">
+  <div class="modal-content-horarios">
+    <span class="close-horarios">&times;</span>
+    <h2>Horários disponíveis</h2>
+
+    <div id="lista-horarios" class="lista-horarios">
+      <div class="horario">08:00</div>
+      <div class="horario">09:00</div>
+      <div class="horario">10:00</div>
+      <div class="horario">11:00</div>
+      <div class="horario">12:00</div>
+      <div class="horario">13:00</div>
+      <div class="horario">14:00</div>
+      <div class="horario">15:00</div>
+      <div class="horario">16:00</div>
+    </div>
+    <input type="text" id="cmrv_vet" class="cmrv_vet" placeholder="cmrv do vet">
+    <input type="text" id="rg_tutor" class="cmrv_vet" placeholder="Digite seu rg">-
+    <!--<input type="text" id="cpf_tutor" class="cmrv_vet" placeholder="Digite seu CPF">-->
+    <button id="btn_agendar_horario" class="btn-agendar">Agendar</button>
+  </div>
+</div>
+</main>
+</body>
+</html>
+<script src="../../js/Script_rec/Script_rec.js"></script>

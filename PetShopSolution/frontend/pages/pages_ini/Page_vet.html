@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel vet</title>
+    <link rel="stylesheet" href="../../css/Page_vet.css">
+</head>
+<body>
+    <main>
+    <div class="title_vet">
+        <h1>Painel veterinário</h1>
+        <p>Registrar consulta • Consultas do dia • Protocolos rápidos</p>
+    </div>
+    <div class="main_card">
+        <div class="col_esq">
+        <div class="card_esq">
+            <h1>Registrar nova consulta</h1>
+            <form action="" class="info_consulta">
+                <label for="name_pet">Pet</label>
+                <input type="text" placeholder="Nome do pet" id="name_pet" class="value_camps">
+                
+                <label for="name_tutor">Tutor</label>
+                <input type="text" placeholder="Nome do tutor" id="name_tutor" class="value_camps">
+
+                <label for="">Espécie</label>
+                <select name="" id="option_esp">
+                    <option value="">Canino</option>
+                    <option value="">Gato</option>
+                </select>
+
+                <label for="type_atend">Tipo de atendimento</label>
+                <input type="text" id="type_atend" class="value_camps">
+
+                <label for="date_atend">Data</label>
+                <input type="date" placeholder="Data do atendimento" id="date_atend" class="value_camps">
+
+                <div class="main_text_area">
+                    <p>Observações / Diagnóstico</p>
+                    <textarea name="" id="value_diag" placeholder="Anotar sintomas, diagnósticos, orientações e prescrição"></textarea>
+                </div>
+
+                <label for="type_presc">Tipo de Prescrição / Tratamento</label>
+                <input type="text" id="type_presc" class="value_camps" placeholder="Ex: Medicamentos">
+
+                <label for="return_diag">Retorno sugerido</label>
+                <input type="date" id="return_diag" class="value_camps">
+            </form>
+            <div class="main_btn_dir">
+                <button id="btn_save" class="btn_save">Salvar consulta</button>
+            </div>
+        </div>
+
+        <div class="card_consul_day">
+            <div class="title_consul_day">
+                <h1>Consultas do dia</h1>
+                <div class="table_consul">
+                    <table>
+                        <thead>
+                          <tr><th>Horário</th><th>Pet</th><th>Tutor</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="body_consul_day">
+                            <!--<tr><td>09:00</td><td>Thor</td><td>Maria</td><td></td></tr>
+                            <tr><td>10:30</td><td>Luna</td><td>João</td><td></td></tr>
+                            <tr><td>13:00</td><td>Bob</td><td>Ana</td><td><span class="status status-pending">Pendente</span></td></tr> -->
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="col_dir">
+        <div class="card_dir">
+            <h1>Protocolos rápidos</h1>
+            <div class="card_protocols">
+                <h1>Consulta clínica geral</h1>
+                <p>Avaliação física completa, anamnese e atualização do histórico.</p>
+                <p>Retorno: Cães — a cada 6 meses • Gatos — a cada 6–12 meses</p>
+            </div>
+
+            <div class="card_protocols">
+                <h1>Vacinação</h1>
+                <p>Aplicação de vacinas obrigatórias e complementares conforme protocolo.</p>
+                <p>Retorno: Anual</p>
+            </div>
+
+            <div class="card_protocols">
+                <h1>Vermifugação</h1>
+                <p>Controle de parasitas intestinais e pulmonares.</p>
+                <p>Retorno: Cães — a cada 3 meses • Gatos — a cada 4–6 meses</p>
+            </div>
+
+
+            <div class="card_protocols">
+                <h1>Consulta de retorno pós-tratamento</h1>
+                <p>Reavaliação após início de medicação ou tratamento clínico.</p>
+                <p>Retorno: 7–15 dias</p>
+            </div>
+        </div>
+
+        <div class="card_hist_dir">
+            <h1>Histórico — atalho</h1>
+            <p>Acesse o histórico completo do veterinário e visualize filtros por tipo de atendimento e período.</p>
+            <button id="btnVerMais" class="btn_ver_mais">Ver mais</button>
+        </div>
+
+        <div class="card_hist_dir">
+            <h1>Histórico — Tutor</h1>
+            <p>Acesse o histórico completo do tutor e visualize todas as consultas</p>
+            <button id="btnVerMaisTutor" class="btn_ver_mais">Ver mais</button>
+        </div>
+    </div>
+    </div>
+
+    <!--Modal Histórico consulta -->
+    <div id="modalHist" class="modal">
+        <div class="modal_content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>Histórico completo</h2>
+            <input type="text" id="searchHistVet" placeholder="Buscar por veterinário" class="search_input">
+            <div class="search_results" id="search_resultsVet">
+                <button id="btn_vet" class="btn_b">Buscar</button>        
+            </div>
+        </div>
+    </div>
+
+    <div id="modalHistTutor" class="modal">
+        <div class="modal_content">
+            <span id="closeModalTutor" class="close">&times;</span>
+            <h2>Histórico completo</h2>
+            <input type="text" id="searchHistTutor" placeholder="Buscar por tutor" class="search_input">
+            <div id="search_resultsTutor" class="search_results">
+                <!-- Aqui você vai popular com JS as consultas filtradas -->
+                <button id="btn_tutor" class="btn_b">Buscar</button>
+            </div>
+        </div>
+    </div>
+    </main>
+</body>
+</html>
+
+<script src="../../js/Script_vet/Script_vet.js"></script>

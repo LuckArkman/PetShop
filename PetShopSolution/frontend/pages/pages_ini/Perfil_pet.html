@@ -21,13 +21,13 @@
                     <div class="div_itens_01">
                         <button class="button_item_01">
                             <i style="color: white;" class="fa-regular fa-heart"></i>
-                            <p>Dashboard</p>
+                            <p><a style="text-decoration: none; color: white;" href="./Dashboard.html">Dashboard</a></p>
                         </button>
                    </div>
                     <div class="div_itens_02">
                         <button class="button_item_02">
                             <i class="fa-solid fa-location-dot"></i>
-                            <p>Localização</p>
+                            <p><a style="text-decoration: none; color: black; cursor: pointer;" href="./Loc_pet.html">Localização</a></p>
                         </button>
                     </div>
                     <div class="div_itens_03">
@@ -46,7 +46,7 @@
                 </div>
                 <div class="content_text">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <p id="remove_user">Sair</p> 
+                    <p id="sair_user">Sair</p> 
                  </div>
             </div>         
         </nav>
@@ -194,6 +194,10 @@
           <h3>Cadastrar pet - informações essenciais</h3>
           <p class="muted">Somente os campos mínimos para criar o perfil.</p>
           <div class="form-grid" style="margin-top:12px">
+            <div>
+                <label>RG</label>
+                <input id="fRg" placeholder="Ex:Digite seu rg " maxlength="12" />
+              </div>
             <div>
               <label>Nome</label>
               <input id="fName" placeholder="Ex: Max" maxlength="12" />

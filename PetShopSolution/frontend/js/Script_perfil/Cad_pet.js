@@ -8,7 +8,7 @@ const div_msg = document.querySelectorAll(".div_msg")
 const info_bottom_pet = document.getElementById("info_bottom_pet")
 const btn_perfil = document.getElementById("btn_perfil")
 const config_user = document.getElementById("config_user")
-const remove_user = document.getElementById("remove_user")
+const sair_user = document.getElementById("sair_user")
 
 btn_perfil.addEventListener("click",()=>{
     const card_perfil_config = document.getElementById("card_perfil_config")
@@ -19,19 +19,17 @@ config_user.addEventListener("click",(e)=>{
     window.location.href = "../../pages/pages_ini/Perfil_user.html"
 })
 
+sair_user.addEventListener("click",(e)=>{
+    window.location.href = "../../pages/pages_login/Login_user.html"
+    window.localStorage.clear()
+})
+
 document.addEventListener('DOMContentLoaded', async() => {
-    /*const btnVerMais = document.getElementById('btn_view_more')
-    const additionalCards = document.getElementById('additional-cards')
-    btnVerMais.addEventListener('click', () => {
-        if (additionalCards.style.display === 'none') {
-            additionalCards.style.display = 'block'
-            btnVerMais.textContent = 'Fechar'
-        } else {
-            additionalCards.style.display = 'none'
-            btnVerMais.textContent = 'Ver mais'
-        }
-    })*/
     const selectedPetId = localStorage.getItem("selectedPetId")
+
+    if(!selectedPetId){
+        return
+    }
     Fetch_vacinas(selectedPetId)
     Fetch_diag(selectedPetId)
     Fetch_med(selectedPetId)
@@ -57,7 +55,6 @@ function showMessage(message, color = "black", duration = 2000) {
         }, 300)
     }, duration)
 }
-
 btn_add_pet.addEventListener("click", () => backdropSimple.style.display = "flex")
 cancelSimple.addEventListener("click", () => backdropSimple.style.display = "none")
 function getPayloadFromToken(token) {
@@ -81,21 +78,15 @@ if (!token) {
 const payload = getPayloadFromToken(token)
 const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
 const userEmail = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
-remove_user.addEventListener("click",async()=>{
-   localStorage.removeItem("token")
-   localStorage.removeItem("userAnimalIds")
-   localStorage.removeItem("selectedPetId")
-   window.location.href = "../../pages/pages_login/Login_user.html"
-})
 function updatePetUI(pet) {
-    document.getElementById("animal_name").textContent = pet.Nome
-    document.getElementById("race_animal").textContent = pet.Raca || "Sem Raça"
-    document.getElementById("petSpecies").textContent = pet.Especie
-    document.getElementById("petAge").textContent = pet.Idade
-    document.getElementById("petWeight").textContent = `${pet.Peso}kg`
-    document.getElementById("petSex").textContent = pet.Sexo
-    document.getElementById("petPorte").textContent = pet.Porte
-    document.getElementById("petCastrated").textContent = pet.Castrado ? "Sim" : "Não"
+    document.getElementById("animal_name").textContent = pet.nome
+    document.getElementById("race_animal").textContent = pet.raca || "Sem Raça"
+    document.getElementById("petSpecies").textContent = pet.especie
+    document.getElementById("petAge").textContent = pet.idade
+    document.getElementById("petWeight").textContent = `${pet.peso}kg`
+    document.getElementById("petSex").textContent = pet.sexo
+    document.getElementById("petPorte").textContent = pet.porte
+    document.getElementById("petCastrated").textContent = pet.castrado ? "Sim" : "Não"
     const avatar = document.getElementById("avatar")
     avatar.style.background = pet.Sexo === "Fêmea" ? "Pink" : "linear-gradient(135deg,#3b82f6,#60a5fa)"
 }
@@ -103,15 +94,18 @@ function updatePetUI(pet) {
 async function populatePets() {
     select_pet.innerHTML = `<option value="">Pet Atual</option>`
         try {
-            const res = await fetch(`http://localhost:5280/api/Responsavel/animais?mail=${userEmail}`, {
-               method:"GET"
+            const res = await fetch(`https://petrakka.com:7231/api/Responsavel/animais`, {
+               method:"Post",
+               headers:{"Content-Type":"application/json"},
+               body:JSON.stringify({mail:userEmail})
             })
             const pets = await res.json()
+            console.log(pets)
             const selectedPetId = localStorage.getItem("selectedPetId") 
             pets.forEach(pet => {
                 const option = document.createElement("option")
                 option.value = pet.id
-                option.textContent = pet.Nome
+                option.textContent = pet.nome
                 if (selectedPetId && selectedPetId === pet.id) {
                     option.selected = true
                     updatePetUI(pet)
@@ -127,9 +121,8 @@ async function populatePets() {
 select_pet.addEventListener("change", async () => {
     const selectedId = select_pet.value
     if (!selectedId) return
-
     try {
-        const res = await fetch(`http://localhost:5280/api/Animal/animal?animal=${selectedId}`, {
+        const res = await fetch(`https://petrakka.com:7231/api/Animal/animal/${selectedId}`, {
             headers: { "Authorization": `Bearer ${token}`}
         })
         const pet = await res.json()
@@ -141,13 +134,18 @@ select_pet.addEventListener("change", async () => {
         animalIds.push(pet.id)
         localStorage.setItem("userAnimalIds", JSON.stringify(animalIds))
         }
-        fetchVacinas(pet.id)
+        const selectedPetId = localStorage.getItem("selectedPetId")
+        Fetch_vacinas(selectedPetId)
+        Fetch_diag(selectedPetId)
+        Fetch_med(selectedPetId)
+        Fetch_cir(selectedPetId)
     } catch (err) {
         console.error("Erro ao buscar pet selecionado:", err)
     }
 })
 
 saveSimple.addEventListener("click", async () => {
+    const fRg = document.getElementById("fRg").value
     const fName = document.getElementById("fName").value
     const fSpecies = document.getElementById("fSpecies").value
     const fBreed = document.getElementById("fBreed").value
@@ -163,30 +161,34 @@ saveSimple.addEventListener("click", async () => {
         showMessage("Usuário não autenticado!","red")
         return
     }
+    if(isNaN(fAge) || isNaN(fWeight)){
+        showMessage("Idade e Peso aceita só números!","red")
+        return
+    }
     const payload = getPayloadFromToken(token)
     const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
 
-    if (!fName || !fSpecies || !fBreed || !fAge || !fWeight || !fPorte || !fSex || !fCastrado) {
+    if (!fName || !fSpecies || !fBreed || !fAge || !fWeight || !fPorte || !fSex || !fCastrado || !fRg) {
         showMessage("Preencha todos os campos!","red")
         return
     }
 
     try {
-        const req = await fetch("http://localhost:5280/api/Animal/register", {
+        const req = await fetch("https://petrakka.com:7231/api/Animal/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({
-                Nome: fName,
-                Especie: fSpecies,
-                Raca: fBreed,
-                Sexo: fSex,
-                Castrado: value_fCastrado,
-                Idade: fAge,
-                Peso: fWeight,
-                Porte: fPorte,
+                nome: fName,
+                especie: fSpecies,
+                raca: fBreed,
+                sexo: fSex,
+                castrado: value_fCastrado,
+                idade: fAge,
+                peso: fWeight,
+                porte: fPorte,
                 responsaveis: [userId]
             })
         })
@@ -199,19 +201,21 @@ saveSimple.addEventListener("click", async () => {
             localStorage.setItem("userAnimalIds", JSON.stringify(animalIds))
             const option = document.createElement("option")
             option.value = res.id
-            option.textContent = res.Nome
+            option.textContent = res.nome
             option.selected = true
             select_pet.appendChild(option)
             updatePetUI(res)
             info_bottom_pet.style.display = "block"
             backdropSimple.style.display = "none"
             showMessage("Cadastro realizado com sucesso!","green")
-            const req_get_user = await fetch(`http://localhost:5280/api/Responsavel/Responsavel?id=${userId}`,{
+            const req_get_user = await fetch(`https://petrakka.com:7231/api/Responsavel/Responsavel${fRg}`,{
                 method:"GET"
             })
+            console.log(req_get_user)
             const res_get_user = await req_get_user.json()
             res_get_user.Animais = animalIds
-            const req_put_user = await fetch(`http://localhost:5280/api/Responsavel/update`,{
+            console.log(res_get_user)
+            const req_put_user = await fetch(`https://petrakka.com:7231/api/Responsavel/update`,{
                 method:"PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -223,19 +227,25 @@ saveSimple.addEventListener("click", async () => {
             showMessage("Erro ao cadastrar pet!","red")
         }
     } catch (err) {
+        showMessage("Erro interno!","red")
         console.log(err)
-        //showMessage("Erro interno!","red")
     }
 })
 
 // Rota excluir pet
 btn_remove_pet.addEventListener("click",async()=>{
+    console.log(select_pet.value)
     try {
-        const req = await fetch(`http://localhost:5280/api/Animal/delete?id=${select_pet.value}`,{
-            method:"DELETE"
+        const req = await fetch(`https://petrakka.com:7231/api/Animal/delete?id=${select_pet.value}`,{
+            method:"DELETE",
+            headers:{
+                "Content-Type": "application/json"
+            }
         })
-        const res =  await req.json()
-        if(res.Nome){
+        console.log(req.status)
+        const res = await req.json()
+        console.log(res)
+        if(res){
             select_pet.value = ""
             info_bottom_pet.style.display = "none"
             document.getElementById("animal_name").textContent = "—"
@@ -269,20 +279,20 @@ btnAttPet.addEventListener("click", async () => {
     const petId = select_pet.value
     if (!petId) return
 
-    const res = await fetch(`http://localhost:5280/api/Animal/animal?animal=${petId}`, {
+    const res = await fetch(`https://petrakka.com:7231/api/Animal/animal/${petId}`, {
         method:"GET",
         headers: { "Authorization": `Bearer ${token}` }
     })
     const pet = await res.json()
 
-    document.getElementById("updateName").value = pet.Nome
-    document.getElementById("updateSpecies").value = pet.Especie
-    document.getElementById("updateBreed").value = pet.Raca
-    document.getElementById("updateAge").value = pet.Idade
-    document.getElementById("updateWeight").value = pet.Peso
-    document.getElementById("updatePorte").value = pet.Porte
-    document.getElementById("updateSex").value = pet.Sexo
-    document.getElementById("updateCastrado").value = pet.Castrado ? "Sim" : "Não"
+    document.getElementById("updateName").value = pet.nome
+    document.getElementById("updateSpecies").value = pet.especie
+    document.getElementById("updateBreed").value = pet.raca
+    document.getElementById("updateAge").value = pet.idade
+    document.getElementById("updateWeight").value = pet.peso
+    document.getElementById("updatePorte").value = pet.porte
+    document.getElementById("updateSex").value = pet.sexo
+    document.getElementById("updateCastrado").value = pet.castrado ? "Sim" : "Não"
 
     backdropUpdate.style.display = "flex"
 })
@@ -308,7 +318,7 @@ saveUpdate.addEventListener("click", async (e) => {
         responsaveis: [userId]
     }
 
-    const req = await fetch(`http://localhost:5280/api/Animal/update?id=${petId}`, {
+    const req = await fetch(`https://petrakka.com:7231/api/Animal/update?id=${petId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -323,7 +333,7 @@ saveUpdate.addEventListener("click", async (e) => {
         showMessage("Pet atualizado com sucesso!","green")
         const optionToUpdate = Array.from(select_pet.options).find(opt => opt.value === res.id)
         if (optionToUpdate) {
-            optionToUpdate.textContent = res.Nome
+            optionToUpdate.textContent = res.nome
         }
     } else {
         showMessage("Erro ao atualizar pet!","red")
@@ -377,7 +387,7 @@ saveVacina.addEventListener("click",async() => {
         ]
       }
       try {
-        const req = await fetch("http://localhost:5280/register",{
+        const req = await fetch("https://petrakka.com:7231/register",{
             method:"Post",
             headers:{
                 "Content-Type":"application/json",
@@ -387,7 +397,7 @@ saveVacina.addEventListener("click",async() => {
         })
         const res = await req.json()
         if(res.id){
-            const req_get_hist = await fetch(`http://localhost:5280/historico?AnimalId=${animal_id}`,{
+            const req_get_hist = await fetch(`https://petrakka.com:7231/historico?AnimalId=${animal_id}`,{
                 method:"GET"
             })
             const res_get_hist = await req_get_hist.json()
@@ -460,7 +470,7 @@ saveDiagnostico.addEventListener("click",async() => {
         condutaTratamento:diagnosticoTratamento
       }
       try {
-        const req = await fetch("http://localhost:5280/api/Diagnostico/register",{
+        const req = await fetch("https://petrakka.com:7231/api/Diagnostico/register",{
             method:"Post",
             headers:{
                 "Content-Type":"application/json",
@@ -469,17 +479,15 @@ saveDiagnostico.addEventListener("click",async() => {
             body:JSON.stringify(obj_add_diag)
         })
         const res = await req.json()
-        if(res.Id){
-            const req_get_hist = await fetch(`http://localhost:5280/api/Diagnostico/Diagnosticos?animalId=${animal_id}`,{
+        if(res.id){
+            const req_get_hist = await fetch(`https://petrakka.com:7231/api/Diagnostico/Diagnosticos?animalId=${animal_id}`,{
                 method:"GET"
             })
             const res_get_hist = await req_get_hist.json()
-            console.log(res_get_hist)
             Render_count_diag(res_get_hist.length,spanDiagnostico)
             Render_list_diagnostico(res_get_hist,animal_id,lista_diagnosticos_view)
             showMessage("Diagnóstico criada com sucesso","green")
         }else{
-            console.log(res)
             showMessage("Erro ao criar diagnóstico","red")
         }
     } catch (error) {
@@ -513,7 +521,6 @@ saveMedicamento.addEventListener("click",async() => {
     const medicamentoDuracao = document.getElementById("medicamentoDuracao").value
     const medicamentoIndicacao = document.getElementById("medicamentoIndicacao").value
     const medicamentoReacoes = document.getElementById("medicamentoReacoes_o1").value
-    console.log(medicamentoReacoes)
     const animal_id = localStorage.getItem("selectedPetId")
     if(!animal_id){
         showMessage("Criei um animal primeiro","red")
@@ -533,7 +540,7 @@ saveMedicamento.addEventListener("click",async() => {
         observacoes:medicamentoReacoes
       }
       try {
-        const req = await fetch("http://localhost:5280/api/Medicacao/register",{
+        const req = await fetch("https://petrakka.com:7231/api/Medicacao/register",{
             method:"Post",
             headers:{
                 "Content-Type":"application/json",
@@ -542,17 +549,15 @@ saveMedicamento.addEventListener("click",async() => {
             body:JSON.stringify(obj_add_med)
         })
         const res = await req.json()
-        if(res.Id){
-            const req_get_hist = await fetch(`http://localhost:5280/api/Medicacao/Medicacoes?animalId=${animal_id}`,{
+        if(res.id){
+            const req_get_hist = await fetch(`https://petrakka.com:7231/api/Medicacao/Medicacoes?animalId=${animal_id}`,{
                 method:"GET"
             })
             const res_get_hist = await req_get_hist.json()
-            console.log(res_get_hist)
             Render_count_med(res_get_hist.length,spanMedicamento)
             Render_list_med(res_get_hist,animal_id,lista_medicamentos_view)
             showMessage("Medicamento criada com sucesso","green")
         }else{
-            console.log(res)
             showMessage("Erro ao criar Medicamento","red")
         }
     } catch (error) {
@@ -615,7 +620,7 @@ saveCirurgia.addEventListener("click",async() => {
         dataAlta:cirurgiaAlta,
       }
       try {
-        const req = await fetch("http://localhost:5280/api/CirurgiaControllers/register",{
+        const req = await fetch("https://petrakka.com:7231/api/CirurgiaControllers/register",{
             method:"Post",
             headers:{
                 "Content-Type":"application/json",
@@ -624,8 +629,8 @@ saveCirurgia.addEventListener("click",async() => {
             body:JSON.stringify(obj_add_cir)
         })
         const res = await req.json()
-        if(res.Id){
-            const req_get_hist = await fetch(`http://localhost:5280/api/CirurgiaControllers/Cirurgias?animalId=${animal_id}`,{
+        if(res.id){
+            const req_get_hist = await fetch(`https://petrakka.com:7231/api/CirurgiaControllers/Cirurgias?animalId=${animal_id}`,{
                 method:"GET"
             })
             const res_get_hist = await req_get_hist.json()
@@ -640,77 +645,6 @@ saveCirurgia.addEventListener("click",async() => {
     }
 })
 
-/*--- Consulta ---
-const btnAddConsulta = document.getElementById('btn_add_consulta')
-const backdropConsulta = document.getElementById('backdropConsulta')
-const cancelConsulta = document.getElementById('cancelConsulta')
-btnAddConsulta.addEventListener('click', () => backdropConsulta.style.display = 'flex')
-cancelConsulta.addEventListener('click', () => backdropConsulta.style.display = 'none')
-backdropConsulta.addEventListener('click', e => { if(e.target === backdropConsulta) backdropConsulta.style.display = 'none' })
-const spanConsulta = document.getElementById('consultaCount')
-const viewConsulta = document.getElementById('backdropConsultaView')
-const closeConsultaView = document.getElementById('closeConsultaView')
-const lista_consultas_view = document.getElementById("lista_consultas_view")
-spanConsulta.addEventListener('click', () => viewConsulta.style.display = 'flex')
-closeConsultaView.addEventListener('click', () => {
-    viewConsulta.style.display = 'none'
-    Render_count_con(lista_consultas_view.children.length,spanConsulta) 
-})
-
-const saveConsulta = document.getElementById("saveConsulta")
-saveConsulta.addEventListener("click",async() => {
-    const consultaData = document.getElementById("consultaData").value
-    const consultaMotivo = document.getElementById("consultaMotivo").value
-    const consultaAvaliacao = document.getElementById("consultaAvaliacao").value
-    const consultaRecomendacoes = document.getElementById("consultaRecomendacoes").value
-    const consultaRetorno = document.getElementById("consultaRetorno").value
-    const medicamentoReacoes = document.getElementById("medicamentoReacoes_o1").value
-    console.log(medicamentoReacoes)
-    const animal_id = localStorage.getItem("selectedPetId")
-    if(!animal_id){
-        showMessage("Criei um animal primeiro","red")
-    }
-    if (!medicamentoData || !medicamentoNome || !medicamentoDosagem || !medicamentoDuracao || !medicamentoIndicacao || !medicamentoReacoes) {
-        showMessage("Preencha todos os dados","red")
-        return
-    }
-
-    const obj_add_med = {
-        animalId: animal_id,
-        data: medicamentoData,
-        nome: medicamentoNome,
-        dosagem: medicamentoDosagem,
-        duracao: medicamentoDuracao,
-        indicacao:medicamentoIndicacao,
-        observacoes:medicamentoReacoes
-      }
-      try {
-        const req = await fetch("http://localhost:5280/api/Medicacao/register",{
-            method:"Post",
-            headers:{
-                "Content-Type":"application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body:JSON.stringify(obj_add_med)
-        })
-        const res = await req.json()
-        if(res.Id){
-            const req_get_hist = await fetch(`http://localhost:5280/api/Medicacao/Medicacoes?animalId=${animal_id}`,{
-                method:"GET"
-            })
-            const res_get_hist = await req_get_hist.json()
-            console.log(res_get_hist)
-            Render_count_med(res_get_hist.length,spanMedicamento)
-            Render_list_med(res_get_hist,animal_id,lista_medicamentos_view)
-            showMessage("Diagnóstico criada com sucesso","green")
-        }else{
-            console.log(res)
-            showMessage("Erro ao criar diagnóstico","red")
-        }
-    } catch (error) {
-        showMessage("Erro interno","red") 
-    }
-})*/
 
 /*Funções*/
 document.querySelectorAll(".modal-backdrop").forEach(b =>
@@ -747,8 +681,8 @@ function Render_list(res_get_hist,animal_id,lista_view){
                 const itens_rel = document.createElement("span")
                 const itens_data = document.createElement("small")
                 const itens_crmv = document.createElement("small")
-                itens_name.innerText = `Nome: ${valor.Tipo}`
-                itens_rel.innerText = `Relatório: ${valor.Relatorio}`
+                itens_name.innerText = `Nome: ${valor.tipo}`
+                itens_rel.innerText = `Relatório: ${valor.relatorio}`
                 itens_data.innerText = `Data: ${valor._dataVacinacao}` 
                 itens_crmv.innerText = `Crmv: ${valor._veterinarioCRMV}`
                 div_info.appendChild(itens_name)
@@ -761,7 +695,7 @@ function Render_list(res_get_hist,animal_id,lista_view){
                 btn_remove_itens.addEventListener("click", async () => {
                 const vacinaId = btn_remove_itens.dataset.vacinaId
                 try {
-                const req_remove = await fetch(`http://localhost:5280/remove?id=${vacinaId}`, {
+                const req_remove = await fetch(`https://petrakka.com:7231/remove?id=${vacinaId}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -775,7 +709,7 @@ function Render_list(res_get_hist,animal_id,lista_view){
                 const res_remove = await req_remove.json()
                 if (res_remove.vacinaId) {
                     item_vacina.remove()
-                    showMessage("Vacina Deletada com sucesso","red")
+                    showMessage("Vacina Deletada com sucesso","green")
                 }else{
                     showMessage("Erro ao delelar vacina","red")
                 }
@@ -788,10 +722,17 @@ function Render_list(res_get_hist,animal_id,lista_view){
 
 async function Fetch_vacinas(animal_id){
     try {
-     const req_get_hist = await fetch(`http://localhost:5280/historico?AnimalId=${animal_id}`,{
+     const req_get_hist = await fetch(`https://petrakka.com:7231/historico?AnimalId=${animal_id}`,{
          method:"GET"
      })
+     console.log(req_get_hist)
+     if (!req_get_hist.ok) {
+        Render_list([], animal_id, listaVacinasView)
+        Render_count_vacina(0, vacinaCount)
+        return
+    }
      const res_get_hist = await req_get_hist.json()
+     console.log(res_get_hist)
      Render_list(res_get_hist,animal_id,listaVacinasView)
      Render_count_vacina(res_get_hist.length,vacinaCount)
     } catch (error) {
@@ -810,7 +751,7 @@ function Render_list_diagnostico(res_get_hist, animal_id, lista_view) {
 
         const btn_remove = document.createElement("button")
         btn_remove.innerText = "Excluir"
-        btn_remove.dataset.id = valor.Id
+        btn_remove.dataset.id = valor.id
         btn_remove.classList.add("btn_excluir")
 
         const itens_cond = document.createElement("strong")
@@ -834,8 +775,9 @@ function Render_list_diagnostico(res_get_hist, animal_id, lista_view) {
 
         btn_remove.addEventListener("click", async () => {
             const registroId = btn_remove.dataset.id
+            console.log(valor)
             try {
-                const req_remove = await fetch(`http://localhost:5280/api/Diagnostico/delete?id=${registroId}`, {
+                const req_remove = await fetch(`https://petrakka.com:7231/api/Diagnostico/delete?id=${registroId}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
@@ -843,15 +785,15 @@ function Render_list_diagnostico(res_get_hist, animal_id, lista_view) {
                     },
                     body: JSON.stringify({
                         AnimalId: animal_id,
-                        Id: registroId
+                        id: registroId
                     })
                 })
                 const res_remove = await req_remove.json()
-                if (res_remove.Id) {
+                if (res_remove.id) {
                     item.remove()
-                    showMessage("Diagnóstico deletado com sucesso","red")
+                    showMessage("Diagnóstico deletado com sucesso","green")
                 } else {
-                    showMessage("Erro ao criar diagnóstico", "red")
+                    showMessage("Erro ao deletar diagnóstico", "red")
                 }
             } catch (err) {
                 showMessage("Erro interno", "red")
@@ -867,7 +809,7 @@ function Render_count_diag(arr_length,element){
 
 async function Fetch_diag(animal_id){
     try {
-     const req_get_hist = await fetch(`http://localhost:5280/api/Diagnostico/Diagnosticos?animalId=${animal_id}`,{
+     const req_get_hist = await fetch(`https://petrakka.com:7231/api/Diagnostico/Diagnosticos?animalId=${animal_id}`,{
          method:"GET"
      })
      const res_get_hist = await req_get_hist.json()
@@ -890,7 +832,7 @@ async function Fetch_diag(animal_id){
 
         const btn_remove = document.createElement("button")
         btn_remove.innerText = "Excluir"
-        btn_remove.dataset.id = valor.Id
+        btn_remove.dataset.id = valor.id
         btn_remove.classList.add("btn_excluir")
 
         const itens_cond = document.createElement("strong")
@@ -918,7 +860,7 @@ async function Fetch_diag(animal_id){
         btn_remove.addEventListener("click", async () => {
             const registroId = btn_remove.dataset.id
             try {
-                const req_remove = await fetch(`http://localhost:5280/api/Medicacao/delete?id=${registroId}`, {
+                const req_remove = await fetch(`https://petrakka.com:7231/api/Medicacao/delete?id=${registroId}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
@@ -926,15 +868,15 @@ async function Fetch_diag(animal_id){
                     },
                     body: JSON.stringify({
                         AnimalId: animal_id,
-                        Id: registroId
+                        id: registroId
                     })
                 })
                 const res_remove = await req_remove.json()
-                if (res_remove.Id) {
+                if (res_remove.id) {
                     item.remove()
                     showMessage("Medicamento deletado com sucesso", "red")
                 } else {
-                    showMessage("Erro ao criar Medicamento", "red")
+                    showMessage("Erro ao deletar Medicamento", "red")
                 }
             } catch (err) {
                 showMessage("Erro interno", "red")
@@ -950,7 +892,7 @@ function Render_count_med(arr_length,element){
 
 async function Fetch_med(animal_id){
     try {
-     const req_get_hist = await fetch(`http://localhost:5280/api/Medicacao/Medicacoes?animalId=${animal_id}`,{
+     const req_get_hist = await fetch(`https://petrakka.com:7231/api/Medicacao/Medicacoes?animalId=${animal_id}`,{
          method:"GET"
      })
      const res_get_hist = await req_get_hist.json()
@@ -974,7 +916,7 @@ async function Fetch_med(animal_id){
 
         const btn_remove = document.createElement("button")
         btn_remove.innerText = "Excluir"
-        btn_remove.dataset.id = valor.Id
+        btn_remove.dataset.id = valor.id
         btn_remove.classList.add("btn_excluir")
 
         const itens_cond = document.createElement("strong")
@@ -1008,7 +950,7 @@ async function Fetch_med(animal_id){
         btn_remove.addEventListener("click", async () => {
             const registroId = btn_remove.dataset.id
             try {
-                const req_remove = await fetch(`http://localhost:5280/api/CirurgiaControllers/delete?id=${registroId}`, {
+                const req_remove = await fetch(`https://petrakka.com:7231/api/CirurgiaControllers/delete?id=${registroId}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
@@ -1016,15 +958,15 @@ async function Fetch_med(animal_id){
                     },
                     body: JSON.stringify({
                         AnimalId: animal_id,
-                        Id: registroId
+                        id: registroId
                     })
                 })
                 const res_remove = await req_remove.json()
-                if (res_remove.Id) {
+                if (res_remove.id) {
                     item.remove()
-                    showMessage("Cirurgia deletada com sucesso", "red")
+                    showMessage("Cirurgia deletada com sucesso", "green")
                 } else {
-                    showMessage("Erro ao criar cirurgia", "red")
+                    showMessage("Erro ao deletar cirurgia", "red")
                 }
             } catch (err) {
                 showMessage("Erro interno", "red")
@@ -1040,7 +982,7 @@ function Render_count_cir(arr_length,element){
 
 async function Fetch_cir(animal_id){
     try {
-     const req_get_hist = await fetch(`http://localhost:5280/api/CirurgiaControllers/Cirurgias?animalId=${animal_id}`,{
+     const req_get_hist = await fetch(`https://petrakka.com:7231/api/CirurgiaControllers/Cirurgias?animalId=${animal_id}`,{
          method:"GET"
      })
      const res_get_hist = await req_get_hist.json()
@@ -1052,82 +994,4 @@ async function Fetch_cir(animal_id){
  }
 
 
- /*function Render_list_con(res_get_hist, animal_id, lista_view) {
-    lista_view.innerHTML = ''
-    res_get_hist.forEach(valor => {
-        const item = document.createElement("div")
-        item.classList.add("vacina_item")
-
-        const div_info = document.createElement("div")
-        div_info.classList.add("vacina_info")
-
-        const btn_remove = document.createElement("button")
-        btn_remove.innerText = "Excluir"
-        btn_remove.dataset.id = valor.Id
-        btn_remove.classList.add("btn_excluir")
-
-        const itens_cond = document.createElement("strong")
-        itens_cond.innerText = `Condição: ${valor.doencaOuCondicao}`
-
-        const itens_sint = document.createElement("span")
-        itens_sint.innerText = `Sintomas: ${valor.sintomasObservados}`
-
-        const itens_exam = document.createElement("small")
-        itens_exam.innerText = `Exames: ${valor.examesSolicitados}`
-
-        const itens_trat = document.createElement("small")
-        itens_trat.innerText = `Tratamento: ${valor.condutaTratamento}`
-
-        const itens_data = document.createElement("small")
-        itens_data.innerText = `Data: ${valor._data}`
-
-        div_info.append(itens_cond, itens_sint, itens_exam, itens_trat, itens_data)
-        item.append(div_info, btn_remove)
-        lista_view.appendChild(item)
-
-        btn_remove.addEventListener("click", async () => {
-            const registroId = btn_remove.dataset.id
-            try {
-                const req_remove = await fetch(`http://localhost:5280/api/Diagnostico/delete?id=${registroId}`, {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        AnimalId: animal_id,
-                        Id: registroId
-                    })
-                })
-                const res_remove = await req_remove.json()
-                if (res_remove.Id) {
-                    item.remove()
-                    showMessage("Diagnóstico criada com sucesso", "green")
-                } else {
-                    showMessage("Erro ao criar diagnóstico", "red")
-                }
-            } catch (err) {
-                showMessage("Erro interno", "red")
-            }
-        })
-    })
-}
-
-
-function Render_count_con(arr_length,element){
-    element.innerText = `(${arr_length})`
-}
-
-async function Fetch_con(animal_id){
-    try {
-     const req_get_hist = await fetch(`http://localhost:5280/api/Diagnostico/Diagnosticos?animalId=${animal_id}`,{
-         method:"GET"
-     })
-     const res_get_hist = await req_get_hist.json()
-     Render_list_diagnostico(res_get_hist,animal_id,lista_diagnosticos_view)
-     
-     Render_count_diag(res_get_hist.length,spanDiagnostico)
-    } catch (error) {
-     console.log(error)
-    }
- }*/
+ 

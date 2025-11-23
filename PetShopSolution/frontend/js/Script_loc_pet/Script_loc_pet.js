@@ -1,6 +1,4 @@
 const btn_perfil = document.getElementById("btn_perfil")
-const config_user = document.getElementById("config_user")
-const sair_user = document.getElementById("sair_user")
 
 btn_perfil.addEventListener("click",()=>{
     const card_perfil_config = document.getElementById("card_perfil_config")

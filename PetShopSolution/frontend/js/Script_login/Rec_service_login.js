@@ -1,11 +1,10 @@
-const btn_login = document.getElementById("btn_login")
+const btn_login_rec = document.getElementById("btn_login_rec")
 const div_msg = document.getElementById("div_msg")
-
-btn_login.addEventListener("click",async(e)=>{
+btn_login_rec.addEventListener("click",async(e)=>{
     e.preventDefault()
-    const crmv_vet = document.getElementById("crmv_vet").value
-    const senha_vet = document.getElementById("senha_vet").value
-    if(senha_vet == "" || senha_vet == ""){
+    const rg_rec = document.getElementById("rg_rec").value
+    const senha_rec = document.getElementById("senha_rec").value
+    if(rg_rec == "" || senha_rec == ""){
         div_msg.textContent = "Prencha todos os campos"
         div_msg.style.color = "red"
         setTimeout(()=>{
@@ -14,22 +13,24 @@ btn_login.addEventListener("click",async(e)=>{
     }
 
     try {
-        const req = await fetch("https://petrakka.com:7231/api/MedicoVeterinario/login",{
+        const req = await fetch("https://petrakka.com:7231/api/Atendente/login",{
             method:"Post",
             headers:{"Content-Type":"application/json"},
             credentials:"include",
-            body:JSON.stringify({credencial:crmv_vet,password:senha_vet})
+            body:JSON.stringify({credencial:rg_rec,password:senha_rec})
         })
         const res = await req.json()
+        console.log(res)
         if(res.success){
-            div_msg.textContent = res.Message
+            localStorage.setItem("token", res.token)
+            div_msg.textContent = res.message
             div_msg.style.color = "green"
             setTimeout(()=>{
             div_msg.textContent = ""
             },2000)
-            window.location.href = "../../pages/pages_ini/Page_vet.html"
+            window.location.href = "../../pages/pages_ini/Page_rec.html"
         }else{
-            div_msg.textContent = res.Message
+            div_msg.textContent = res.message
             div_msg.style.color = "red"
             setTimeout(()=>{
             div_msg.textContent = ""
@@ -40,7 +41,6 @@ btn_login.addEventListener("click",async(e)=>{
             div_msg.style.color = "red"
             setTimeout(()=>{
             div_msg.textContent = ""
-            console.log(error)
         },2000)
     }
 })

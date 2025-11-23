@@ -3,7 +3,7 @@ const div_msg = document.getElementById("div_msg")
 
 /*remove_user.addEventListener("click",async()=>{
     try {
-        const req = fetch(`http://localhost:5280/api/Responsavel/delete?mail=${userEmail}`,{
+        const req = fetch(`https://petrakka.com:7231/api/Responsavel/delete?mail=${userEmail}`,{
             method:"DELETE"
         })
         const res =  req.json()
@@ -73,7 +73,7 @@ btn_save.addEventListener("click",async(e)=>{
     }
 
     try {
-        const req = await fetch(`http://localhost:5280/api/Responsavel/update`,{
+        const req = await fetch(`https://petrakka.com:7231/api/Responsavel/update`,{
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
