@@ -44,7 +44,7 @@ public class MedicoVeterinarioController  : ControllerBase
         return Ok(register);
     }
     
-    [HttpGet("MedicoVeterinario")]
+    [HttpGet("MedicoVeterinario/{crmv}")]
     public async Task<IActionResult> MedicoVeterinario(string crmv)
     {
         
