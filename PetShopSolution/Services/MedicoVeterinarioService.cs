@@ -36,7 +36,7 @@ public class MedicoVeterinarioService : IMedicoVeterinarioService
         var collection = _db.GetDatabase().GetCollection<MedicoVeterinario>("MedicoVeterinario");
 
         // Create a filter to find the document by Id
-        var filter = Builders<MedicoVeterinario>.Filter.Eq(u => u.Id, _object);
+        var filter = Builders<MedicoVeterinario>.Filter.Eq(u => u.CRMV, _object);
 
         // Find the document matching the filter
         var character = collection.Find(filter).FirstOrDefault();
