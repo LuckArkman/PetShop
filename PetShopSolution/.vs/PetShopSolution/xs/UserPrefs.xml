@@ -1,0 +1,34 @@
+﻿<Properties StartupConfiguration="{A0B40536-BC8F-44B0-9CAA-7DD48175BEB0}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Services/ResponsavelService.cs">
+    <Files>
+      <File FileName="Services/AnimalService.cs" Line="1" Column="1" />
+      <File FileName="Services/RelatorioClinicoService.cs" Line="20" Column="100" />
+      <File FileName="Services/VacinacaoService.cs" Line="25" Column="41" />
+      <File FileName="Services/HistoricoClinicoService.cs" Line="23" Column="37" />
+      <File FileName="Services/GeolocationRecordService.cs" Line="1" Column="1" />
+      <File FileName="Services/AnimalGeolocationHistoryService.cs" Line="1" Column="1" />
+      <File FileName="Services/AgendamentoService.cs" Line="1" Column="1" />
+      <File FileName="Services/DisponibilidadeService.cs" Line="1" Column="1" />
+      <File FileName="Services/HistoryVacinacaoService.cs" Line="59" Column="45" />
+      <File FileName="Services/ResponsavelService.cs" Line="130" Column="9" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="PetShopSolution" expanded="True">
+            <Node name="Services" expanded="True">
+              <Node name="ResponsavelService.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Api PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
