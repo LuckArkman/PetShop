@@ -1,6 +1,5 @@
 const btn_save = document.getElementById("btn_save")
 const div_msg = document.getElementById("div_msg")
-
 /*remove_user.addEventListener("click",async()=>{
     try {
         const req = fetch(`https://petrakka.com:7231/api/Responsavel/delete?mail=${userEmail}`,{

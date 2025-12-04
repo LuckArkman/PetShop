@@ -16,6 +16,10 @@
               <div class="card-form">
                 <h1>Login Veterinário</h1>
                 <form>
+                  <!-- Honeypot para bloquear autofill do Firefox -->
+                  <input type="text" autocomplete="username" style="position:absolute; top:-9999px">
+                  <input type="password" autocomplete="new-password" style="position:absolute; top:-9999px">
+                  
                   <input type="text" placeholder="CRMV" id="crmv_vet" required>
                   <input type="password" placeholder="Senha" id="senha_vet"required>
                   <button type="button" id="btn_login">Entrar</button>
@@ -27,4 +31,4 @@
     </main>
 </body>
 </html>
-<script src="../../js/Script_login/Vet_service_login.js"></script>
+<script type="module" src="../../js/Script_login/Vet_service_login.js"></script>

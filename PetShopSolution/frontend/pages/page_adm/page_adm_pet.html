@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página adm pet</title>
+    <link rel="stylesheet" href="page_adm_pet.css">
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo">PetShop Admin</div>
+        <nav>
+            <a href="page_adm.html">Dashboard</a>
+            <a href="page_adm_pet.html"class="active">Pets</a>
+            <a href="page_adm_cliente.html">Clientes</a>
+            <a href="page_adm_recep.html">Recepcionistas</a>
+            <a href="page_adm_agenda.html">Agenda</a>
+            <a href="page_adm_finan.html">Financeiro</a>
+        </nav>
+        <div class="profile">
+            <span>Admin</span>
+        </div>
+    </header>
+
+
+    <h2 class="title">Pets Cadastrados</h2>
+
+<div class="top-actions">
+    <input style="width: 80%;" type="text" placeholder="Buscar pet pelo nome..." class="input">
+    <button style="margin-right: 10%;" class="btn">Buscar Pet</button>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Espécie</th>
+            <th>Tutor</th>
+            <th>Idade</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Luna</td>
+            <td>Cachorro</td>
+            <td>Ana Paula</td>
+            <td>3 anos</td>
+            <td>
+                <button class="edit">Editar</button>
+                <button class="delete">Excluir</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Mingau</td>
+            <td>Gato</td>
+            <td>Roberto</td>
+            <td>1 ano</td>
+            <td>
+                <button class="edit">Editar</button>
+                <button class="delete">Excluir</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h2 class="title">Cadastrar Pet</h2>
+
+<form class="form">
+    <label>Nome do Pet</label>
+    <input type="text" class="input" placeholder="Ex: Thor">
+
+    <label>Espécie</label>
+    <select class="input">
+        <option>Cachorro</option>
+        <option>Gato</option>
+        <option>Ave</option>
+        <option>Coelho</option>
+    </select>
+
+    <label>Raça</label>
+    <input type="text" class="input" placeholder="Ex: Golden Retriever">
+
+    <label>Idade</label>
+    <input type="number" class="input" placeholder="Ex: 2">
+
+    <label>Tutor</label>
+    <input type="text" class="input" placeholder="Nome do tutor">
+
+    <button class="btn">Salvar Pet</button>
+</form>
+
+</body>
+</html>

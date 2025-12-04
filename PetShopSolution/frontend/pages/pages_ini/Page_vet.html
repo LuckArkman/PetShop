@@ -12,6 +12,25 @@
         <h1>Painel veterinário</h1>
         <p>Registrar consulta • Consultas do dia • Protocolos rápidos</p>
     </div>
+    <div class="content_search">
+        <div class="search-box">
+             <input id="value_rg" type="text" placeholder="Digite o RG do tutor para selecionar o pet para consulta">
+             <button id="btn_search">Buscar</button>
+        </div>
+    </div>
+    <div class="resultado-tutor-container" id="resultado_tutor_container">
+        <div class="tutor-info">
+            <h2 class="tutor-nome" id="tutor_name">Tutor(a): <span id="spantutor_name"></span></h2>
+            <button id="btn_info_user" class="btn_info_user">Ver mais</button>
+        </div>
+    
+        <div class="pets-lista" id="pet_lista">
+            <h3>Pets de <span id="tutor_name_pet"></span>:</h3>
+        </div>
+    
+        <!--<button class="btn-agendar-geral" id="btn_agendar_consulta" type="button">Agendar Consulta</button>-->
+    </div>
+    <!--Modal pet-->
     <div class="main_card">
         <div class="col_esq">
         <div class="card_esq">
@@ -100,13 +119,13 @@
 
         <div class="card_hist_dir">
             <h1>Histórico — atalho</h1>
-            <p>Acesse o histórico completo do veterinário e visualize filtros por tipo de atendimento e período.</p>
+            <p>Acesse o histórico completo do veterináriod.</p>
             <button id="btnVerMais" class="btn_ver_mais">Ver mais</button>
         </div>
 
         <div class="card_hist_dir">
             <h1>Histórico — Tutor</h1>
-            <p>Acesse o histórico completo do tutor e visualize todas as consultas</p>
+            <p>Acesse o histórico completo do tutor e visualize todos os  agendamentos</p>
             <button id="btnVerMaisTutor" class="btn_ver_mais">Ver mais</button>
         </div>
     </div>
@@ -135,8 +154,38 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+<div id="modal-user" class="modal">
+    <div class="modal-content">
+      <span id="btn_fechar" class="close">&times;</span>
+      <h2>Informações do Tutor</h2>
+      <p><strong>Nome:</strong> <span id="modal_nome"></span></p>
+      <p><strong>Email:</strong> <span id="modal_email"></span></p>
+      <p><strong>RG:</strong> <span id="modal_rg"></span></p>
+      <p><strong>CPF:</strong> <span id="modal_cpf"></span></p>
+      <p><strong>Telefone:</strong> <span id="modal_telefone"></span></p>
+      <p><strong>Cidade:</strong> <span id="modal_city"></span></p>
+      <p><strong>Estado:</strong> <span id="modal_state"></span></p>
+    </div>
+  </div>
+  
+  <!-- Modal PET -->
+  <div id="modal-pet" class="modal">
+    <div class="modal-content">
+      <span class="close-pet">&times;</span>
+      <h2>Informações do Pet</h2>
+      <p><strong>Nome:</strong> <span id="modal_pet_nome"></span></p>
+      <p><strong>Espécie:</strong> <span id="modal_pet_especie"></span></p>
+      <p><strong>Raça:</strong> <span id="modal_pet_raca"></span></p>
+      <p><strong>Sexo:</strong> <span id="modal_pet_sexo"></span></p>
+      <p><strong>Idade:</strong> <span id="modal_pet_idade"></span> anos</p>
+      <p><strong>Peso:</strong> <span id="modal_pet_peso"></span> kg</p>
+      <p><strong>Porte:</strong> <span id="modal_pet_porte"></span></p>
+      <p><strong>Castrado:</strong> <span id="modal_pet_castrado"></span></p>
+    </div>
+  </div>
     </main>
 </body>
 </html>
 
-<script src="../../js/Script_vet/Script_vet.js"></script>
+<script type="module" src="../../js/Script_vet/Script_vet.js"></script>

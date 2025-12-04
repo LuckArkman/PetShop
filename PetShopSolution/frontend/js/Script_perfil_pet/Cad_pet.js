@@ -10,7 +10,6 @@ const btn_perfil = document.getElementById("btn_perfil")
 const config_user = document.getElementById("config_user")
 const sair_user = document.getElementById("sair_user")
 
-
 btn_perfil.addEventListener("click",()=>{
     const card_perfil_config = document.getElementById("card_perfil_config")
     card_perfil_config.classList.toggle("show")
@@ -79,7 +78,6 @@ if (!token) {
 const payload = getPayloadFromToken(token)
 const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
 const userEmail = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
-
 function updatePetUI(pet) {
     document.getElementById("animal_name").textContent = pet.nome
     document.getElementById("race_animal").textContent = pet.raca || "Sem Raça"
@@ -97,7 +95,7 @@ async function populatePets() {
     select_pet.innerHTML = `<option value="">Pet Atual</option>`
         try {
             const res = await fetch(`https://petrakka.com:7231/api/Responsavel/animais`, {
-               method:"POST",
+               method:"Post",
                headers:{"Content-Type":"application/json"},
                body:JSON.stringify({mail:userEmail})
             })
@@ -209,7 +207,6 @@ saveSimple.addEventListener("click", async () => {
             updatePetUI(res)
             info_bottom_pet.style.display = "block"
             backdropSimple.style.display = "none"
-            resetForm()
             showMessage("Cadastro realizado com sucesso!","green")
             const req_get_user = await fetch(`https://petrakka.com:7231/api/Responsavel/Responsavel${fRg}`,{
                 method:"GET"
@@ -234,19 +231,6 @@ saveSimple.addEventListener("click", async () => {
         console.log(err)
     }
 })
-
-
-function resetForm() {
-    document.getElementById("fRg").value = ""
-    document.getElementById("fName").value = ""
-    document.getElementById("fSpecies").value = ""
-    document.getElementById("fBreed").value = ""
-    document.getElementById("fAge").value = ""
-    document.getElementById("fWeight").value = ""
-    document.getElementById("fPorte").value = ""
-    document.getElementById("fSex").value = ""
-    document.getElementById("fCastrado").value = ""
-}
 
 // Rota excluir pet
 btn_remove_pet.addEventListener("click",async()=>{
@@ -1008,4 +992,6 @@ async function Fetch_cir(animal_id){
      console.log(error)
     }
  }
+
+
  

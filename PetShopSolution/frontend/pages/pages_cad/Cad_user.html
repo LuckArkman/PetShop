@@ -16,21 +16,24 @@
               <div class="card-form">
                 <h1>Cadastro Usuário</h1>
                 <form id="form_content">
+                  <!-- Honeypot para bloquear autofill do Firefox -->
+                  <input type="text" autocomplete="username" style="position:absolute; top:-9999px">
+                  <input type="password" autocomplete="new-password" style="position:absolute; top:-9999px">
                   <div class="form-row">
-                    <input type="text" placeholder="Nome de Usuário" id="username_user" required min="2" max="30">
-                    <input type="email" placeholder="Email" id="email_user" required>
+                    <input type="text" placeholder="Nome de Usuário" id="username_user" name="username_user" required min="2" max="30" autocomplete="off">
+                    <input type="email" placeholder="Email" id="email_user" name="email_user" autocomplete="off" required>
                   </div>
                   <div class="form-row">
-                    <input type="password" placeholder="Senha" id="senha_user" required min="4" max="20">
-                    <input type="password" placeholder="Confirme Senha" id="confirm_senha_user" required min="4" max="20">
+                    <input type="password" placeholder="Senha" id="senha_user" name="senha_user" autocomplete="off" required min="4" max="20">
+                    <input type="password" placeholder="Confirme Senha" id="confirm_senha_user" name="confirm_senha_user" autocomplete="off"  required min="4" max="20">
                   </div>
-                  <input style="width: 70%; margin: auto; text-align: center;" type="text" placeholder="RG" id="rg_user" required>
-                  <button type="button" id="btn_cad">Cadastrar</button>
+                  <input style="width: 70%; margin: auto; text-align: center;" type="text" placeholder="RG" id="rg_user" name="rg_user" autocomplete="off" required>
+                  <button type="button" id="btn_cad" name="btn_cad_user">Cadastrar</button>
                   <div id="div_msg" style="text-align: center;"></div>
                   <div class="links">
                     <p>Já tem conta? <a href="../../pages/pages_login/Login_user.html">Entrar</a></p>
                     <p>É veterinário?<a href="../../pages/pages_cad/Cad_vet.html">Cadastrar</a></p>
-                    <p>É Recepcionista?<a href="../../pages/pages_cad/Cad_rec.html">Cadastrar</a></p>
+                    <p>É Recepcionista?<a href="../../pages/pages_login/Login_rec.html">Entrar</a></p>
                   </div>
                </form>                           
               </div>
@@ -39,4 +42,4 @@
     </main>
 </body>
 </html>
-<script src="../../js/Script_cad/User_service_cad.js"></script>
+<script type="module" src="../../js/Script_cad/User_service_cad.js"></script>

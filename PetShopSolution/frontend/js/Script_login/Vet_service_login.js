@@ -1,7 +1,6 @@
 const btn_login = document.getElementById("btn_login")
 const div_msg = document.getElementById("div_msg")
-
-btn_login.addEventListener("click",async(e)=>{
+    btn_login.addEventListener("click",async(e)=>{
     e.preventDefault()
     const crmv_vet = document.getElementById("crmv_vet").value
     const senha_vet = document.getElementById("senha_vet").value

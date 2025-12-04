@@ -16,6 +16,10 @@
               <div class="card-form">
                 <h1>Login Recepcionista</h1>
                 <form>
+                  <!-- Honeypot para bloquear autofill do Firefox -->
+                  <input type="text" autocomplete="username" style="position:absolute; top:-9999px">
+                  <input type="password" autocomplete="new-password" style="position:absolute; top:-9999px">
+                  
                   <input type="text" placeholder="Email" id="rg_rec" required>
                   <input type="password" placeholder="Senha" id="senha_rec"required>
                   <button type="button" id="btn_login_rec">Entrar</button>
@@ -27,4 +31,4 @@
     </main>
 </body>
 </html>
-<script src="../../js/Script_login/Rec_service_login.js"></script>
+<script type="module" src="../../js/Script_login/Rec_service_login.js"></script>

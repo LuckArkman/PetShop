@@ -1,0 +1,148 @@
+/* Header Topo */
+header.top-header {
+    width:97%;
+    height: 60px;
+    background: #4e73df;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header.top-header .logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+header.top-header nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    transition: background 0.2s;
+}
+
+header.top-header nav a:hover,
+header.top-header nav a.active {
+    background: rgba(255,255,255,0.2);
+}
+
+header.top-header .profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header.top-header .profile img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+.title {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    margin: 30px 0 10px;
+    font-size: 20px;
+    color: #444;
+}
+
+.input {
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.btn {
+    background: #4e73df;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .2s;
+}
+.btn:hover {
+    opacity: .8;
+}
+
+.table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table th {
+    background: #eee;
+    text-align: left;
+    padding: 12px;
+    font-size: 14px;
+}
+
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.table tr:hover {
+    background: #f7f7f7;
+}
+
+.edit, .delete {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.edit { background: #2e7d32; color: white; }
+.delete { background: #c62828; color: white; }
+
+.status {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: white;
+}
+.pendente { background: #ff9800; }
+.concluido { background: #2e7d32; }
+
+.cards {
+    display: flex;
+    gap: 20px;
+}
+.card {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.card h3 {
+    color: #777;
+    font-size: 14px;
+}
+.card p {
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.top-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
