@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2RUJ9Kwln90=",
+  "dgSpecHash": "Qzr60tGKdXY=",
   "success": true,
-  "projectFilePath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj",
+  "projectFilePath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj",
   "expectedPackageFiles": [
     "/home/mplopes/.nuget/packages/dnsclient/1.6.1/dnsclient.1.6.1.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.extensions.logging.abstractions/2.0.0/microsoft.extensions.logging.abstractions.2.0.0.nupkg.sha512",

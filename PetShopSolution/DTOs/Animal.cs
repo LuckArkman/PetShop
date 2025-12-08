@@ -22,10 +22,10 @@ public class Animal
     public bool? Castrado { get; set; }
 
     [Range(0, 100), Display(Name = "Idade (anos)")]
-    public int Idade { get; set; }
+    public Idade _idade { get; set; }
 
     [Range(0, 200), Display(Name = "Peso (Kg)")]
-    public double Peso { get; set; }
+    public Peso _peso { get; set; }
 
     [Display(Name = "Porte / Tamanho")]
     public string? Porte { get; set; }

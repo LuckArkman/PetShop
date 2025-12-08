@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
+      "projectUniqueName": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
       "projectName": "Enums",
-      "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
+      "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
       "packagesPath": "/home/mplopes/.nuget/packages/",
-      "outputPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/",
+      "outputPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/mplopes/.nuget/NuGet/NuGet.Config"

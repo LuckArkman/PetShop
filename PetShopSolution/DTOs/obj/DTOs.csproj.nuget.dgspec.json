@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj": {}
+    "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj": {}
   },
   "projects": {
-    "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj": {
+    "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj",
+        "projectUniqueName": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj",
         "projectName": "DTOs",
-        "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj",
+        "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj",
         "packagesPath": "/home/mplopes/.nuget/packages/",
-        "outputPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/",
+        "outputPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/mplopes/.nuget/NuGet/NuGet.Config"
@@ -27,8 +27,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj": {
-                "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj"
+              "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj": {
+                "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj"
               }
             }
           }
@@ -84,14 +84,14 @@
         }
       }
     },
-    "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj": {
+    "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
+        "projectUniqueName": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
         "projectName": "Enums",
-        "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
+        "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
         "packagesPath": "/home/mplopes/.nuget/packages/",
-        "outputPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/",
+        "outputPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/mplopes/.nuget/NuGet/NuGet.Config"

@@ -10,11 +10,15 @@ public class RelatorioClinicoController : ControllerBase
 {
     readonly IHistoricoClinicoService _service;
     readonly IRelatorioClinicoService  _relatorioClinicoService;
-    public RelatorioClinicoController(IHistoricoClinicoService service,
-        IRelatorioClinicoService relatorioClinicoService)
+    private readonly IMedicoVeterinarioService _medicoVeterinario;
+    public RelatorioClinicoController(
+        IHistoricoClinicoService service,
+        IRelatorioClinicoService relatorioClinicoService,
+        IMedicoVeterinarioService medicoVeterinario)
     {
         _service = service;
         _relatorioClinicoService = relatorioClinicoService;
+        _medicoVeterinario = medicoVeterinario;
     }
     
     [HttpPost("register")]
@@ -44,6 +48,15 @@ public class RelatorioClinicoController : ControllerBase
     public async Task<IActionResult> Relatorios(string animalId)
     {
         var register = await _relatorioClinicoService.GetAllRelatorios(animalId,CancellationToken.None);
+        return Ok(register);
+    }
+    
+    [HttpGet("Relatorios_Veterinario/{crmv}")]
+    public async Task<IActionResult> RelatoriosVeterinario(string crmv)
+    {
+        var vet = await _medicoVeterinario.FindByCRMVAsync(crmv, CancellationToken.None);
+        if (vet == null) return BadRequest();
+        var register = await _relatorioClinicoService.GetAllVeterinarioRelatorios(vet.Id,CancellationToken.None);
         return Ok(register);
     }
 

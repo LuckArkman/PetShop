@@ -604,11 +604,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Data/Data.csproj",
+      "projectUniqueName": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Data/Data.csproj",
       "projectName": "Data",
-      "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Data/Data.csproj",
+      "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Data/Data.csproj",
       "packagesPath": "/home/mplopes/.nuget/packages/",
-      "outputPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Data/obj/",
+      "outputPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Data/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/mplopes/.nuget/NuGet/NuGet.Config"
