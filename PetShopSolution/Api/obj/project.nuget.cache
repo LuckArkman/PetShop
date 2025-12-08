@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wv3z7kgxXCU=",
+  "dgSpecHash": "IuiOhDCmJQA=",
   "success": true,
-  "projectFilePath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Api/Api.csproj",
+  "projectFilePath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Api/Api.csproj",
   "expectedPackageFiles": [
     "/home/mplopes/.nuget/packages/bcrypt.net-core/1.6.0/bcrypt.net-core.1.6.0.nupkg.sha512",
     "/home/mplopes/.nuget/packages/dnsclient/1.6.1/dnsclient.1.6.1.nupkg.sha512",

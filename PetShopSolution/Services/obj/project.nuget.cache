@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qJVzn+lSux8=",
+  "dgSpecHash": "ZtUIj500Yc8=",
   "success": true,
-  "projectFilePath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj",
+  "projectFilePath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj",
   "expectedPackageFiles": [
     "/home/mplopes/.nuget/packages/dnsclient/1.6.1/dnsclient.1.6.1.nupkg.sha512",
     "/home/mplopes/.nuget/packages/microsoft.aspnetcore.antiforgery/2.3.0/microsoft.aspnetcore.antiforgery.2.3.0.nupkg.sha512",

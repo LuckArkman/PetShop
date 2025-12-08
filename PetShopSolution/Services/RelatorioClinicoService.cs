@@ -89,6 +89,18 @@ public class RelatorioClinicoService : IRelatorioClinicoService
         }
     }
 
+    public async Task<List<Relatorio>?> GetAllVeterinarioRelatorios(string id, CancellationToken none)
+    {
+        var collection = _db.GetDatabase().GetCollection<Relatorio>("RelatorioClinico");
+        var filtro = Builders<Relatorio>.Filter.Eq(m => m.VeterinarioId, id);
+
+        var _relatorios = await collection
+            .Find(filtro)
+            .ToListAsync(none);
+
+        return _relatorios;
+    }
+
     public async Task<bool?> RemoveRelatorio(Relatorio _object, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

@@ -10168,11 +10168,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/Controllers.csproj",
+      "projectUniqueName": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Controllers/Controllers.csproj",
       "projectName": "Controllers",
-      "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/Controllers.csproj",
+      "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Controllers/Controllers.csproj",
       "packagesPath": "/home/mplopes/.nuget/packages/",
-      "outputPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Controllers/obj/",
+      "outputPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Controllers/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/mplopes/.nuget/NuGet/NuGet.Config"
@@ -10188,17 +10188,17 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj": {
-              "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj"
+            "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj": {
+              "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj"
             },
-            "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj": {
-              "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj"
+            "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj": {
+              "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj"
             },
-            "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj": {
-              "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj"
+            "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj": {
+              "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj"
             },
-            "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj": {
-              "projectPath": "/home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj"
+            "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj": {
+              "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj"
             }
           }
         }

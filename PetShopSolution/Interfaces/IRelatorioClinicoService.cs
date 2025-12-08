@@ -12,4 +12,5 @@ public interface IRelatorioClinicoService
 
     Task<bool?> RemoveRelatorio(Relatorio _object, CancellationToken cancellationToken);
     Task<List<Relatorio>?> GetAllRelatorios(string animalId, CancellationToken none);
+    Task<List<Relatorio>?> GetAllVeterinarioRelatorios(string id, CancellationToken none);
 }

@@ -58,8 +58,6 @@ public class AnimalService : IAnimalService
             .Set(u => u.Nome, _object.Nome)
             .Set(u => u.Especie, _object.Especie)
             .Set(u => u.Raca, _object.Raca)
-            .Set(u => u.Idade, _object.Idade)
-            .Set(u => u.Peso, _object.Peso)
             .Set(u => u.Porte,  _object.Porte)
             .Set(u => u.responsaveis, _object.responsaveis);
 

@@ -10,3 +10,15 @@
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/refint/Enums.dll
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.pdb
 /home/mplopes/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/ref/Enums.dll
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/bin/Debug/net8.0/Enums.deps.json
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/bin/Debug/net8.0/Enums.dll
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/bin/Debug/net8.0/Enums.pdb
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.AssemblyInfoInputs.cache
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.AssemblyInfo.cs
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.csproj.CoreCompileInputs.cache
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.sourcelink.json
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.dll
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/refint/Enums.dll
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/Enums.pdb
+/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/Debug/net8.0/ref/Enums.dll
