@@ -20,11 +20,7 @@ public class Animal
     public string? Sexo { get; set; }
     
     public bool? Castrado { get; set; }
-
-    [Range(0, 100), Display(Name = "Idade (anos)")]
     public Idade _idade { get; set; }
-
-    [Range(0, 200), Display(Name = "Peso (Kg)")]
     public Peso _peso { get; set; }
 
     [Display(Name = "Porte / Tamanho")]
