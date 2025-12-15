@@ -58,6 +58,11 @@ public class AnimalService : IAnimalService
             .Set(u => u.Nome, _object.Nome)
             .Set(u => u.Especie, _object.Especie)
             .Set(u => u.Raca, _object.Raca)
+            .Set(u => u._idade.anos, _object._idade.anos)
+            .Set(u => u._idade.meses, _object._idade.meses)
+            .Set(u => u._peso.kilos, _object._peso.kilos)
+            .Set(u => u._peso.gramas, _object._peso.gramas)
+            .Set(u => u.Raca, _object.Raca)
             .Set(u => u.Porte,  _object.Porte)
             .Set(u => u.responsaveis, _object.responsaveis);
 
@@ -80,7 +85,7 @@ public class AnimalService : IAnimalService
     {
         var filter = Builders<Animal>.Filter.Eq(u => u.id, _object);
         var result = await _collection.DeleteOneAsync(filter, cancellationToken);
-        return result.DeletedCount > 0;  
+        return result.DeletedCount > 0;
     }
 
     public async Task<List<Animal>?> GetAnimalsInList(List<string> ids, CancellationToken cancellationToken)

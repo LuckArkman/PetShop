@@ -14,10 +14,6 @@ public class Relatorio
     [BsonElement("sintomas")]
     
     public string Sintomas { get; set; }
-    
-    //public ICollection<Diagnostico>? Diagnosticos { get; set; }
-    
-    //public ICollection<Medicacao>? Medicacoes { get; set; }
 
     [BsonElement("tratamento")]
     public string Tratamento { get; set; }
