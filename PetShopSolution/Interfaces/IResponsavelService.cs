@@ -14,4 +14,5 @@ public interface IResponsavelService
     Task<bool> RemoveAsync(string _object, CancellationToken cancellationToken);
     Task<Responsavel?> FindByEmailAsync(string modelCredencial, CancellationToken cancellationToken);
     Task<List<Responsavel>?> GetAllResponsaveis(ICollection<string> resResponsaveis, CancellationToken none);
+    Task<Responsavel?> GetResponsavelRg(string agendamentoRg);
 }

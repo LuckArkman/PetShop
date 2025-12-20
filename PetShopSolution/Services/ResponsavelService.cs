@@ -139,4 +139,17 @@ public class ResponsavelService : IResponsavelService
 
         return responsaveis;
     }
+
+    public async Task<Responsavel?> GetResponsavelRg(string? agendamentoRg)
+    {
+        var collection = _dbMongo.GetDatabase().GetCollection<Responsavel>("Responsavel");
+
+        // Create a filter to find the document by Id
+        var filter = Builders<Responsavel>.Filter.Eq(u => u.RG, agendamentoRg);
+        
+        // Find the document matching the filter
+        var _responsavel = collection.Find(filter).FirstOrDefault();
+
+        return _responsavel as Responsavel;
+    }
 }

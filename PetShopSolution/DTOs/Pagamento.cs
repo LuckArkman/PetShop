@@ -7,7 +7,7 @@ public class Pagamento
     public string id { get; set; }
     public long? payment { get; set; }
     public string cpf { get; set; }
-    public PaidType type { get; set; } = PaidType.money;
+    public PaidType type { get; set; } = PaidType.pix;
     public decimal amount { get; set; }
     public PaidStatus Status { get; set; } = PaidStatus.pending;
     public string pixKey { get; set; } = string.Empty;
