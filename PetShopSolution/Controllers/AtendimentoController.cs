@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using DTOs;
+using Microsoft.Extensions.Configuration;
 using Services;
 
 namespace PetShop.API.Controllers;
@@ -9,10 +10,17 @@ namespace PetShop.API.Controllers;
 public class AtendimentoController : ControllerBase
 {
     private readonly AtendimentoService _service;
+    private readonly IConfiguration _cfg;
 
-    public AtendimentoController(AtendimentoService service)
+    public AtendimentoController(AtendimentoService service,
+        IConfiguration cfg)
     {
         _service = service;
+        _cfg = cfg;
+        
+        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Atendimento");
     }
 
     /// <summary>

@@ -8,7 +8,6 @@ namespace Services;
 
 public class AnimalService : IAnimalService
 {
-    public AnimalDBMongo _animalDb { get; set; }
     private IMongoCollection<Animal> _collection { get; set; }
     public string _collectionName { get; set; }
     private MongoDataController _db { get; set; }

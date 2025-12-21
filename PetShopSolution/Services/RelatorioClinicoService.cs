@@ -26,39 +26,23 @@ public class RelatorioClinicoService : IRelatorioClinicoService
         _mongoDatabase = _db.GetDatabase();
         _collection = _mongoDatabase.GetCollection<Relatorio>(_collectionName);
     }
-    public RelatorioClinicoService(IConfiguration configuration)
-    {
-        _cfg = configuration;
-        _db = new RelatorioClinicoDB(_cfg["MongoDbSettings:ConnectionString"], "RelatorioClinico");
-        _db.GetOrCreateDatabase();
-    }
 
     public async Task<Relatorio?> GetRelatorio(string _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Relatorio>("RelatorioClinico");
-        
         var filter = Builders<Relatorio>.Filter.Eq(u => u.Id, _object);
-        
-        var character = collection.Find(filter).FirstOrDefault();
-
+        var character = _collection.Find(filter).FirstOrDefault();
         return character as Relatorio;
     }
 
     public async Task<Relatorio?> InsetRelatorio(Relatorio _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Relatorio>("RelatorioClinico");
-        collection.InsertOne(_object);
+        await _collection.InsertOneAsync(_object);
         return _object as Relatorio;
     }
 
     public async Task<Relatorio?> UpdateRelatorio(Relatorio _object, CancellationToken cancellationToken)
     {
-        var obj = await GetRelatorio(_object.Id, CancellationToken.None) as Relatorio;
-        var collection = _db.GetDatabase().GetCollection<Relatorio>("RelatorioClinico");
-
-        // Create a filter to find the document by Id
         var filter = Builders<Relatorio>.Filter.Eq(u => u.Id, _object.Id);
-
         var update = Builders<Relatorio>.Update
             .Set(u => u.Id, _object.Id)
             .Set(u => u.animalId, _object.animalId)
@@ -69,7 +53,7 @@ public class RelatorioClinicoService : IRelatorioClinicoService
             .Set(u => u.VeterinarioId, _object.VeterinarioId);
 
         // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = await _collection.UpdateOneAsync(filter, update);
 
         if (result.ModifiedCount > 0)
         {
@@ -87,15 +71,10 @@ public class RelatorioClinicoService : IRelatorioClinicoService
     {
         try
         {
-            var collection = _db.GetDatabase().GetCollection<Relatorio>("RelatorioClinico");
-
-            // Cria filtro para buscar apenas as medicações do animal
             var filtro = Builders<Relatorio>.Filter.Eq(m => m.animalId, animalId);
-
-            var _relatorios = await collection
+            var _relatorios = await _collection
                 .Find(filtro)
                 .ToListAsync(none);
-
             return _relatorios;
         }
         catch (Exception ex)
@@ -107,10 +86,8 @@ public class RelatorioClinicoService : IRelatorioClinicoService
 
     public async Task<List<Relatorio>?> GetAllVeterinarioRelatorios(string id, CancellationToken none)
     {
-        var collection = _db.GetDatabase().GetCollection<Relatorio>("RelatorioClinico");
         var filtro = Builders<Relatorio>.Filter.Eq(m => m.VeterinarioId, id);
-
-        var _relatorios = await collection
+        var _relatorios = await _collection
             .Find(filtro)
             .ToListAsync(none);
 

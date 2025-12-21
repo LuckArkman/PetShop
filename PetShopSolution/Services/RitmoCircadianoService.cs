@@ -26,41 +26,25 @@ public class RitmoCircadianoService : IRitmoCircadianoService
         _mongoDatabase = _db.GetDatabase();
         _collection = _mongoDatabase.GetCollection<RitmoCircadiano>(_collectionName);
     }
-    public RitmoCircadianoService(IConfiguration configuration)
-    {
-        _cfg = configuration;
-        _db = new RitmoCircadianoDB(_cfg["MongoDbSettings:ConnectionString"], "RitmoCircadiano");
-        _db.GetOrCreateDatabase();
-    }
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<RitmoCircadiano>("RitmoCircadiano");
-
-        // Create a filter to find the document by Id
         var filter = Builders<RitmoCircadiano>.Filter.Eq(u => u.AnimalId, _object);
 
         // Find the document matching the filter
-        var character = collection.Find(filter).FirstOrDefault();
+        var character = _collection.Find(filter).FirstOrDefault();
 
         return character as RitmoCircadiano;
     }
 
     public async Task<object?> InsetObject(RitmoCircadiano _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<RitmoCircadiano>("RitmoCircadiano");
-        // Insert the user object into the collection
-        collection.InsertOne(_object);
+        await _collection.InsertOneAsync(_object);
         return _object as RitmoCircadiano;
     }
 
     public async Task<object?> UpdateObject(RitmoCircadiano _object, CancellationToken cancellationToken)
     {
-        var obj = await GetObject(_object.Id, CancellationToken.None) as RitmoCircadiano;
-        var collection = _db.GetDatabase().GetCollection<RitmoCircadiano>("RitmoCircadiano");
-
-        // Create a filter to find the document by Id
         var filter = Builders<RitmoCircadiano>.Filter.Eq(u => u.Id, _object.Id);
-
         var update = Builders<RitmoCircadiano>.Update
             .Set(u => u.Id, _object.Id)
             .Set(u => u.AnimalId, _object.AnimalId)
@@ -81,7 +65,7 @@ public class RitmoCircadianoService : IRitmoCircadianoService
             .Set(u => u.SonoTotal, _object.SonoTotal);
 
         // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = await _collection.UpdateOneAsync(filter, update);
 
         if (result.ModifiedCount > 0)
         {

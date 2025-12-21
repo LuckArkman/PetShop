@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DTOs;
 using Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace PetShop.API.Controllers;
 
@@ -9,9 +10,15 @@ namespace PetShop.API.Controllers;
 public class RitmoCircadianoController : ControllerBase
 {
     private readonly IRitmoCircadianoService _animalService;
-    public RitmoCircadianoController(IRitmoCircadianoService animalService)
+    private readonly IConfiguration _cfg;
+    public RitmoCircadianoController(IRitmoCircadianoService animalService,
+        IConfiguration configuration)
     {
         _animalService = animalService;
+        _cfg = configuration;
+        _animalService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "RitmoCircadiano");
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RitmoCircadiano model)

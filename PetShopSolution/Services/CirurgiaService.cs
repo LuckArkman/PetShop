@@ -11,6 +11,7 @@ public class CirurgiaService : ICirurgiaService
     public MongoDataController _db { get; set; }
     private readonly IConfiguration _configuration;
     protected IMongoCollection<Cirurgia> _collection;
+    private readonly IConfiguration _cfg;
     public string _collectionName { get; set; }
     private IMongoDatabase _mongoDatabase { get; set; }
     
@@ -26,36 +27,24 @@ public class CirurgiaService : ICirurgiaService
         _mongoDatabase = _db.GetDatabase();
         _collection = _mongoDatabase.GetCollection<Cirurgia>(_collectionName);
     }
-    public CirurgiaService(IConfiguration configuration)
-    {
-        _cfg = configuration;
-        _db = new CirurgiaDBMongo(_cfg["MongoDbSettings:ConnectionString"], "Cirurgia");
-        _db.GetOrCreateDatabase();
-    }
 
     public async Task<Cirurgia?> GetCirurgia(string _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Cirurgia>("Cirurgia");
         var filter = Builders<Cirurgia>.Filter.Eq(u => u.Id, _object);
-        var character = collection.Find(filter).FirstOrDefault();
+        var character = _collection.Find(filter).FirstOrDefault();
         return character as Cirurgia;
     }
 
     public async Task<Cirurgia?> InsetCirurgia(Cirurgia _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Cirurgia>("Cirurgia");
-        collection.InsertOne(_object);
+        await _collection.InsertOneAsync(_object);
         return _object as Cirurgia;
     }
 
     public async Task<Cirurgia?> UpdateCirurgia(Cirurgia _object, CancellationToken cancellationToken)
     {
-        var obj = await GetCirurgia(_object.Id, CancellationToken.None) as Cirurgia;
-        var collection = _db.GetDatabase().GetCollection<Cirurgia>("Cirurgia");
-
         // Create a filter to find the document by Id
         var filter = Builders<Cirurgia>.Filter.Eq(u => u.Id, _object.Id);
-
         var update = Builders<Cirurgia>.Update
             .Set(u => u.Id, _object.Id)
             .Set(u => u.animalId, _object.animalId)
@@ -68,7 +57,7 @@ public class CirurgiaService : ICirurgiaService
             .Set(u => u.dataAlta, _object.dataAlta);
 
         // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = _collection.UpdateOne(filter, update);
 
         if (result.ModifiedCount > 0)
         {
@@ -84,11 +73,9 @@ public class CirurgiaService : ICirurgiaService
 
     public async Task<bool?> RemoveCirurgia(string Id, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Cirurgia>("Cirurgia");
-        // Cria filtro para encontrar o documento pelo id
         var filter = Builders<Cirurgia>.Filter.Eq(u => u.Id, Id);
         // Remove o documento
-        var result = await collection.DeleteOneAsync(filter, cancellationToken);
+        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
 
         if (result.DeletedCount > 0)
         {
@@ -107,12 +94,10 @@ public class CirurgiaService : ICirurgiaService
     {
         try
         {
-            var collection = _db.GetDatabase().GetCollection<Cirurgia>("Cirurgia");
-
             // Cria filtro para buscar apenas as medicações do animal
             var filtro = Builders<Cirurgia>.Filter.Eq(m => m.animalId, animalId);
 
-            var _relatorios = await collection
+            var _relatorios = await _collection
                 .Find(filtro)
                 .ToListAsync(none);
 

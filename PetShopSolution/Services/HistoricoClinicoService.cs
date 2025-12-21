@@ -10,6 +10,7 @@ public class HistoricoClinicoService : IHistoricoClinicoService
 {
     private readonly IConfiguration _configuration;
     protected IMongoCollection<HistoricoClinico> _collection;
+    private readonly IConfiguration _cfg;
     public string _collectionName { get; set; }
     private MongoDataController _db { get; set; }
     private IMongoDatabase _mongoDatabase { get; set; }
@@ -26,38 +27,22 @@ public class HistoricoClinicoService : IHistoricoClinicoService
         _mongoDatabase = _db.GetDatabase();
         _collection = _mongoDatabase.GetCollection<HistoricoClinico>(_collectionName);
     }
-    public HistoricoClinicoService(IConfiguration configuration)
-    {
-        _cfg = configuration;
-        _db = new HistoricoClinicoDB(_cfg["MongoDbSettings:ConnectionString"], "HistoricoClinico");
-        _db.GetOrCreateDatabase();
-    }
     public async Task<HistoricoClinico?> GetObject(string _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<HistoricoClinico>("HistoricoClinico");
-        
-        var filter = MongoDB.Driver.Builders<HistoricoClinico>.Filter.Eq(u => u.Id, _object);
-        
-        var character = collection.Find(filter).FirstOrDefault();
-
+        var filter = Builders<HistoricoClinico>.Filter.Eq(u => u.Id, _object);
+        var character = _collection.Find(filter).FirstOrDefault();
         return character as HistoricoClinico;
     }
 
     public async Task<HistoricoClinico?> InsetObject(HistoricoClinico _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<HistoricoClinico>("HistoricoClinico");
-        collection.InsertOne(_object);
+        await _collection.InsertOneAsync(_object);
         return _object as HistoricoClinico;
     }
 
     public async Task<HistoricoClinico?> UpdateObject(HistoricoClinico _object, CancellationToken cancellationToken)
     {
-        var obj = await GetObject(_object.Id, CancellationToken.None) as HistoricoClinico;
-        var collection = _db.GetDatabase().GetCollection<HistoricoClinico>("HistoricoClinico");
-
-        // Create a filter to find the document by Id
         var filter = MongoDB.Driver.Builders<HistoricoClinico>.Filter.Eq(u => u.Id, _object.Id);
-
         var update = MongoDB.Driver.Builders<HistoricoClinico>.Update
             .Set(u => u.Id, _object.Id)
             .Set(u => u.AnimalId, _object.AnimalId)
@@ -65,7 +50,7 @@ public class HistoricoClinicoService : IHistoricoClinicoService
             .Set(u => u.UltimaAtualizacao, _object.UltimaAtualizacao);
 
         // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = await _collection.UpdateOneAsync(filter, update);
 
         if (result.ModifiedCount > 0)
         {

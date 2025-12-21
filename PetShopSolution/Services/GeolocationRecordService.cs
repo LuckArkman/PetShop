@@ -26,20 +26,13 @@ public class GeolocationRecordService : IGeolocationRecordService
         _mongoDatabase = _db.GetDatabase();
         _collection = _mongoDatabase.GetCollection<GeolocationRecord>(_collectionName);
     }
-
-    public GeolocationRecordService(IConfiguration configuration)
-    {
-        _cfg = configuration;
-        _db = new GeolocationRecordDB(_cfg["MongoDbSettings:ConnectionString"], "GeolocationRecord");
-        _db.GetOrCreateDatabase();
-    }
     public async Task<GeolocationRecord?> GetObject(string _object, CancellationToken cancellationToken)
     {
         var collection = _db.GetDatabase().GetCollection<GeolocationRecord>("GeolocationRecord");
         
         var filter = MongoDB.Driver.Builders<GeolocationRecord>.Filter.Eq(u => u.Id, _object);
         
-        var character = collection.Find(filter).FirstOrDefault();
+        var character = _collection.Find(filter).FirstOrDefault();
 
         return character as GeolocationRecord;
     }

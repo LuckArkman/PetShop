@@ -26,38 +26,22 @@ public class QrCodeRegistroService : IQrCodeRegistroService
         _mongoDatabase = _db.GetDatabase();
         _collection = _mongoDatabase.GetCollection<QrCodeRegistro>(_collectionName);
     }
-    public QrCodeRegistroService(IConfiguration configuration)
-    {
-        _cfg = configuration;
-        _db = new QrCodeRegistroDB(_cfg["MongoDbSettings:ConnectionString"], "QrCodeRegistro");
-        _db.GetOrCreateDatabase();
-    }
     public async Task<QrCodeRegistro?> GetObject(string _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<QrCodeRegistro>("QrCodeRegistro");
-        
         var filter = Builders<QrCodeRegistro>.Filter.Eq(u => u.AnimalId, _object);
-        
-        var character = collection.Find(filter).FirstOrDefault();
-
+        var character = _collection.Find(filter).FirstOrDefault();
         return character as QrCodeRegistro;
     }
 
     public async Task<QrCodeRegistro?> InsetObject(QrCodeRegistro _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<QrCodeRegistro>("QrCodeRegistro");
-        collection.InsertOne(_object);
+        await _collection.InsertOneAsync(_object);
         return _object as QrCodeRegistro;
     }
 
     public async Task<QrCodeRegistro?> UpdateObject(QrCodeRegistro _object, CancellationToken cancellationToken)
     {
-        var obj = await GetObject(_object.Id, CancellationToken.None) as QrCodeRegistro;
-        var collection = _db.GetDatabase().GetCollection<QrCodeRegistro>("QrCodeRegistro");
-
-        // Create a filter to find the document by Id
         var filter = Builders<QrCodeRegistro>.Filter.Eq(u => u.Id, _object.Id);
-
         var update = Builders<QrCodeRegistro>.Update
             .Set(u => u.Id, _object.Id)
             .Set(u => u.AnimalId, _object.AnimalId)
@@ -65,7 +49,7 @@ public class QrCodeRegistroService : IQrCodeRegistroService
             .Set(u => u.DataGeracao, _object.DataGeracao);
 
         // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = await _collection.UpdateOneAsync(filter, update);
 
         if (result.ModifiedCount > 0)
         {

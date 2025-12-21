@@ -26,12 +26,6 @@ public class MedicacaoService : IMedicacaoService
         _mongoDatabase = _db.GetDatabase();
         _collection = _mongoDatabase.GetCollection<Medicacao>(_collectionName);
     }
-    public MedicacaoService(IConfiguration configuration)
-    {
-        _cfg = configuration;
-        _db = new MedicacaolDBMongo(_cfg["MongoDbSettings:ConnectionString"], "Medicacao");
-        _db.GetOrCreateDatabase();
-    }
 
     public async Task<List<Medicacao>?> GetAllMedicacoes(string _object,CancellationToken cancellationToken)
     {
