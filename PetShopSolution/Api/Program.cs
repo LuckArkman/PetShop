@@ -1,3 +1,4 @@
+using DTOs;
 using Interfaces;
 using MercadoPago.Config;
 using Services;
@@ -39,16 +40,17 @@ builder.Services.AddScoped<ICirurgiaService, CirurgiaService>();
 builder.Services.AddScoped<IRitmoCircadianoService, RitmoCircadianoService>();
 builder.Services.AddScoped<IHistoryFrequenciaCardiaca, HistoryFrequenciaCardiacaService>();
 builder.Services.AddScoped<IFrequenciaCardiaca, FrequenciaCardiacaService>();
-builder.Services.AddScoped<ICaixaService, CaixaService>();
 builder.Services.AddScoped<IAtendenteService, AtendenteService>();
 builder.Services.AddScoped<AgendamentoService>();
 builder.Services.AddScoped<AtendimentoService>();
 builder.Services.AddScoped<DisponibilidadeService>();
+builder.Services.AddHttpClient<IPaymentGateway, PaymentGateway>();
+builder.Services.AddSingleton(typeof(IRepositorio<Order>), typeof(Repositorio));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.SetIsOriginAllowed(origin => true) // Aceita QUALQUER origem
+        policy.SetIsOriginAllowed(origin => true)
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();

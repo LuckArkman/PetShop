@@ -8,23 +8,28 @@ namespace Services;
 
 public class AtendenteService : IAtendenteService
 {
-    public AtendenteDB _db { get; set; }
-    private readonly IMongoCollection<Responsavel> _collection;
-    private readonly IConfiguration _cfg;
-    public AtendenteService(IConfiguration configuration)
+    public MongoDataController _db { get; set; }
+    private IMongoCollection<Atendente> _collection;
+    public string _collectionName { get; set; }
+    private IMongoDatabase _mongoDatabase { get; set; }
+    
+    public void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName)
     {
-        _cfg = configuration;
-        _db = new AtendenteDB(_cfg["MongoDbSettings:ConnectionString"], "Atendente");
-        _db.GetOrCreateDatabase();
-        _collection = _db.GetDatabase().GetCollection<Responsavel>("Atendente");
+        _collectionName = collectionName;
+        // Verifica se a conexão já foi estabelecida
+        if (_collection != null) return;
+        
+        _db = new MongoDataController(connectionString, databaseName, _collectionName);
+        _mongoDatabase = _db.GetDatabase();
+        _collection = _mongoDatabase.GetCollection<Atendente>(_collectionName);
     }
 
     public async Task<List<Atendente>?> GetAllAtendente(CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Atendente>("Atendente");
-
         // Busca todos os animais
-        var _objts = await collection
+        var _objts = await _collection
             .Find(Builders<Atendente>.Filter.Empty)
             .ToListAsync(cancellationToken);
 
@@ -33,25 +38,22 @@ public class AtendenteService : IAtendenteService
 
     public async Task<Atendente?> GetObject(string mail, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Atendente>("Atendente");
-        
         var filter = Builders<Atendente>.Filter.Eq(u => u.email, mail);
 
         // Find the document matching the filter
-        var _Atendente = collection.Find(filter).FirstOrDefault();
+        var _Atendente = _collection.Find(filter).FirstOrDefault();
 
         return _Atendente as Atendente;
     }
 
     public async Task<Atendente?> GetAtendenteRG(string _rg, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Atendente>("Atendente");
 
         // Create a filter to find the document by Id
         var filter = Builders<Atendente>.Filter.Eq(u => u.RG, _rg);
 
         // Find the document matching the filter
-        var _responsavel = collection.Find(filter).FirstOrDefault();
+        var _responsavel = _collection.Find(filter).FirstOrDefault();
 
         return _responsavel as Atendente;
     }
@@ -71,8 +73,6 @@ public class AtendenteService : IAtendenteService
             var obj = await FindByEmailAsync(_object.email, CancellationToken.None) as Atendente;
         }
 
-        var collection = _db.GetDatabase().GetCollection<Atendente>("Atendente");
-
         // Create a filter to find the document by Id
         var filter = Builders<Atendente>.Filter.Eq(u => u.email, _object.email);
 
@@ -89,7 +89,7 @@ public class AtendenteService : IAtendenteService
             .Set(u => u.PhoneNumber, _object.PhoneNumber);
 
         // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = _collection.UpdateOne(filter, update);
 
         if (result.ModifiedCount > 0)
         {

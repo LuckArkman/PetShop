@@ -8,14 +8,23 @@ namespace Services;
 
 public class DisponibilidadeService : IDisponibilidadeService
 {
-    private readonly DisponibilidadeDB _db;
-    private readonly IConfiguration _cfg;
-
-    public DisponibilidadeService(IConfiguration configuration)
+    private readonly IConfiguration _configuration;
+    protected IMongoCollection<DiasIndisponiveis> _collection;
+    public string _collectionName { get; set; }
+    private MongoDataController _db { get; set; }
+    private IMongoDatabase _mongoDatabase { get; set; }
+    
+    public void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName)
     {
-        _cfg = configuration;
-        _db = new DisponibilidadeDB(_cfg["MongoDbSettings:ConnectionString"], "Disponibilidade");
-        _db.GetOrCreateDatabase();
+        _collectionName = collectionName;
+        // Verifica se a conexão já foi estabelecida
+        if (_collection != null) return;
+        
+        _db = new MongoDataController(connectionString, databaseName, _collectionName);
+        _mongoDatabase = _db.GetDatabase();
+        _collection = _mongoDatabase.GetCollection<DiasIndisponiveis>(_collectionName);
     }
 
     public IMongoCollection<DiasIndisponiveis> GetCollection() =>

@@ -2,20 +2,22 @@ using MongoDB.Driver;
 
 namespace Data;
 
-public class RelatorioClinicoDB
+public class MongoDataController
 {
     IMongoClient client;
     string databaseName;
+    string collectionName;
     IMongoDatabase _database;
-    public RelatorioClinicoDB()
+    public MongoDataController()
     {
         
     }
 
-    public RelatorioClinicoDB(string connectionString, string _databaseName)
+    public MongoDataController(string connectionString, string _databaseName, string _collectionName) // Updated constructor
     {
         this.client = new MongoClient(connectionString);
         this.databaseName = _databaseName;
+        this.collectionName = _collectionName;
         GetOrCreateDatabase();
     }
 
@@ -28,6 +30,7 @@ public class RelatorioClinicoDB
     {
         _database = client.GetDatabase(databaseName);
         var collectionList = _database.ListCollectionNames().ToList();
-        if (collectionList.Count <= 0) _database.CreateCollection(databaseName);
+        // Use the stored collectionName to create the collection
+        if (collectionList.Count <= 0) _database.CreateCollection(collectionName); 
     }
 }

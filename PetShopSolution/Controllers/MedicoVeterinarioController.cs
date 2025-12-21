@@ -15,13 +15,18 @@ namespace PetShop.API.Controllers;
 public class MedicoVeterinarioController  : ControllerBase
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IConfiguration _configuration;
+    private readonly IConfiguration _cfg;
     readonly IMedicoVeterinarioService _service;
-    public MedicoVeterinarioController(IMedicoVeterinarioService service, IConfiguration configuration)
+    public MedicoVeterinarioController(IMedicoVeterinarioService service,
+        IConfiguration cfg)
     {
         _service = service;
-        _configuration = configuration;
+        _cfg = cfg;
+        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "MedicoVeterinario");
     }
+    
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] MedicoVeterinario model)
     {
@@ -87,13 +92,13 @@ public class MedicoVeterinarioController  : ControllerBase
             new Claim(ClaimTypes.Email, user.Email)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpireMinutes"] ?? "120"));
+        var expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_cfg["Jwt:ExpireMinutes"] ?? "120"));
 
         var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
+            issuer: _cfg["Jwt:Issuer"],
+            audience: _cfg["Jwt:Audience"],
             claims: claims,
             expires: expires,
             signingCredentials: creds

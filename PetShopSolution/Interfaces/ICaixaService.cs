@@ -5,6 +5,9 @@ namespace Interfaces;
 
 public interface ICaixaService
 {
+    void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName);
     Task<Pagamento?> GetById(string id, CancellationToken cancellationToken);
     Task<IEnumerable<Pagamento>?> GetAllTodayPaidsCompletes(DateTime dataConsulta, CancellationToken cancellationToken);
     Task<IEnumerable<Pagamento>?> GetAllTodayPaidsPending(DateTime dataConsulta, CancellationToken cancellationToken);

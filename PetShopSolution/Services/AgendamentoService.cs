@@ -10,15 +10,24 @@ namespace Services;
 
 public class AgendamentoService : IAgendamentoService
 {
-    private readonly AgendamentoDB _db;
-    private readonly IConfiguration _cfg;
-
-
-    public AgendamentoService(IConfiguration configuration)
+    private MongoDataController _db { get; set; }
+    
+    private readonly IConfiguration _configuration;
+    protected IMongoCollection<Agendamento> _collection;
+    public string _collectionName { get; set; }
+    private IMongoDatabase _mongoDatabase { get; set; }
+    
+    public void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName)
     {
-        _cfg = configuration;
-        _db = new AgendamentoDB(_cfg["MongoDbSettings:ConnectionString"], "Agendamento");
-        _db.GetOrCreateDatabase();
+        _collectionName = collectionName;
+        // Verifica se a conexão já foi estabelecida
+        if (_collection != null) return;
+        
+        _db = new MongoDataController(connectionString, databaseName, _collectionName);
+        _mongoDatabase = _db.GetDatabase();
+        _collection = _mongoDatabase.GetCollection<Agendamento>(_collectionName);
     }
 
     public async Task<Agendamento?> GetById(string id, CancellationToken cancellationToken)

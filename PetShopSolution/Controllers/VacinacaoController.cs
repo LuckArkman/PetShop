@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DTOs;
 using Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace PetShop.API.Controllers;
 
@@ -9,11 +10,20 @@ public class VacinacaoController : ControllerBase
 {
     readonly IVacinacaoService _service;
     readonly IHistoryVacinacaoService _historyVacinacao;
+    private readonly IConfiguration _cfg;
     public VacinacaoController( IVacinacaoService service,
-        IHistoryVacinacaoService historyVacinacao)
+        IHistoryVacinacaoService historyVacinacao,
+        IConfiguration configuration)
     {
         _service = service;
         _historyVacinacao = historyVacinacao;
+        _cfg = configuration;
+        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Vacinacao");
+        _historyVacinacao.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "RitmoCircadiano");
     }
     
     [HttpPost("register")]

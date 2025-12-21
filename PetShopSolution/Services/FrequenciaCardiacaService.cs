@@ -8,42 +8,41 @@ namespace Services;
 
 public class FrequenciaCardiacaService : IFrequenciaCardiaca
 {
-    public FrequenciaCardiacaDB _db { get; set; }
+    private readonly IConfiguration _configuration;
+    protected IMongoCollection<FrequenciaCardiaca> _collection;
     private readonly IConfiguration _cfg;
-    public FrequenciaCardiacaService(IConfiguration configuration)
+    public string _collectionName { get; set; }
+    private MongoDataController _db { get; set; }
+    private IMongoDatabase _mongoDatabase { get; set; }
+    
+    public void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName)
     {
-        _cfg = configuration;
-        _db = new FrequenciaCardiacaDB(_cfg["MongoDbSettings:ConnectionString"], "FrequenciaCardiaca");
-        _db.GetOrCreateDatabase();
+        _collectionName = collectionName;
+        // Verifica se a conexão já foi estabelecida
+        if (_collection != null) return;
+        
+        _db = new MongoDataController(connectionString, databaseName, _collectionName);
+        _mongoDatabase = _db.GetDatabase();
+        _collection = _mongoDatabase.GetCollection<FrequenciaCardiaca>(_collectionName);
     }
 
     public async Task<FrequenciaCardiaca?> GetObject(string _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<FrequenciaCardiaca>("FrequenciaCardiaca");
-
-        // Create a filter to find the document by Id
         var filter = Builders<FrequenciaCardiaca>.Filter.Eq(u => u.AnimalId, _object);
-
-        // Find the document matching the filter
-        var character = collection.Find(filter).FirstOrDefault();
-
+        var character = _collection.Find(filter).FirstOrDefault();
         return character as FrequenciaCardiaca;
     }
 
     public async Task<FrequenciaCardiaca?> InsetObject(FrequenciaCardiaca _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<FrequenciaCardiaca>("FrequenciaCardiaca");
-        // Insert the user object into the collection
-        collection.InsertOne(_object);
+        await _collection.InsertOneAsync(_object);
         return _object as FrequenciaCardiaca;
     }
 
     public async Task<FrequenciaCardiaca?> UpdateObject(FrequenciaCardiaca _object, CancellationToken cancellationToken)
     {
-        var obj = await GetObject(_object.Id, CancellationToken.None) as FrequenciaCardiaca;
-        var collection = _db.GetDatabase().GetCollection<FrequenciaCardiaca>("FrequenciaCardiaca");
-
-        // Create a filter to find the document by Id
         var filter = Builders<FrequenciaCardiaca>.Filter.Eq(u => u.Id, _object.Id);
 
         var update = Builders<FrequenciaCardiaca>.Update
@@ -58,7 +57,7 @@ public class FrequenciaCardiacaService : IFrequenciaCardiaca
             .Set(u => u.Observacao, _object.Observacao);
 
         // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = await _collection.UpdateOneAsync(filter, update);
 
         if (result.ModifiedCount > 0)
         {

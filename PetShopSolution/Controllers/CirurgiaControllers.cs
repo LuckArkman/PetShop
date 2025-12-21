@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DTOs;
 using Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace PetShop.API.Controllers;
 
@@ -9,10 +10,16 @@ namespace PetShop.API.Controllers;
 public class CirurgiaControllers : ControllerBase
 {
     public ICirurgiaService _service { get; set; }
+    private readonly IConfiguration _cfg;
 
-    public CirurgiaControllers(ICirurgiaService cirurgiaService)
+    public CirurgiaControllers(ICirurgiaService cirurgiaService,
+        IConfiguration cfg)
     {
         _service = cirurgiaService;
+        _cfg = cfg;
+        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Cirurgia");
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Cirurgia model)

@@ -4,6 +4,9 @@ namespace Interfaces;
 
 public interface IResponsavelService
 {
+    void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName);
     Task<List<Responsavel>?> GetAllResponsavel(CancellationToken cancellationToken);
     Task<Responsavel?> GetObject(string mail, CancellationToken cancellationToken);
     Task<Responsavel?> GetResponsavelId(string _rg, CancellationToken cancellationToken);
@@ -14,4 +17,5 @@ public interface IResponsavelService
     Task<bool> RemoveAsync(string _object, CancellationToken cancellationToken);
     Task<Responsavel?> FindByEmailAsync(string modelCredencial, CancellationToken cancellationToken);
     Task<List<Responsavel>?> GetAllResponsaveis(ICollection<string> resResponsaveis, CancellationToken none);
+    Task<Responsavel?> GetResponsavelRg(string agendamentoRg);
 }

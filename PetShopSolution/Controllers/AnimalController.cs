@@ -1,6 +1,7 @@
 using DTOs;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace PetShop.API.Controllers;
 
@@ -10,10 +11,22 @@ public class AnimalController : ControllerBase
 {
     private readonly IAnimalService _animalService;
     private readonly IResponsavelService _responsavel;
-    public AnimalController(IAnimalService animalService, IResponsavelService responsavel)
+    private readonly IConfiguration _cfg;
+    public AnimalController(
+        IAnimalService animalService,
+        IResponsavelService responsavel,
+        IConfiguration configuration)
     {
         _animalService = animalService;
         _responsavel = responsavel;
+        _cfg = configuration;
+        
+        _animalService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Animais");
+        _responsavel.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Responsavel");
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Animal model)

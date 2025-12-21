@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DTOs;
 using Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace PetShop.API.Controllers;
 
@@ -9,9 +10,16 @@ namespace PetShop.API.Controllers;
 public class QrCodeRegistroController  : ControllerBase
 {
     private readonly IQrCodeRegistroService _service;
-    public QrCodeRegistroController(IQrCodeRegistroService service)
+    private readonly IConfiguration _cfg;
+    public QrCodeRegistroController(IQrCodeRegistroService service,
+        IConfiguration cfg)
     {
         _service = service;
+        _cfg = cfg;
+        
+        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "QrCodeRegistro");
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register(string AnimalId)

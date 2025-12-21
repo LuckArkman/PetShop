@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DTOs;
 using Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace PetShop.API.Controllers;
 
@@ -10,11 +11,17 @@ public class AnimalGeolocationController : ControllerBase
 {
     readonly IAnimalGeolocationHistoryService  _animalGeolocationHistoryService;
     readonly IGeolocationRecordService _geolocationRecordService;
-    public AnimalGeolocationController( IAnimalGeolocationHistoryService animalGeolocationHistoryService,
+    private readonly IConfiguration _cfg;
+    public AnimalGeolocationController(
+        IConfiguration cfg,
+        IAnimalGeolocationHistoryService animalGeolocationHistoryService,
         IGeolocationRecordService geolocationRecordService)
     {
+        _cfg = cfg;
         _animalGeolocationHistoryService = animalGeolocationHistoryService;
-        _animalGeolocationHistoryService =  animalGeolocationHistoryService;
+        _animalGeolocationHistoryService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "AnimalGeolocationHistory");
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] GeolocationRecord model)
@@ -36,10 +43,10 @@ public class AnimalGeolocationController : ControllerBase
         return BadRequest(model);
     }
     
-    [HttpGet("AnimalGeolocation")]
-    public async Task<IActionResult> AnimalGeolocation(string cpf)
+    [HttpGet("AnimalGeolocation/{Id}")]
+    public async Task<IActionResult> AnimalGeolocation(string Id)
     {
-        var model = await _geolocationRecordService.GetObject(cpf, CancellationToken.None) as GeolocationRecord;
+        var model = await _animalGeolocationHistoryService.GetObject(Id, CancellationToken.None) as AnimalGeolocationHistory;
         return Ok(model);
     }
 }

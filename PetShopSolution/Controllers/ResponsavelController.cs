@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 public class ResponsavelController : ControllerBase
 {
     private readonly IResponsavelService _service;
-    private readonly IConfiguration _configuration;
+    private readonly IConfiguration _cfg;
     private readonly IAnimalService _animalService;
 
     public ResponsavelController(IResponsavelService service,
@@ -22,7 +22,13 @@ public class ResponsavelController : ControllerBase
     {
         _service = service;
         _animalService = animalService;
-        _configuration = configuration;
+        _cfg = configuration;
+        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Responsavel");
+        _animalService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Animais");
     }
 
     [HttpPost("register")]
@@ -110,13 +116,13 @@ public class ResponsavelController : ControllerBase
             new Claim(ClaimTypes.Email, user.Email)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpireMinutes"] ?? "120"));
+        var expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_cfg["Jwt:ExpireMinutes"] ?? "120"));
 
         var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
+            issuer: _cfg["Jwt:Issuer"],
+            audience: _cfg["Jwt:Audience"],
             claims: claims,
             expires: expires,
             signingCredentials: creds
