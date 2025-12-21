@@ -8,9 +8,24 @@ namespace Services;
 
 public class AtendenteService : IAtendenteService
 {
-    public AtendenteDB _db { get; set; }
+    public MongoDataController _db { get; set; }
     private readonly IMongoCollection<Responsavel> _collection;
-    private readonly IConfiguration _cfg;
+    private readonly IConfiguration _configuration;
+    public string _collectionName { get; set; }
+    private IMongoDatabase _mongoDatabase { get; set; }
+    
+    public void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName)
+    {
+        _collectionName = collectionName;
+        // Verifica se a conexão já foi estabelecida
+        if (_collection != null) return;
+        
+        _db = new MongoDataController(connectionString, databaseName, _collectionName);
+        _mongoDatabase = _db.GetDatabase();
+        _collection = _mongoDatabase.GetCollection<Responsavel>(_collectionName);
+    }
     public AtendenteService(IConfiguration configuration)
     {
         _cfg = configuration;

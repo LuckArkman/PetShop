@@ -4,6 +4,9 @@ namespace Interfaces;
 
 public interface IMedicacaoService
 {
+    void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName);
     Task<List<Medicacao>?> GetAllMedicacoes(string _object,CancellationToken cancellationToken);
     Task<Medicacao?> GetMedicacao(string _object, CancellationToken cancellationToken);
 

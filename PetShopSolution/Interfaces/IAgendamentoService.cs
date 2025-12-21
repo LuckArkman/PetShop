@@ -5,6 +5,9 @@ namespace Interfaces;
 
 public interface IAgendamentoService
 {
+    void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName);
     Task<Agendamento?> GetById(string id, CancellationToken cancellationToken);
     Task<IEnumerable<Agendamento>> GetByCliente(string clienteId, CancellationToken cancellationToken);
     Task<Agendamento> Create(Agendamento agendamento, CancellationToken cancellationToken);

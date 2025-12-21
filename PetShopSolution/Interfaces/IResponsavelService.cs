@@ -4,6 +4,9 @@ namespace Interfaces;
 
 public interface IResponsavelService
 {
+    void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName);
     Task<List<Responsavel>?> GetAllResponsavel(CancellationToken cancellationToken);
     Task<Responsavel?> GetObject(string mail, CancellationToken cancellationToken);
     Task<Responsavel?> GetResponsavelId(string _rg, CancellationToken cancellationToken);

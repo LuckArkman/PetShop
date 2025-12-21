@@ -1,6 +1,7 @@
 using DTOs;
 using Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Services;
 
 namespace PetShop.API.Controllers;
@@ -12,15 +13,28 @@ public class AgendamentoController : ControllerBase
     private readonly AgendamentoService _service;
     private readonly AtendimentoService _atendimentoService;
     private readonly DisponibilidadeService _disponibilidadeService;
+    private readonly IConfiguration _cfg;
 
     public AgendamentoController(
         AgendamentoService service,
         AtendimentoService atendimentoService,
-        DisponibilidadeService disponibilidadeService)
+        DisponibilidadeService disponibilidadeService,
+        IConfiguration configuration)
     {
         _service = service;
         _atendimentoService = atendimentoService;
-        this._disponibilidadeService = disponibilidadeService;
+        _disponibilidadeService = disponibilidadeService;
+        _cfg = configuration;
+        
+        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Agendamento");
+        _atendimentoService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Atendimento");
+        _disponibilidadeService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Disponibilidade");
     }
 
     /// <summary>

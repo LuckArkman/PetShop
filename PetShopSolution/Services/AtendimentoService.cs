@@ -8,14 +8,22 @@ namespace Services;
 
 public class AtendimentoService : IAtendimentoService
 {
-    private readonly AtendimentoDB _db;
-    private readonly IConfiguration _cfg;
-
-    public AtendimentoService(IConfiguration configuration)
+    private MongoDataController _db { get; set; }
+    protected IMongoCollection<Atendimento> _collection;
+    public string _collectionName { get; set; }
+    private IMongoDatabase _mongoDatabase { get; set; }
+    
+    public void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName)
     {
-        _cfg = configuration;
-        _db = new AtendimentoDB(_cfg["MongoDbSettings:ConnectionString"], "Atendimento");
-        _db.GetOrCreateDatabase();
+        _collectionName = collectionName;
+        // Verifica se a conexão já foi estabelecida
+        if (_collection != null) return;
+        
+        _db = new MongoDataController(connectionString, databaseName, _collectionName);
+        _mongoDatabase = _db.GetDatabase();
+        _collection = _mongoDatabase.GetCollection<Atendimento>(_collectionName);
     }
 
     public async Task<Atendimento?> GetById(string id, CancellationToken cancellationToken)

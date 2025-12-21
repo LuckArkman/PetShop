@@ -4,6 +4,9 @@ namespace Interfaces;
 
 public interface IHistoryVacinacaoService
 {
+    void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName);
     Task<HistoryVacinacao?> GetObject(string _object, CancellationToken cancellationToken);
 
     Task<HistoryVacinacao?> InsetObject(HistoryVacinacao _object, CancellationToken cancellationToken);

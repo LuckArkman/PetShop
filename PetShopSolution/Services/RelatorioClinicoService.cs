@@ -8,8 +8,24 @@ namespace Services;
 
 public class RelatorioClinicoService : IRelatorioClinicoService
 {
-    public RelatorioClinicoDB _db { get; set; }
-    private readonly IConfiguration _cfg;
+    private readonly IConfiguration _configuration;
+    protected IMongoCollection<Relatorio> _collection;
+    public string _collectionName { get; set; }
+    private MongoDataController _db { get; set; }
+    private IMongoDatabase _mongoDatabase { get; set; }
+    
+    public void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName)
+    {
+        _collectionName = collectionName;
+        // Verifica se a conexão já foi estabelecida
+        if (_collection != null) return;
+        
+        _db = new MongoDataController(connectionString, databaseName, _collectionName);
+        _mongoDatabase = _db.GetDatabase();
+        _collection = _mongoDatabase.GetCollection<Relatorio>(_collectionName);
+    }
     public RelatorioClinicoService(IConfiguration configuration)
     {
         _cfg = configuration;

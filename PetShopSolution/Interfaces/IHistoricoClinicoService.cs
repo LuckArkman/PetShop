@@ -4,6 +4,9 @@ namespace Interfaces;
 
 public interface IHistoricoClinicoService
 {
+    void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName);
     Task<HistoricoClinico?> GetObject(string _object, CancellationToken cancellationToken);
 
     Task<HistoricoClinico?> InsetObject(HistoricoClinico _object, CancellationToken cancellationToken);

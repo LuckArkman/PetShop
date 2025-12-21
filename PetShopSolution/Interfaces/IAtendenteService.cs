@@ -4,6 +4,9 @@ namespace Interfaces;
 
 public interface IAtendenteService
 {
+    void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName);
     Task<List<Atendente>?> GetAllAtendente(CancellationToken cancellationToken);
     Task<Atendente?> GetObject(string mail, CancellationToken cancellationToken);
     Task<Atendente?> GetAtendenteRG(string _rg, CancellationToken cancellationToken);

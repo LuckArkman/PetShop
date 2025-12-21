@@ -4,6 +4,9 @@ namespace Interfaces;
 
 public interface IRelatorioClinicoService
 {
+    void InitializeCollection(string connectionString,
+        string databaseName,
+        string collectionName);
     Task<Relatorio?> GetRelatorio(string _object, CancellationToken cancellationToken);
 
     Task<Relatorio?> InsetRelatorio(Relatorio _object, CancellationToken cancellationToken);
