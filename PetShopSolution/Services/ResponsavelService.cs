@@ -116,9 +116,9 @@ public class ResponsavelService : IResponsavelService
         return responsaveis;
     }
 
-    public async Task<Responsavel?> GetResponsavelRg(string? agendamentoRg)
+    public async Task<Responsavel?> GetResponsavelRg(string? rg)
     {
-        var filter = Builders<Responsavel>.Filter.Eq(u => u.RG, agendamentoRg);
+        var filter = Builders<Responsavel>.Filter.Eq(u => u.RG, rg);
         var _responsavel = _collection.Find(filter).FirstOrDefault();
         return _responsavel as Responsavel;
     }
