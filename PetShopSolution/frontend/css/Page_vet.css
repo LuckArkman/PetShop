@@ -402,9 +402,30 @@ tbody td {
     font-weight: 600;
 }
 
+.edit-btn{
+    margin-left: 5%;
+    margin-top: 2%;
+    padding: 8px 12px;
+    width: 33%;
+    font-size: 0.9em;
+    font-weight: 600;
+    background-color: #db7324;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-btn:hover {
+    background-color: #c96314;
+    transform: translateY(-1px);
+}
 
 .cancel-btn {
     margin-left: 5%;
+    margin-top: 2%;
     padding: 8px 12px;
     width: 33%;
     font-size: 0.9em;

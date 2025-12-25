@@ -9,8 +9,6 @@ const info_bottom_pet = document.getElementById("info_bottom_pet")
 const btn_perfil = document.getElementById("btn_perfil")
 const config_user = document.getElementById("config_user")
 const sair_user = document.getElementById("sair_user")
-
-
 btn_perfil.addEventListener("click",()=>{
     const card_perfil_config = document.getElementById("card_perfil_config")
     card_perfil_config.classList.toggle("show")
@@ -27,7 +25,6 @@ sair_user.addEventListener("click",(e)=>{
 
 document.addEventListener('DOMContentLoaded', async() => {
     const selectedPetId = localStorage.getItem("selectedPetId")
-
     if(!selectedPetId){
         return
     }
@@ -81,11 +78,12 @@ const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/na
 const userEmail = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
 
 function updatePetUI(pet) {
+
     document.getElementById("animal_name").textContent = pet.nome
     document.getElementById("race_animal").textContent = pet.raca || "Sem Raça"
     document.getElementById("petSpecies").textContent = pet.especie
-    document.getElementById("petAge").textContent = pet.idade
-    document.getElementById("petWeight").textContent = `${pet.peso}kg`
+    document.getElementById("petAge").textContent = pet._idade.anos>0?`${pet._idade.anos}anos`:`${pet._idade.meses}meses`
+    document.getElementById("petWeight").textContent = pet._peso.kilos>0?`${pet._peso.kilos}kg`:`${pet._peso.gramas}gramas`
     document.getElementById("petSex").textContent = pet.sexo
     document.getElementById("petPorte").textContent = pet.porte
     document.getElementById("petCastrated").textContent = pet.castrado ? "Sim" : "Não"
@@ -102,7 +100,6 @@ async function populatePets() {
                body:JSON.stringify({mail:userEmail})
             })
             const pets = await res.json()
-            console.log(pets)
             const selectedPetId = localStorage.getItem("selectedPetId") 
             pets.forEach(pet => {
                 const option = document.createElement("option")
@@ -136,7 +133,7 @@ select_pet.addEventListener("change", async () => {
         animalIds.push(pet.id)
         localStorage.setItem("userAnimalIds", JSON.stringify(animalIds))
         }
-        const selectedPetId = localStorage.getItem("selectedPetId")
+        const selectedPetId = localStorage.getItem("selectedPetId") 
         Fetch_vacinas(selectedPetId)
         Fetch_diag(selectedPetId)
         Fetch_med(selectedPetId)
@@ -151,30 +148,45 @@ saveSimple.addEventListener("click", async () => {
     const fName = document.getElementById("fName").value
     const fSpecies = document.getElementById("fSpecies").value
     const fBreed = document.getElementById("fBreed").value
-    const fAge = document.getElementById("fAge").value
-    const fWeight = document.getElementById("fWeight").value
+    const fAge = Number(document.getElementById("fAge").value).toFixed(0)
+    const fWeight = Number(document.getElementById("fWeight").value).toFixed(0)
     const fPorte = document.getElementById("fPorte").value
     const fSex = document.getElementById("fSex").value
     const fCastrado = document.getElementById("fCastrado").value
+    const fAgeSelect = document.getElementById("fAgeSelect").value
+    const fWeightSelect = document.getElementById("fWeightSelect").value
     const value_fCastrado = fCastrado === "Sim"
-
     const token = localStorage.getItem("token")
     if (!token) {
         showMessage("Usuário não autenticado!","red")
         return
     }
     if(isNaN(fAge) || isNaN(fWeight)){
-        showMessage("Idade e Peso aceita só números!","red")
+        showMessage("Dados inválidos digite números inteiro para idade e peso","red")
         return
     }
     const payload = getPayloadFromToken(token)
     const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
 
-    if (!fName || !fSpecies || !fBreed || !fAge || !fWeight || !fPorte || !fSex || !fCastrado || !fRg) {
+    if (!fName || !fSpecies || !fBreed || !fAge || !fWeight || !fPorte || !fSex || !fCastrado || !fRg || !fAgeSelect || !fWeightSelect) {
         showMessage("Preencha todos os campos!","red")
         return
     }
+    if(fAgeSelect==="Anos" && fAge>30){
+        showMessage("Idade inválida digite uma idade menor que 31 anos","red")
+        return
+    }else if(fAgeSelect==="Meses" && fAge>12){
+        showMessage("Idade inválida digite uma idade menor que 13 meses ","red")
+        return 
+    }
 
+     if(fWeightSelect==="Kilos" && fWeight>150){
+        showMessage("Peso inválido digite um peso menor que 150 kilos","red")
+        return
+    }else if(fWeightSelect==="Gramas" && fWeight>1000){
+        showMessage("Peso inválido digite um peso menor que 1000 gramas sass","red")
+        return 
+    }
     try {
         const req = await fetch("https://petrakka.com:7231/api/Animal/register", {
             method: "POST",
@@ -188,8 +200,14 @@ saveSimple.addEventListener("click", async () => {
                 raca: fBreed,
                 sexo: fSex,
                 castrado: value_fCastrado,
-                idade: fAge,
-                peso: fWeight,
+                _idade:{
+                    Anos:fAgeSelect==="Anos"?fAge:0,
+                    Meses:fAgeSelect==="Meses"?fAge:0
+                },
+                _peso:{
+                    Kilos:fWeightSelect==="Kilos"?fWeight:0,
+                    Gramas:fWeightSelect==="Gramas"?fWeight:0
+                },
                 porte: fPorte,
                 responsaveis: [userId]
             })
@@ -214,10 +232,9 @@ saveSimple.addEventListener("click", async () => {
             const req_get_user = await fetch(`https://petrakka.com:7231/api/Responsavel/Responsavel${fRg}`,{
                 method:"GET"
             })
-            console.log(req_get_user)
             const res_get_user = await req_get_user.json()
             res_get_user.Animais = animalIds
-            console.log(res_get_user)
+
             const req_put_user = await fetch(`https://petrakka.com:7231/api/Responsavel/update`,{
                 method:"PUT",
                 headers: {
@@ -231,7 +248,7 @@ saveSimple.addEventListener("click", async () => {
         }
     } catch (err) {
         showMessage("Erro interno!","red")
-        console.log(err)
+
     }
 })
 
@@ -250,7 +267,7 @@ function resetForm() {
 
 // Rota excluir pet
 btn_remove_pet.addEventListener("click",async()=>{
-    console.log(select_pet.value)
+
     try {
         const req = await fetch(`https://petrakka.com:7231/api/Animal/delete?id=${select_pet.value}`,{
             method:"DELETE",
@@ -258,9 +275,9 @@ btn_remove_pet.addEventListener("click",async()=>{
                 "Content-Type": "application/json"
             }
         })
-        console.log(req.status)
+
         const res = await req.json()
-        console.log(res)
+
         if(res){
             select_pet.value = ""
             info_bottom_pet.style.display = "none"
@@ -295,17 +312,17 @@ btnAttPet.addEventListener("click", async () => {
     const petId = select_pet.value
     if (!petId) return
 
+
     const res = await fetch(`https://petrakka.com:7231/api/Animal/animal/${petId}`, {
         method:"GET",
         headers: { "Authorization": `Bearer ${token}` }
     })
     const pet = await res.json()
-
     document.getElementById("updateName").value = pet.nome
     document.getElementById("updateSpecies").value = pet.especie
     document.getElementById("updateBreed").value = pet.raca
-    document.getElementById("updateAge").value = pet.idade
-    document.getElementById("updateWeight").value = pet.peso
+    document.getElementById("updateAge").value = pet._idade.anos>0?`${pet._idade.anos}`:`${pet._idade.meses}`
+    document.getElementById("updateWeight").value = pet._peso.kilos>0?`${pet._peso.kilos}`:`${pet._peso.gramas}`
     document.getElementById("updatePorte").value = pet.porte
     document.getElementById("updateSex").value = pet.sexo
     document.getElementById("updateCastrado").value = pet.castrado ? "Sim" : "Não"
@@ -320,19 +337,54 @@ cancelUpdate.addEventListener("click", () => {
 saveUpdate.addEventListener("click", async (e) => {
     e.preventDefault()
     const petId = select_pet.value
-
+    const updateAge = Number(document.getElementById("updateAge").value).toFixed(0)
+    const updateWeight = Number(document.getElementById("updateWeight").value).toFixed(0)
+    const fAgeSelectupdate = document.getElementById("fAgeSelectupdate").value
+    const fWeightSelectupdate = document.getElementById("fWeightSelectupdate").value
+    console.log(fAgeSelectupdate)
+    console.log(fWeightSelectupdate)
+    if(fAgeSelectupdate==="Selecione"){
+        showMessage("Selecione uma idade valida, anos ou meses","red")
+        return
+    }
+    if(fAgeSelectupdate==="Anos" && updateAge>30){
+        showMessage("Idade inválida digite uma idade menor que 31 anos","red")
+        return
+    }else if(fAgeSelectupdate==="Meses" && updateAge>12){
+        showMessage("Idade inválida digite uma idade menor que 13 meses ","red")
+        return 
+    }
+    if(fWeightSelectupdate==="Selecione"){
+        showMessage("Selecione um peso valido, kilos ou gramas","red")
+        return
+    }
+     if(fWeightSelectupdate==="Kilos" && updateWeight>150){
+        showMessage("Peso inválido digite um peso menor que 150 kilos","red")
+        return
+    }else if(fWeightSelectupdate==="Gramas" && updateWeight>1000){
+        showMessage("Peso inválido digite um peso menor que 1000 gramas sass","red")
+        return 
+    }
     const updatedPet = {
         id: petId,
         Nome: document.getElementById("updateName").value,
         Especie: document.getElementById("updateSpecies").value,
         Raca: document.getElementById("updateBreed").value,
-        Idade: document.getElementById("updateAge").value,
-        Peso: document.getElementById("updateWeight").value,
+        _idade:{
+            anos:fAgeSelectupdate==="Anos"?Number(updateAge):0,
+            meses:fAgeSelectupdate==="Meses"?Number(updateAge):0
+            },
+        _peso:{
+            kilos:fWeightSelectupdate==="Kilos"?Number(updateWeight):0,
+            gramas:fWeightSelectupdate==="Gramas"?Number(updateWeight):0
+            },
         Porte: document.getElementById("updatePorte").value,
         Sexo: document.getElementById("updateSex").value,
         Castrado: document.getElementById("updateCastrado").value === "Sim",
         responsaveis: [userId]
     }
+
+    console.log(updatedPet)
 
     const req = await fetch(`https://petrakka.com:7231/api/Animal/update?id=${petId}`, {
         method: "PUT",
@@ -342,7 +394,9 @@ saveUpdate.addEventListener("click", async (e) => {
         },
         body: JSON.stringify(updatedPet)
     })
+    console.log(req)
     const res = await req.json()
+    console.log(res)
     if (res.id) {
         updatePetUI(res)
         backdropUpdate.style.display = "none"
@@ -427,8 +481,8 @@ saveVacina.addEventListener("click",async() => {
         showMessage("Erro interno","red") 
     }
 })
-
-toggleVacinas.addEventListener("click", () => {
+const btn_ver_mais_vacina = document.getElementById("btn_ver_mais_vacina")
+btn_ver_mais_vacina.addEventListener("click", () => {
     backdropVacinasView.style.display = "flex"
     Render_count_vacina(listaVacinasView.children.length,vacinaCount)
 })
@@ -452,7 +506,11 @@ const spanDiagnostico = document.getElementById('diagnosticoCount')
 const viewDiagnostico = document.getElementById('backdropDiagnosticoView')
 const closeDiagnosticoView = document.getElementById('closeDiagnosticoView')
 const lista_diagnosticos_view = document.getElementById("lista_diagnosticos_view")
-spanDiagnostico.addEventListener('click', () => viewDiagnostico.style.display = 'flex')
+const btn_ver_mais_diag = document.getElementById("btn_ver_mais_diag")
+btn_ver_mais_diag.addEventListener('click', () => {
+    viewDiagnostico.style.display = 'flex'
+})
+
 closeDiagnosticoView.addEventListener('click', () => {
     viewDiagnostico.style.display = 'none'
     Render_count_diag(lista_diagnosticos_view.children.length,spanDiagnostico)
@@ -494,6 +552,12 @@ saveDiagnostico.addEventListener("click",async() => {
             },
             body:JSON.stringify(obj_add_diag)
         })
+        if (req.status === 204) {
+            showMessage("Pet atualizado com sucesso!", "green")
+            backdropUpdate.style.display = "none"
+            await populatePets()
+            return
+        }
         const res = await req.json()
         if(res.id){
             const req_get_hist = await fetch(`https://petrakka.com:7231/api/Diagnostico/Diagnosticos?animalId=${animal_id}`,{
@@ -522,7 +586,10 @@ const spanMedicamento = document.getElementById('medicamentoCount')
 const viewMedicamento = document.getElementById('backdropMedicamentoView')
 const closeMedicamentoView = document.getElementById('closeMedicamentosView')
 const lista_medicamentos_view = document.getElementById("lista_medicamentos_view")
-spanMedicamento.addEventListener('click', () => viewMedicamento.style.display = 'flex')
+const btn_ver_mais_med = document.getElementById("btn_ver_mais_med")
+btn_ver_mais_med.addEventListener("click",()=>{
+    viewMedicamento.style.display = 'flex' 
+})
 closeMedicamentoView.addEventListener('click', () => {
     viewMedicamento.style.display = 'none' 
     Render_count_med(lista_medicamentos_view.children.length,spanMedicamento) 
@@ -591,7 +658,8 @@ const spanCirurgia = document.getElementById('cirurgiaCount')
 const viewCirurgia = document.getElementById('backdropCirurgiaView')
 const closeCirurgiaView = document.getElementById('closeCirurgiasView')
 const lista_cirurgias_view = document.getElementById("lista_cirurgias_view")
-spanCirurgia.addEventListener('click', () => viewCirurgia.style.display = 'flex')
+const btn_ver_mais_cir = document.getElementById("btn_ver_mais_cir")
+btn_ver_mais_cir.addEventListener('click', () => viewCirurgia.style.display = 'flex')
 closeCirurgiaView.addEventListener('click', () => {
    viewCirurgia.style.display = 'none'
    Render_count_cir(lista_cirurgias_view.children.length,spanCirurgia) 
@@ -645,6 +713,8 @@ saveCirurgia.addEventListener("click",async() => {
             body:JSON.stringify(obj_add_cir)
         })
         const res = await req.json()
+
+
         if(res.id){
             const req_get_hist = await fetch(`https://petrakka.com:7231/api/CirurgiaControllers/Cirurgias?animalId=${animal_id}`,{
                 method:"GET"
@@ -653,13 +723,30 @@ saveCirurgia.addEventListener("click",async() => {
             Render_count_cir(res_get_hist.length,spanCirurgia)
             Render_list_cir(res_get_hist,animal_id,lista_cirurgias_view)
             showMessage("Cirurgia criada com sucesso","green")
+            resetFormCir()
+
         }else{
             showMessage("Erro ao criar cirurgia","red")
         }
     } catch (error) {
         showMessage("Erro interno","red") 
+
     }
 })
+
+
+function resetFormCir(){
+    document.getElementById("cirurgiaData").value = ""
+    parseInt(document.getElementById("tipoCirurgia").value = "", 10)
+    document.getElementById("cirurgiaMotivo").value = ""
+    document.getElementById("cirurgiaProcedimento").value = ""
+    document.getElementById("cirurgiaPos").value = ""
+    document.getElementById("cirurgiaAlta").value = ""
+    document.getElementById("relSintomas").value = ""
+    document.getElementById("relTratamento").value = ""
+    document.getElementById("relObservacoes").value = ""
+    document.getElementById("relVeterinario").value = ""
+}
 
 
 /*Funções*/
@@ -685,6 +772,8 @@ function Render_count_vacina(arr_length,element){
 function Render_list(res_get_hist,animal_id,lista_view){
     lista_view.innerHTML = ''
             res_get_hist.forEach((valor, index) => {   
+                let data_format_arr = String(valor._dataVacinacao).slice(0,10).split("-")
+                let data_format_br = new Date(data_format_arr[0]+"/"+data_format_arr[1]+"/"+data_format_arr[2]).toLocaleDateString("pt-BR")
                 const item_vacina = document.createElement("div")
                 item_vacina.classList.add("vacina_item")
                 const div_info = document.createElement("div")
@@ -699,7 +788,7 @@ function Render_list(res_get_hist,animal_id,lista_view){
                 const itens_crmv = document.createElement("small")
                 itens_name.innerText = `Nome: ${valor.tipo}`
                 itens_rel.innerText = `Relatório: ${valor.relatorio}`
-                itens_data.innerText = `Data: ${valor._dataVacinacao}` 
+                itens_data.innerText = `Data: ${data_format_br}` 
                 itens_crmv.innerText = `Crmv: ${valor._veterinarioCRMV}`
                 div_info.appendChild(itens_name)
                 div_info.appendChild(itens_rel)
@@ -741,18 +830,16 @@ async function Fetch_vacinas(animal_id){
      const req_get_hist = await fetch(`https://petrakka.com:7231/historico?AnimalId=${animal_id}`,{
          method:"GET"
      })
-     console.log(req_get_hist)
      if (!req_get_hist.ok) {
         Render_list([], animal_id, listaVacinasView)
         Render_count_vacina(0, vacinaCount)
         return
     }
      const res_get_hist = await req_get_hist.json()
-     console.log(res_get_hist)
      Render_list(res_get_hist,animal_id,listaVacinasView)
      Render_count_vacina(res_get_hist.length,vacinaCount)
     } catch (error) {
-     console.log(error)
+
     }
  }
 
@@ -791,7 +878,7 @@ function Render_list_diagnostico(res_get_hist, animal_id, lista_view) {
 
         btn_remove.addEventListener("click", async () => {
             const registroId = btn_remove.dataset.id
-            console.log(valor)
+
             try {
                 const req_remove = await fetch(`https://petrakka.com:7231/api/Diagnostico/delete?id=${registroId}`, {
                     method: "DELETE",
@@ -833,7 +920,7 @@ async function Fetch_diag(animal_id){
      
      Render_count_diag(res_get_hist.length,spanDiagnostico)
     } catch (error) {
-     console.log(error)
+
     }
  }
 
@@ -916,7 +1003,7 @@ async function Fetch_med(animal_id){
      
      Render_count_diag(res_get_hist.length,spanMedicamento)
     } catch (error) {
-     console.log(error)
+
     }
  }
 
@@ -1005,7 +1092,7 @@ async function Fetch_cir(animal_id){
      Render_list_cir(res_get_hist,animal_id,lista_cirurgias_view)
      Render_count_cir(res_get_hist.length,spanCirurgia)
     } catch (error) {
-     console.log(error)
+
     }
  }
  

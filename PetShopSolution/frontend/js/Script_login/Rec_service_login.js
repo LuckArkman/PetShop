@@ -20,7 +20,7 @@ const div_msg = document.getElementById("div_msg")
                 body:JSON.stringify({credencial:rg_rec,password:senha_rec})
             })
             const res = await req.json()
-            console.log(res)
+
             if(res.success){
                 localStorage.setItem("token", res.token)
                 div_msg.textContent = res.message

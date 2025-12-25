@@ -425,7 +425,7 @@ header{
     background: rgba(0,0,0,0.6);
     justify-content: center;
     align-items: center;
-    z-index: 9998;
+    z-index: 9994;
     animation: fadeInBg 0.3s ease forwards;
   }
   
@@ -506,7 +506,7 @@ header{
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
     transition: right 0.3s ease;
     overflow-y: auto;
-    z-index: 9999;
+    z-index: 9995;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -621,6 +621,98 @@ header{
   display: flex !important;
   justify-content: center;
   align-items: center;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9996;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-pagament{
+  background: #fff;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.close-btn {
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-body label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.modal-body select,input{
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.price-box {
+  background: #f5f7fa;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: #e0e0e0;
+}
+
+.btn-confirm {
+  background: #4CAF50;
+  color: #fff;
 }
 
 

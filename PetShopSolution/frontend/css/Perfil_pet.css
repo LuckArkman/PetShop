@@ -457,6 +457,8 @@ main,body{
 }   
 .modal{
     background:#fff;
+    height: auto;
+    margin-top: 10%;
     width:720px;
     max-width:100%;
     border-radius:12px;

@@ -31,7 +31,7 @@ const div_msg = document.getElementById("div_msg")
                 body:JSON.stringify({Email:email_user,Password:senha_user,ConfirmPassword:confirm_senha_user,FirstName:username_user,RG:rg_user})
             })
             const res = await req.json()
-            console.log(res)
+
             if(req.status === 401){
                 div_msg.style.color = "red"
                 div_msg.textContent = res.message

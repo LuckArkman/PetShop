@@ -139,6 +139,54 @@
   </div>
 </div>
 
+
+<!--Modal de pagamento-->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal-pagament">
+    <div class="modal-header">
+      <h2>Pagamento</h2>
+      <button class="close-btn" id="closeModal">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div>
+        <label for="appointmentType">Tipo de consulta</label>
+        <select id="appointmentType">
+          <option value="consulta">Consulta</option>
+          <option value="retorno">Retorno</option>
+          <option value="vacina">Vacina</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="paymentType">Forma de pagamento</label>
+        <select id="paymentType">
+          <option value="selecione">Selecione</option>
+          <option value="pix">PIX</option>
+          <option value="card">Cartão</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="email_value">Seu email</label>
+        <input type="email" name="email_value" id="email_value" placeholder="Digite o seu email">
+        <label for="">Valor do pagamento:</label>
+        <input step="0.01" type="number" name="" id="value_total" placeholder="Digite o valor a pagar">
+      </div> 
+
+      <div class="price-box">
+        <span>Total</span>
+        <span id="priceValue">R$0,00</span>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-cancel" id="cancelPayment">Cancelar</button>
+      <button class="btn btn-confirm" id="confirmPayment">Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal lateral de horários -->
 <div id="modal-horarios" class="modal-horarios">
   <div class="modal-content-horarios">
@@ -157,7 +205,12 @@
       <div class="horario">16:00</div>
     </div>
     <input type="text" id="cmrv_vet" class="cmrv_vet" placeholder="cmrv do vet">
-    <input type="text" id="rg_tutor" class="cmrv_vet" placeholder="Digite seu rg">-
+    <input type="text" id="rg_tutor" class="cmrv_vet" placeholder="Digite rg do tutor">
+    <select class="cmrv_vet" name="" id="pagament_din">
+      <option value="default_pagament">Pago no dinheiro?</option>
+      <option value="pag_true">Sim</option>
+      <option value="pag_false">não</option>
+    </select>
     <!--<input type="text" id="cpf_tutor" class="cmrv_vet" placeholder="Digite seu CPF">-->
     <button id="btn_agendar_horario" class="btn-agendar">Agendar</button>
   </div>

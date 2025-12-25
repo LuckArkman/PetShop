@@ -11,7 +11,7 @@
           if (!reqConsultas.ok) throw new Error("Erro ao buscar consultas de hoje")
       
           const consultas = await reqConsultas.json()
-          console.log("Consultas de hoje:", consultas)
+
       
           appointmentList.innerHTML = ""
           
@@ -26,7 +26,7 @@
       
           for (const consulta of consultas) {
             const { id, animalId,dataConsulta,rg} = consulta
-            console.log(rg)
+
             const reqResponsavel = await fetch(`https://petrakka.com:7231/api/Responsavel/Responsavel${rg}`, {
               method: "GET",
               headers: { "Authorization": `Bearer ${token}` }
@@ -74,7 +74,7 @@
                     showMessage("Erro ao cancelar consulta", "red")
                   }
                 } catch (err) {
-                  console.log(err)
+
                   showMessage("Erro interno", "red")
                 }
               }
@@ -133,15 +133,15 @@
           if(day_data_delete<day_atual){
             showMessage("Data invalida","red")
           }
-          console.log(data_delete)
-          console.log(horario_delete) 
+
+
           try {
             const req_delete_date = await fetch(`https://petrakka.com:7231/api/Agendamento/por-data/${data_delete}/${horario_delete}`,{
               method:"DELETE"
             })
             const res_delete_date = await req_delete_date.json()
-            console.log(req_delete_date)
-            console.log(res_delete_date)
+
+
             if(req_delete_date.status === 200){
               showMessage(res_delete_date.message,"green")
             }else{
@@ -150,7 +150,7 @@
             //api/Agendamento/por-data/{data}/{hora}
           } catch (error) {
             showMessage("Erro interno")
-            console.log(error)
+
           }
         }
       }
@@ -188,7 +188,7 @@
       const token = localStorage.getItem("token")
       const payload = getPayloadFromToken(token)
       const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
-      console.log(userId)
+
       const btn_search = document.getElementById("btn_search")
       btn_search.addEventListener("click",async(e)=>{
           const value_rg = document.getElementById("value_rg").value
@@ -202,10 +202,10 @@
               method:"GET"
             })
             const res = await req.json()
-            console.log(res)
+
             tutor_pet(res)
           } catch (error) {
-            console.log(error)
+
           }
       })
       
@@ -220,6 +220,7 @@
         spantutor_name.textContent = res.firstName
         const tutor_name_pet = document.getElementById("tutor_name_pet")
         tutor_name_pet.textContent = res.firstName
+        console.log(res)
         for (const itens of res.animais) {
           const div_pet_itens = document.createElement("div")
           div_pet_itens.classList.add("pet-item")
@@ -269,7 +270,7 @@
                     Data:info.dateStr,
                     Motivo:"Todos foram agendados"
                   }
-                  console.log(info.dateStr+"T"+"00"+":00.000Z")
+
                   if(resHorarios.length === 0){
                     const reqIndisponivel = await fetch(`https://petrakka.com:7231/api/Agendamento/indisponiveis`,{
                       method:"POST",
@@ -294,22 +295,23 @@
                 btn_agendar_horario.onclick = async (e) => {
                   const cmrv_vet = document.getElementById("cmrv_vet").value
                   const rg_tutor = document.getElementById("rg_tutor").value
-                  console.log(rg_tutor)
+                  const pagament_din = document.getElementById("pagament_din").value
+                  if (pagament_din === "default_pagament"){
+                    showMessage("informe se já foi pago","red")
+                    return
+                  }
                   if(!cmrv_vet || !rg_tutor){
                     showMessage("Preencha todos os dados","red")
                   }
-                  console.log("Data formatada:"+data_formatada_back)
                   const body_consulta = {
                     id:"",
                     animalId:div_pet_itens.id,
-                    //clienteId:res.Id,
-                    //veterinarioId:cmrv_vet,
                     rg:rg_tutor,
                     crmv:cmrv_vet,
                     dataConsulta:data_formatada_back,
-                    status:0 
+                    status:1    
                   }
-                  try {
+                try {
                   const req = await fetch("https://petrakka.com:7231/api/Agendamento",{
                     method:"Post",
                     headers:
@@ -319,19 +321,59 @@
                     body:JSON.stringify(body_consulta)
                   })
                   const res = await req.json()
-                  console.log(res)
-                  console.log(body_consulta)
-                  console.log(res.id)
-                  if(res.animalId){
-                    modalHorarios.classList.remove("show")
-                    calendarContainer.classList.remove('show-calendar')
-                    showMessage(`Dia ${info.dateStr} agendado com sucesso`,"green")
+                if(res.animalId){
+                  modalHorarios.classList.remove("show")
+                  calendarContainer.classList.remove('show-calendar')
+                  const paymentModal = document.getElementById("paymentModal")
+                  const closeModal = document.getElementById("closeModal")
+                  const cancelPayment = document.getElementById("cancelPayment")
+                  const confirmPayment = document.getElementById("confirmPayment")
+                  const priceValue = document.getElementById("priceValue")
+                  const value_total =  document.getElementById("value_total")
+                  const email_value = document.getElementById("email_value")
+                  if(pagament_din === "pag_true"){
+                    //fazer lógica do status, e mudar para que já foi pago
+                    paymentModal.style.display = "none"
                   }else{
-                    showMessage("Erro ao agendar tente novamente","red")
-                  }
+                    paymentModal.style.display = "flex"
+                    value_total.addEventListener("input",(e)=>{
+                    priceValue.innerText = `R$${e.target.value}`
+                    })
+                    closeModal.onclick = ()=>{
+                      paymentModal.style.display = "none"
+                    }
+                    cancelPayment.onclick = ()=>{
+                    paymentModal.style.display = "none"
+                    }
+                  confirmPayment.addEventListener("click",async(e)=>{
+                    const paymentType = document.getElementById("paymentType").value
+                    const dados = {consultaId:res.id,valor:Number(value_total.value),paymentMethod:String(paymentType).toLocaleLowerCase()}
+                    if(paymentType.value === "selecione"){
+                      showMessage("Selecione um método de pagamento válido")
+                      return
+                    }
+                    if(value_total.value<1){
+                      showMessage("Valor do pagamento inválido")
+                    }
+                    try {
+                      const req_payment = await fetch(`https://petrakka.com:7231/api/Caixa/Payment/ProcessCheckout`,{
+                        method:"POST",
+                        headers:{"Content-Type":"application/json"},
+                        body:JSON.stringify(dados)
+                      })
+                      const res_payment = await req_payment.json()
+                      console.log(res_payment)
+                    }catch (error) {
+                      console.log(error)
+                    }
+                  })}
+                }else{
+                  showMessage("Erro ao agendar tente novamente","red")
+                }
                 } catch (error) {
                   showMessage("Erro interno","red")
                 }
+                  /*Fluxo do webhook*/
                 }
               },
               datesSet: async function(info) {
@@ -396,7 +438,7 @@
                 }
               }
             } catch (error) {
-              console.log(error)
+
             }
           })
           div_pet_itens.appendChild(pet_icone)
@@ -408,7 +450,7 @@
             const res = await req.json()
             name_pet.textContent = `Nome Pet:${res.nome}`
           } catch (error) {
-            console.log(error)
+
           }
       
           /*Logica botões ver mais*/

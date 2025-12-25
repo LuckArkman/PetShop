@@ -31,7 +31,7 @@ btn_cad.addEventListener("click",async (e)=>{
             body:JSON.stringify({email:email_rec,password:senha_rec,confirmPassword:confirm_senha_rec,nome:username_rec,rg:rg_rec})
         })
         const res = await req.json()
-        console.log(res)
+
         if(res.message){
             div_msg.style.color = "green"
             div_msg.textContent = "Cadastro realizado com sucesso"

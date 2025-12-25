@@ -100,7 +100,6 @@ async function populatePets() {
                body:JSON.stringify({mail:userEmail})
             })
             const pets = await res.json()
-            console.log(pets)
             const selectedPetId = localStorage.getItem("selectedPetId") 
             pets.forEach(pet => {
                 const option = document.createElement("option")
@@ -211,10 +210,10 @@ saveSimple.addEventListener("click", async () => {
             const req_get_user = await fetch(`https://petrakka.com:7231/api/Responsavel/Responsavel${fRg}`,{
                 method:"GET"
             })
-            console.log(req_get_user)
+
             const res_get_user = await req_get_user.json()
             res_get_user.Animais = animalIds
-            console.log(res_get_user)
+
             const req_put_user = await fetch(`https://petrakka.com:7231/api/Responsavel/update`,{
                 method:"PUT",
                 headers: {
@@ -228,13 +227,13 @@ saveSimple.addEventListener("click", async () => {
         }
     } catch (err) {
         showMessage("Erro interno!","red")
-        console.log(err)
+
     }
 })
 
 // Rota excluir pet
 btn_remove_pet.addEventListener("click",async()=>{
-    console.log(select_pet.value)
+
     try {
         const req = await fetch(`https://petrakka.com:7231/api/Animal/delete?id=${select_pet.value}`,{
             method:"DELETE",
@@ -242,9 +241,9 @@ btn_remove_pet.addEventListener("click",async()=>{
                 "Content-Type": "application/json"
             }
         })
-        console.log(req.status)
+
         const res = await req.json()
-        console.log(res)
+
         if(res){
             select_pet.value = ""
             info_bottom_pet.style.display = "none"
@@ -725,18 +724,18 @@ async function Fetch_vacinas(animal_id){
      const req_get_hist = await fetch(`https://petrakka.com:7231/historico?AnimalId=${animal_id}`,{
          method:"GET"
      })
-     console.log(req_get_hist)
+
      if (!req_get_hist.ok) {
         Render_list([], animal_id, listaVacinasView)
         Render_count_vacina(0, vacinaCount)
         return
     }
      const res_get_hist = await req_get_hist.json()
-     console.log(res_get_hist)
+
      Render_list(res_get_hist,animal_id,listaVacinasView)
      Render_count_vacina(res_get_hist.length,vacinaCount)
     } catch (error) {
-     console.log(error)
+
     }
  }
 
@@ -775,7 +774,7 @@ function Render_list_diagnostico(res_get_hist, animal_id, lista_view) {
 
         btn_remove.addEventListener("click", async () => {
             const registroId = btn_remove.dataset.id
-            console.log(valor)
+
             try {
                 const req_remove = await fetch(`https://petrakka.com:7231/api/Diagnostico/delete?id=${registroId}`, {
                     method: "DELETE",
@@ -817,7 +816,7 @@ async function Fetch_diag(animal_id){
      
      Render_count_diag(res_get_hist.length,spanDiagnostico)
     } catch (error) {
-     console.log(error)
+
     }
  }
 
@@ -900,7 +899,7 @@ async function Fetch_med(animal_id){
      
      Render_count_diag(res_get_hist.length,spanMedicamento)
     } catch (error) {
-     console.log(error)
+
     }
  }
 
@@ -989,7 +988,7 @@ async function Fetch_cir(animal_id){
      Render_list_cir(res_get_hist,animal_id,lista_cirurgias_view)
      Render_count_cir(res_get_hist.length,spanCirurgia)
     } catch (error) {
-     console.log(error)
+
     }
  }
 

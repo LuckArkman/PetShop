@@ -128,6 +128,7 @@
                     </div>
                     <div class="button_add_info">
                         <button id="btn_add_vacina" class="btn_add_vacina">Adicionar</button>
+                        <button class="btn_add" id="btn_ver_mais_vacina">Ver mais</button>
                     </div>
                 </div>
 
@@ -139,7 +140,8 @@
                         </div>
                     </div>
                     <div class="button_add_info">
-                        <button id="btn_add_diagnostico" class="btn_add">Adicionar</button>
+                        <button id="btn_add_diagnostico" class="btn_add">Adicionar</butto>
+                        <button class="btn_add" id="btn_ver_mais_diag">Ver mais</button>
                     </div>
                 </div>
 
@@ -152,6 +154,7 @@
                     </div>
                     <div class="button_add_info">
                         <button id="btn_add_medicamento" class="btn_add">Adicionar</button>
+                        <button class="btn_add" id="btn_ver_mais_med">Ver mais</button>
                     </div>
                 </div>
 
@@ -164,6 +167,7 @@
                     </div>
                     <div class="button_add_info">
                         <button id="btn_add_cirurgia" class="btn_add">Adicionar</button>
+                        <button class="btn_add" id="btn_ver_mais_cir">Ver mais</button>
                     </div>
                 </div>
 
@@ -190,7 +194,7 @@
     </main>
 
     <div class="modal-backdrop" id="backdropSimple">
-        <div class="modal" role="dialog" aria-modal="true">
+        <div class="modal" role="dialog" aria-modal="true" style="margin-bottom: 10%;">
           <h3>Cadastrar pet - informações essenciais</h3>
           <p class="muted">Somente os campos mínimos para criar o perfil.</p>
           <div class="form-grid" style="margin-top:12px">
@@ -212,11 +216,21 @@
             </div>
             <div>
               <label>Idade</label>
-              <input id="fAge" placeholder="3 anos" />
+              <input id="fAge" placeholder="Idade" />
+              <select style="margin-top: 4%; width: 50%;" name="" id="fAgeSelect">
+                <option value="">Selecione</option>
+                <option>Anos</option>
+                <option>Meses</option>
+              </select>
             </div>
             <div>
               <label>Peso</label>
-              <input id="fWeight" placeholder="28 kg" />
+              <input id="fWeight" placeholder="Peso" />
+              <select style="margin-top: 4%; width: 50%;" name="" id="fWeightSelect">
+                <option value="">Selecione</option>
+                <option>Kilos</option>
+                <option>Gramas</option>
+              </select>
             </div>
             <div>
               <label>Porte</label>
@@ -261,8 +275,8 @@
             <input id="crmvVet" placeholder="CRMV-SP 12345">
           </div>
         <div>
-          <label>Relatório</label>
-          <input id="relVet" placeholder="Ex: Pet melhorou" />
+          <label>Observações</label>
+          <input id="relVet" placeholder="Ex: Aparência saudável" />
         </div>
       </div>
       <div class="modal-actions">
@@ -375,8 +389,8 @@
     </div>
 </div>
 
-<div class="modal-backdrop" id="backdropCirurgia">
-    <div class="modal" role="dialog" aria-modal="true">
+<div class="modal-backdrop" id="backdropCirurgia" style="overflow-y: scroll;">
+    <div class="modal" role="dialog" aria-modal="true" style="margin:auto;">
         <h3>Cadastrar Cirurgia</h3>
         <p class="muted">Informe os detalhes da cirurgia realizada.</p>
         <div class="form-grid" style="margin-top:12px">
@@ -393,6 +407,7 @@
                   <option value="3">Diagnóstica</option>
                   <option value="4">Emergência</option>
                   <option value="5">Outro</option>
+                  <option value="6">Nenhuma</option>
                 </select>
               </div>
 
@@ -497,8 +512,8 @@
     </div>
 </div>
 -->
-<div id="backdropUpdate" class="modal-backdrop" style="display:none;">
-    <div class="modal" role="dialog" aria-modal="true">
+<div id="backdropUpdate" class="modal-backdrop" style="display:none; overflow-y: scroll;">
+    <div class="modal" role="dialog" aria-modal="true" style="margin-top: 10%;">
       <h2>Atualizar Pet</h2>
       <form id="formUpdatePet">
         <label for="updateName">Nome:</label>
@@ -512,9 +527,19 @@
 
         <label for="updateAge">Idade:</label>
         <input type="number" id="updateAge" required>
+        <select style="margin-top: 4%; width: 50%;" name="" id="fAgeSelectupdate">
+                <option value="Selecione">Selecione</option>
+                <option>Anos</option>
+                <option>Meses</option>
+        </select>
 
-        <label for="updateWeight">Peso (kg):</label>
+        <label for="updateWeight">Peso:</label>
         <input type="number" id="updateWeight" required>
+        <select style="margin-top: 4%; width: 50%;" name="" id="fWeightSelectupdate">
+                <option value="Selecione">Selecione</option>
+                <option>Kilos</option>
+                <option>Gramas</option>
+        </select>
 
         <label for="updatePorte">Porte:</label>
         <select id="updatePorte" required>
@@ -545,6 +570,70 @@
       </form>
     </div>
   </div>
+
+  <div class="modal-backdrop" id="backdropSimple">
+        <div class="modal" role="dialog" aria-modal="true">
+          <h3>Cadastrar pet - informações essenciais</h3>
+          <p class="muted">Somente os campos mínimos para criar o perfil.</p>
+          <div class="form-grid" style="margin-top:12px">
+            <div>
+                <label>RG</label>
+                <input id="fRg" placeholder="Ex:Digite seu rg " maxlength="12" />
+              </div>
+            <div>
+              <label>Nome</label>
+              <input id="fName" placeholder="Ex: Max" maxlength="12" />
+            </div>
+            <div>
+              <label>Espécie</label>
+              <select id="fSpecies"><option value="">Selecione</option><option>Canino</option><option>Felino</option></select>
+            </div>
+            <div>
+              <label>Raça</label>
+              <input id="fBreed" placeholder="Ex: Golden Retriever" />
+            </div>
+            <div>
+              <label>Idade</label>
+              <input id="fAge" placeholder="Idade" />
+              <select style="margin-top: 4%; width: 50%;" name="" id="fAgeSelect">
+                <option value="">Selecione</option>
+                <option>Anos</option>
+                <option>Meses</option>
+              </select>
+            </div>
+            <div>
+              <label>Peso</label>
+              <input id="fWeight" placeholder="Peso" />
+              <select style="margin-top: 4%; width: 50%;" name="" id="fWeightSelect">
+                <option value="">Selecione</option>
+                <option>Kilos</option>
+                <option>Gramas</option>
+              </select>
+            </div>
+            <div>
+              <label>Porte</label>
+              <select id="fPorte">
+                <option value="">Selecione</option>
+                <option>Pequeno</option>
+                <option>Médio</option>
+                <option>Grande</option>
+            </select>
+            </div>
+            <div>
+              <label>Sexo</label>
+              <select id="fSex"><option value="">Selecione</option><option>Macho</option><option>Fêmea</option></select>
+            </div>
+            <div>
+              <label>Castrado?</label>
+              <select id="fCastrado"><option value="">Selecione</option><option>Sim</option><option>Não</option></select>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button id="cancelSimple" class="btn-ghost">Cancelar</button>
+            <button id="saveSimple">Criar perfil</button>
+          </div>
+        </div>
+      </div> 
 
 </body>
 </html>

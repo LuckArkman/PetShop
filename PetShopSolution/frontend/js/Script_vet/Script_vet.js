@@ -5,6 +5,7 @@ const type_atend = document.getElementById("type_atend")
 const date_atend = document.getElementById("date_atend")
 const value_diag = document.getElementById("value_diag")
 const type_presc = document.getElementById("type_presc")
+const vet_crmv = document.getElementById("vet_crmv")
 const return_diag = document.getElementById("return_diag")
 const btn_save = document.getElementById("btn_save")
 const search_results = document.getElementById("search_resultsVet")
@@ -22,6 +23,7 @@ function resetForm(){
     date_atend.value = ""
     value_diag.value = ""
     type_presc.value = ""
+    vet_crmv.value = ""
     return_diag.value = ""
     selectedPetId = null
     selectedTutorName = ""
@@ -33,6 +35,7 @@ document.addEventListener("DOMContentLoaded",async e=>{
     try{
         const req = await fetch("https://petrakka.com:7231/api/Agendamento/hoje",{method:"GET"})
         const res = await req.json()
+
         for(let i=0;i<res.length;i++){
             if(res[i].id){
                 const req_pet = await fetch(`https://petrakka.com:7231/api/Animal/animal/${res[i].animalId}`,{method:"GET"})
@@ -93,17 +96,22 @@ document.addEventListener("DOMContentLoaded",async e=>{
                         }catch(error){}
 
                         btn_save.onclick = async ()=>{
-                            let data_formatada = date_atend.value+"T"+selectedHorario+":00.000"
-                            const obj_dados_rel = {
-                                animalId:selectedPetId,
-                                _data:data_formatada,
-                                Sintomas:value_diag.value,
-                                Tratamento:type_presc.value,
-                                Observacoes:type_atend.value,
-                                VeterinarioId:""
-                            }
-
                             try{
+                                const req_vet = await fetch(`https://petrakka.com:7231/api/MedicoVeterinario/MedicoVeterinario/${vet_crmv.value}`)
+                                const res_vet = await req_vet.json()
+                                if(!res_vet.id){
+                                    showMessage("Digite um crmv válido","red")
+                                    return
+                                }
+                                let data_formatada = date_atend.value+"T"+selectedHorario+":00.000"
+                                const obj_dados_rel = {
+                                    animalId:selectedPetId,
+                                    _data:data_formatada,
+                                    Sintomas:value_diag.value,
+                                    Tratamento:type_presc.value,
+                                    Observacoes:type_atend.value,
+                                    VeterinarioId:res_vet.id
+                                }
                                 const req_rel = await fetch("https://petrakka.com:7231/api/RelatorioClinico/register",{
                                     method:"POST",
                                     headers:{"Content-Type":"application/json"},
@@ -249,92 +257,122 @@ btn_save.addEventListener("click",async()=>{
         return
     }
 
-    let data_formatada = date_atend.value+"T09:00:00.000"
-
-    const obj = {
-        animalId:selectedPetId,
-        _data:data_formatada,
-        Sintomas:value_diag.value,
-        Tratamento:type_presc.value,
-        Observacoes:type_atend.value,
-        VeterinarioId:""
-    }
-
     try{
+        const req_vet = await fetch(`https://petrakka.com:7231/api/MedicoVeterinario/MedicoVeterinario/${vet_crmv.value}`,{method:"GET"})
+        const res_vet = await req_vet.json()
+        console.log(req_vet)
+        console.log(res_vet)
+            if(!res_vet.id){
+                showMessage("Digite um crmv válido","red")
+                return
+            }
+        const obj = {
+            animalId:selectedPetId,
+            _data:date_atend.value,
+            Sintomas:value_diag.value,
+            Tratamento:type_presc.value,
+            Observacoes:type_atend.value,
+            VeterinarioId:res_vet.id
+        }
+
         const req = await fetch("https://petrakka.com:7231/api/RelatorioClinico/register",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(obj)
         })
         const res = await req.json()
+        console.log(req)
+        console.log(res)
         showMessage("Consulta cadastrada com sucesso","green")
         resetForm()
-    }catch(error){}
+    }catch(error){
+        showMessage("Erro interno","red")
+        console.log(error)
+    }
 })
 
 const btn_vet = document.getElementById("btn_vet")
 btn_vet.addEventListener("click",async e=>{
     const searchHistVet = document.getElementById("searchHistVet").value
     search_results.innerHTML = ""
-
     try{
-        const req_hist_vet = await fetch(`https://petrakka.com:7231/api/Agendamento/veterinario/${searchHistVet}`)
-        const res_hist_vet = await req_hist_vet.json()
+        const req_vet_hist_rel = await fetch(`https://petrakka.com:7231/api/RelatorioClinico/Relatorios_Veterinario/${searchHistVet}`)
+        const res_vet_hist_rel = await req_vet_hist_rel.json()
+        console.log(res_vet_hist_rel)
 
-        if(req_hist_vet.status === 404){
-            showMessage(res_hist_vet.message,"red")
-            return
-        }
+        const req_info_vet = await fetch(`https://petrakka.com:7231/api/MedicoVeterinario/MedicoVeterinario/${searchHistVet}`)
+        const res_info_vet = await req_info_vet.json()
+        let name_vet = res_info_vet.id ? res_info_vet.nome : ""
+        for(let i=0;i<res_vet_hist_rel.length;i++){
+            if(res_vet_hist_rel[i].id){
 
-        for(let i=0;i<res_hist_vet.length;i++){
-            if(res_hist_vet[i].id){
-                const req_info_pet = await fetch(`https://petrakka.com:7231/api/Animal/animal/${res_hist_vet[i].animalId}`)
+                const req_info_pet = await fetch(`https://petrakka.com:7231/api/Animal/animal/${res_vet_hist_rel[i].animalId}`)
                 const res_info_pet = await req_info_pet.json()
                 let name_pet = res_info_pet.id ? res_info_pet.nome : ""
-
-                const req_info_vet = await fetch(`https://petrakka.com:7231/api/MedicoVeterinario/MedicoVeterinario/${searchHistVet}`)
-                const res_info_vet = await req_info_vet.json()
-                let name_vet = res_info_vet.id ? res_info_vet.nome : ""
 
                 const div_card_hist_consul = document.createElement("div")
                 div_card_hist_consul.classList.add("card_hist_consulta")
 
                 const h3_name_pet = document.createElement("h3")
-                h3_name_pet.innerText = "Consulta — "+name_pet
+                h3_name_pet.innerText = "Consulta — " + name_pet
 
                 const p_data = document.createElement("p")
                 const span_data = document.createElement("span")
                 const span_vet = document.createElement("span")
 
-                const iso = res_hist_vet[i].dataConsulta
-                const dataFormatada = iso.slice(8,10) + "/" + iso.slice(5,7) + "/" + iso.slice(0,4) + " " + iso.slice(11,16)
+                const iso = res_vet_hist_rel[i]._data
 
-                span_data.innerText = "Data: "+dataFormatada+"   "
-                span_vet.innerText = "Veterinário: "+name_vet
+                const dataFormatada =
+                    iso.slice(8,10)+"/"+
+                    iso.slice(5,7)+"/"+
+                    iso.slice(0,4)+" "+
+                    iso.slice(11,16)
 
-                const div_stats = document.createElement("div")
-                if(res_hist_vet[i].status == 0){
-                    div_stats.classList.add("status_tag","status-pending")
-                    div_stats.innerText = "Pendente"
-                }else if(res_hist_vet[i].status == 1){
-                    div_stats.classList.add("status_tag","status-progress")
-                    div_stats.innerText = "Em andamento"
-                }else{
-                    div_stats.classList.add("status_tag","status-done")
-                    div_stats.innerText = "Concluída"
-                }
+                span_data.innerText = dataFormatada
+                span_vet.innerText = "  Veterinário: " + name_vet
+
+                const p_sintomas = document.createElement("p")
+                p_sintomas.innerHTML = "<strong>Sintomas:</strong> " + res_vet_hist_rel[i].sintomas
+
+                const p_tratamento = document.createElement("p")
+                p_tratamento.innerHTML = "<strong>Tratamento:</strong> " + res_vet_hist_rel[i].tratamento
+
+                const p_obs = document.createElement("p")
+                p_obs.innerHTML = "<strong>Observações:</strong> " + res_vet_hist_rel[i].observacoes
+
+                const div_actions = document.createElement("div")
+                div_actions.classList.add("actions_hist")
+
+                const btn_edit = document.createElement("button")
+                btn_edit.innerText = "Editar"
+                btn_edit.classList.add("edit-btn")
+
+                const btn_delete = document.createElement("button")
+                btn_delete.innerText = "Excluir"
+                btn_delete.classList.add("cancel-btn")
 
                 p_data.appendChild(span_data)
                 p_data.appendChild(span_vet)
+
+                div_actions.appendChild(btn_edit)
+                div_actions.appendChild(btn_delete)
+
                 div_card_hist_consul.appendChild(h3_name_pet)
                 div_card_hist_consul.appendChild(p_data)
-                div_card_hist_consul.appendChild(div_stats)
+                div_card_hist_consul.appendChild(p_sintomas)
+                div_card_hist_consul.appendChild(p_tratamento)
+                div_card_hist_consul.appendChild(p_obs)
+                div_card_hist_consul.appendChild(div_actions)
 
                 search_results.appendChild(div_card_hist_consul)
             }
         }
-    }catch(error){}
+    }catch(error){
+        showMessage("Erro interno","red")
+        console.log(error)
+    }
 })
+
 
 const btn_tutor = document.getElementById("btn_tutor")
 btn_tutor.addEventListener("click",async e=>{
@@ -361,6 +399,17 @@ btn_tutor.addEventListener("click",async e=>{
                 const h3_name_pet = document.createElement("h3")
                 h3_name_pet.innerText = "Consulta — "+name_pet
 
+                const div_actions = document.createElement("div")
+                div_actions.classList.add("actions_hist")
+
+                const btn_edit = document.createElement("button")
+                btn_edit.innerText = "Editar"
+                btn_edit.classList.add("edit-btn")
+
+                const btn_delete = document.createElement("button")
+                btn_delete.innerText = "Excluir"
+                btn_delete.classList.add("cancel-btn")
+
                 const p_data = document.createElement("p")
                 const span_data = document.createElement("span")
                 const span_tutor = document.createElement("span")
@@ -382,17 +431,20 @@ btn_tutor.addEventListener("click",async e=>{
                     div_stats.classList.add("status_tag","status-done")
                     div_stats.innerText = "Concluída"
                 }
-
+                div_actions.appendChild(btn_edit)
+                div_actions.appendChild(btn_delete)
                 p_data.appendChild(span_data)
                 p_data.appendChild(span_tutor)
                 div_card_hist_consul.appendChild(h3_name_pet)
                 div_card_hist_consul.appendChild(p_data)
                 div_card_hist_consul.appendChild(div_stats)
-
+                div_card_hist_consul.appendChild(div_actions)
                 search_results_t.appendChild(div_card_hist_consul)
             }
         }
-    }catch(error){}
+    }catch(error){
+        console.log(error)
+    }
 })
 
 const modal = document.getElementById('modalHist')
@@ -420,7 +472,7 @@ async function teste(){
     try {
         const req = await fetch(`https://petrakka.com:7231/api/RelatorioClinico/Relatorios?animalId=${"aa8b5f25-3d16-4b82-9f58-7edf1a3af676"}`)
         const res = await req.json()
-        console.log(res)
+
     } catch (error) {
         
     }

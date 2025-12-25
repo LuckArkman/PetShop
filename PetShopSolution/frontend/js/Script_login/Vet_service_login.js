@@ -39,7 +39,7 @@ const div_msg = document.getElementById("div_msg")
             div_msg.style.color = "red"
             setTimeout(()=>{
             div_msg.textContent = ""
-            console.log(error)
+
         },2000)
     }
 })

@@ -37,7 +37,7 @@ if (!token) {
 const payload = getPayloadFromToken(token)
 const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
 const userName = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
-console.log(userName)
+
 
 btn_save.addEventListener("click",async(e)=>{
     e.preventDefault()
