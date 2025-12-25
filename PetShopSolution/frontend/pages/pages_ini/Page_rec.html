@@ -141,15 +141,16 @@
 
 
 <!--Modal de pagamento-->
-<div class="modal-overlay" id="paymentModal">
-  <div class="modal-pagament">
+<div class="overlay">
+  <div class="payment-modal">
     <div class="modal-header">
-      <h2>Pagamento</h2>
-      <button class="close-btn" id="closeModal">×</button>
+      <i class="fa-solid fa-credit-card"></i>
+      <h2>Finalizar Pagamento</h2>
     </div>
 
     <div class="modal-body">
-      <div>
+
+      <div class="form-group">
         <label for="appointmentType">Tipo de consulta</label>
         <select id="appointmentType">
           <option value="consulta">Consulta</option>
@@ -158,7 +159,7 @@
         </select>
       </div>
 
-      <div>
+      <div class="form-group">
         <label for="paymentType">Forma de pagamento</label>
         <select id="paymentType">
           <option value="selecione">Selecione</option>
@@ -167,22 +168,26 @@
         </select>
       </div>
 
-      <div>
-        <label for="email_value">Seu email</label>
-        <input type="email" name="email_value" id="email_value" placeholder="Digite o seu email">
-        <label for="">Valor do pagamento:</label>
-        <input step="0.01" type="number" name="" id="value_total" placeholder="Digite o valor a pagar">
-      </div> 
-
+      
+      <div class="form-group">
+        <label for="value_total">Valor do pagamento</label>
+        <input step="0.01" type="number" id="value_total" placeholder="R$ 0,00">
+      </div>
       <div class="price-box">
         <span>Total</span>
-        <span id="priceValue">R$0,00</span>
+        <span id="priceValue">R$ 0,00</span>
       </div>
-    </div>
 
-    <div class="modal-footer">
-      <button class="btn btn-cancel" id="cancelPayment">Cancelar</button>
-      <button class="btn btn-confirm" id="confirmPayment">Confirmar</button>
+      <button class="pay-button">
+        <i class="fa-solid fa-lock"></i>
+        Pagar com segurança
+      </button>
+
+      <p class="secure-text">
+        <i class="fa-solid fa-shield-halved"></i>
+        Pagamento 100% seguro
+      </p>
+
     </div>
   </div>
 </div>
