@@ -724,14 +724,21 @@ header{
 body {
   margin: 0;
 }
-
-.overlay {
-  background: linear-gradient(135deg, #3085E9 0%, #2A9CB3 35%, #28A89A 65%,#22C164 100% );
-  min-height: 100vh;
-  display: flex;
+#div_effect{
+  position: fixed;
+  inset: 0; /* top, right, bottom, left = 0 */
+  background-color: #00000079;
+  display: none;
   align-items: center;
   justify-content: center;
 }
+.overlay {
+  width: 100%;
+  max-width: 440px;
+  display: none;
+  justify-content: center;
+}
+
 
 .payment-modal {
   background: #fff;
@@ -932,6 +939,9 @@ input:focus, select:focus {
 
   .modal-horarios {
     width: 100%;
+  }
+  .overlay{
+    padding: 30px;
   }
 }
 

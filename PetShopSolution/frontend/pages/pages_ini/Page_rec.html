@@ -141,7 +141,8 @@
 
 
 <!--Modal de pagamento-->
-<div class="overlay">
+<div id="div_effect">
+<div class="overlay" id="paymentModal">
   <div class="payment-modal">
     <div class="modal-header">
       <i class="fa-solid fa-credit-card"></i>
@@ -166,6 +167,7 @@
           <option value="pix">PIX</option>
           <option value="card">Cartão</option>
         </select>
+        <input type="email" name="" id="email_value">
       </div>
 
       
@@ -177,8 +179,8 @@
         <span>Total</span>
         <span id="priceValue">R$ 0,00</span>
       </div>
-
-      <button class="pay-button">
+      <button id="cancelPayment" class="pay-button">Cancelar</button>
+      <button class="pay-button" id="confirmPayment">
         <i class="fa-solid fa-lock"></i>
         Pagar com segurança
       </button>
@@ -191,7 +193,7 @@
     </div>
   </div>
 </div>
-
+</div>
 <!-- Modal lateral de horários -->
 <div id="modal-horarios" class="modal-horarios">
   <div class="modal-content-horarios">

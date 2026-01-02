@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Recepcionistas - PetAdmin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <h2 class="logo">PetAdmin</h2>
+  <nav>
+    <a><i class="fa-solid fa-paw"></i> Dashboard</a>
+    <a><i class="fa-solid fa-user"></i> Usuários</a>
+    <a><i class="fa-solid fa-stethoscope"></i> Veterinários</a>
+    <a class="active"><i class="fa-solid fa-clipboard"></i> Recepcionistas</a>
+    <a href=""><i class="fa-solid fa-calendar"></i> Consultas</a>
+    <a href=""><i class="fa-solid fa-credit-card"></i> Pagamentos</a>
+   
+  </nav>
+</aside>
+
+<main class="content">
+  <header class="topbar">
+    <h2>Recepcionistas</h2>
+    <button class="btn" id="btn_add_rec">+ Novo Recepcionista</button>
+  </header>
+
+  <div class="box">
+    <input class="search" placeholder="Buscar Recepcionista...">
+    <table>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Turno</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+      <tr>
+        <td>Maria Souza</td>
+        <td>maria@email.com</td>
+        <td>Manhã</td>
+        <td>Ativo</td>
+        <td class="actions">
+            <button class="btn-edit">
+                <i class="fa-solid fa-pen"></i> Editar
+            </button>
+
+            <button class="btn-delete">
+                <i class="fa-solid fa-trash"></i> Deletar
+            </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!--Modal de criação de recepcionista-->
+  <div class="modal-backdrop" id="backdropSimplerec">
+        <div class="modal" role="dialog" aria-modal="true" style="margin-bottom: 10%;">
+          <h3>Cadastrar Recepcionista - informações essenciais</h3>
+          <p class="muted">Somente os campos mínimos para criar o perfil.</p>
+          <div class="form-grid" style="margin-top:12px">
+            <form action="" id="form_recep">
+            <div>
+              <label>Nome</label>
+              <input type="text" id="fNamerec" placeholder="Ex:Ana"/>
+            </div>
+            <div>
+              <label>Email</label>
+              <input type="text" id="fEmailrec" placeholder="Ex:rec123@gmail.com" />
+            <div>
+            <div>
+              <label>RG</label>
+              <input type="text" id="fRgrec" placeholder="RG">
+            </div>
+            <div>
+              <label>Telefone</label>
+              <input type="tel" id="fTelrec" placeholder="Telefone">
+            </div>
+            <div>
+              <label>Senha</label>
+              <input type="text" id="fsenharec" placeholder="Senha" />
+            </div>
+            <div>
+              <label>Confirme senha</label>
+              <input type="text" id="fConsenharec" placeholder="confirmar senha">
+            </div>
+            <div style="text-align: center;" id="toastMessage"></div>
+          <div class="modal-actions">
+            <button id="cancelSimplerec" class="btn-ghost">Cancelar</button>
+            <button id="saveSimplerec">Criar perfil</button>
+          </div>
+          </form>
+        </div>
+  </div> 
+</main>
+
+</body>
+</html>
+
+<script src="../../js/Script_adm/script_adm_rec.js"></script>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pagamentos - PetAdmin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <h2 class="logo">PetAdmin</h2>
+  <nav>
+    <a><i class="fa-solid fa-paw"></i> Dashboard</a>
+    <a><i class="fa-solid fa-user"></i> Usuários</a>
+    <a><i class="fa-solid fa-stethoscope"></i> Veterinários</a>
+    <a><i class="fa-solid fa-clipboard"></i> Recepcionistas</a>
+    <a><i class="fa-solid fa-calendar"></i> Consultas</a>
+    <a  class="active"><i class="fa-solid fa-credit-card"></i> Pagamentos</a>
+  </nav>
+</aside>
+
+<main class="content">
+  <header class="topbar">
+    <h2>Pagamentos</h2>
+  </header>
+
+  <section class="cards" style="margin-bottom: 2%;">
+    <div class="card green">
+      <p>Total Recebido</p>
+      <h3>R$ 12.500</h3>
+    </div>
+
+    <div class="card orange">
+      <p>Total Pendente</p>
+      <h3>R$ 2.300</h3>
+    </div>
+  </section>
+
+  <div class="box">
+    <div class="filters">
+      <select>
+        <option>Status</option>
+        <option>Pago</option>
+        <option>Pendente</option>
+      </select>
+
+      <select>
+        <option>Método</option>
+        <option>PIX</option>
+        <option>Cartão</option>
+        <option>Dinheiro</option>
+      </select>
+    </div>
+
+    <table>
+      <tr>
+        <th>Tutor</th>
+        <th>Consulta</th>
+        <th>Valor</th>
+        <th>Método</th>
+        <th>Status</th>
+        <th>Data</th>
+      </tr>
+      <tr>
+        <td>João Silva</td>
+        <td>Consulta Geral</td>
+        <td>R$ 150</td>
+        <td>PIX</td>
+        <td><span class="status paid">Pago</span></td>
+        <td>20/05/2024</td>
+      </tr>
+    </table>
+  </div>
+</main>
+
+</body>
+</html>

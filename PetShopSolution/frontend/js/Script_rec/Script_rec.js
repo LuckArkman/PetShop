@@ -1,4 +1,6 @@
     document.addEventListener("DOMContentLoaded", async () => {
+        console.log("-------------------")
+        console.log("-------------------")
         const appointmentList = document.querySelector(".appointment-list")
         const appointmentCount = document.getElementById("appointment-count")
         const noAppointmentsMsg = document.getElementById("no-appointments-message")
@@ -133,8 +135,6 @@
           if(day_data_delete<day_atual){
             showMessage("Data invalida","red")
           }
-
-
           try {
             const req_delete_date = await fetch(`https://petrakka.com:7231/api/Agendamento/por-data/${data_delete}/${horario_delete}`,{
               method:"DELETE"
@@ -321,6 +321,7 @@
                     body:JSON.stringify(body_consulta)
                   })
                   const res = await req.json()
+                  console.log(res)
                 if(res.animalId){
                   modalHorarios.classList.remove("show")
                   calendarContainer.classList.remove('show-calendar')
@@ -331,23 +332,25 @@
                   const priceValue = document.getElementById("priceValue")
                   const value_total =  document.getElementById("value_total")
                   const email_value = document.getElementById("email_value")
+                  const div_effect = document.getElementById("div_effect")
+                  const appointmentType = document.getElementById("appointmentType").value
                   if(pagament_din === "pag_true"){
                     //fazer lógica do status, e mudar para que já foi pago
                     paymentModal.style.display = "none"
+                    div_effect.style.display = "none"
                   }else{
                     paymentModal.style.display = "flex"
+                    div_effect.style.display = "flex"
                     value_total.addEventListener("input",(e)=>{
                     priceValue.innerText = `R$${e.target.value}`
                     })
-                    closeModal.onclick = ()=>{
-                      paymentModal.style.display = "none"
-                    }
-                    cancelPayment.onclick = ()=>{
+                    cancelPayment.onclick = ()=>{  
                     paymentModal.style.display = "none"
+                    div_effect.style.display = "none"
                     }
                   confirmPayment.addEventListener("click",async(e)=>{
                     const paymentType = document.getElementById("paymentType").value
-                    const dados = {consultaId:res.id,valor:Number(value_total.value),paymentMethod:String(paymentType).toLocaleLowerCase()}
+                    const dados = {amount:Number(value_total.value),description:appointmentType.value,externalReference:res.id,mail:email_value}
                     if(paymentType.value === "selecione"){
                       showMessage("Selecione um método de pagamento válido")
                       return
@@ -356,7 +359,7 @@
                       showMessage("Valor do pagamento inválido")
                     }
                     try {
-                      const req_payment = await fetch(`https://petrakka.com:7231/api/Caixa/Payment/ProcessCheckout`,{
+                      const req_payment = await fetch(`https://petrakka.com:7231/api/Gateway/CreatePixCode`,{
                         method:"POST",
                         headers:{"Content-Type":"application/json"},
                         body:JSON.stringify(dados)
@@ -371,6 +374,7 @@
                   showMessage("Erro ao agendar tente novamente","red")
                 }
                 } catch (error) {
+                  console.log(error)
                   showMessage("Erro interno","red")
                 }
                   /*Fluxo do webhook*/
