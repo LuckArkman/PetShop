@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace DTOs;
 
 public class HistoryVacinacao

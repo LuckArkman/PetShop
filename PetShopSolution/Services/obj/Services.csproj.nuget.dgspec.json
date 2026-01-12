@@ -1,34 +1,112 @@
 {
   "format": 1,
   "restore": {
-    "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj": {}
+    "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Services\\Services.csproj": {}
   },
   "projects": {
-    "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj": {
+    "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj",
-        "projectName": "DTOs",
-        "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj",
-        "packagesPath": "/home/mplopes/.nuget/packages/",
-        "outputPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/obj/",
+        "projectUniqueName": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Data\\Data.csproj",
+        "projectName": "Data",
+        "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Data\\Data.csproj",
+        "packagesPath": "C:\\Users\\MPLopes\\.nuget\\packages\\",
+        "outputPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Data\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/mplopes/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\MPLopes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.5.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\DTOs.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\DTOs.csproj",
+        "projectName": "DTOs",
+        "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\DTOs.csproj",
+        "packagesPath": "C:\\Users\\MPLopes\\.nuget\\packages\\",
+        "outputPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\MPLopes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj": {
-                "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj"
+              "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Enums\\Enums.csproj": {
+                "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Enums\\Enums.csproj"
               }
             }
           }
@@ -43,7 +121,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -69,110 +147,38 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.16, 8.0.16]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Data/Data.csproj": {
+    "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Enums\\Enums.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Data/Data.csproj",
-        "projectName": "Data",
-        "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Data/Data.csproj",
-        "packagesPath": "/home/mplopes/.nuget/packages/",
-        "outputPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Data/obj/",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "/home/mplopes/.nuget/NuGet/NuGet.Config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0"
-        ],
-        "sources": {
-          "/usr/share/dotnet/library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
-      },
-      "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
-          "dependencies": {
-            "MongoDB.Driver": {
-              "target": "Package",
-              "version": "[3.5.0, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.16, 8.0.16]"
-            }
-          ],
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
+        "projectUniqueName": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Enums\\Enums.csproj",
         "projectName": "Enums",
-        "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj",
-        "packagesPath": "/home/mplopes/.nuget/packages/",
-        "outputPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/obj/",
+        "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Enums\\Enums.csproj",
+        "packagesPath": "C:\\Users\\MPLopes\\.nuget\\packages\\",
+        "outputPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Enums\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/mplopes/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\MPLopes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -191,7 +197,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -207,46 +213,46 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.16, 8.0.16]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj": {
+    "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Interfaces\\Interfaces.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj",
+        "projectUniqueName": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Interfaces\\Interfaces.csproj",
         "projectName": "Interfaces",
-        "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj",
-        "packagesPath": "/home/mplopes/.nuget/packages/",
-        "outputPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/obj/",
+        "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Interfaces\\Interfaces.csproj",
+        "packagesPath": "C:\\Users\\MPLopes\\.nuget\\packages\\",
+        "outputPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Interfaces\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/mplopes/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\MPLopes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj": {
-                "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj"
+              "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\DTOs.csproj": {
+                "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\DTOs.csproj"
               }
             }
           }
@@ -261,7 +267,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -277,55 +283,55 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.16, 8.0.16]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj": {
+    "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Services\\Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj",
+        "projectUniqueName": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Services\\Services.csproj",
         "projectName": "Services",
-        "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Services/Services.csproj",
-        "packagesPath": "/home/mplopes/.nuget/packages/",
-        "outputPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Services/obj/",
+        "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Services\\Services.csproj",
+        "packagesPath": "C:\\Users\\MPLopes\\.nuget\\packages\\",
+        "outputPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Services\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/mplopes/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\MPLopes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj": {
-                "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/DTOs/DTOs.csproj"
+              "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Data\\Data.csproj": {
+                "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Data\\Data.csproj"
               },
-              "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Data/Data.csproj": {
-                "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Data/Data.csproj"
+              "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\DTOs.csproj": {
+                "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\DTOs.csproj"
               },
-              "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj": {
-                "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Enums/Enums.csproj"
+              "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Enums\\Enums.csproj": {
+                "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Enums\\Enums.csproj"
               },
-              "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj": {
-                "projectPath": "/mnt/wwn-0x5000c500e3635241-part1/Documentos/GitHub/PetShop/PetShopSolution/Interfaces/Interfaces.csproj"
+              "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Interfaces\\Interfaces.csproj": {
+                "projectPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Interfaces\\Interfaces.csproj"
               }
             }
           }
@@ -340,7 +346,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -370,18 +376,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.16, 8.0.16]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

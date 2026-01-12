@@ -30,7 +30,6 @@ public class MongoDataController
     {
         _database = client.GetDatabase(databaseName);
         var collectionList = _database.ListCollectionNames().ToList();
-        // Use the stored collectionName to create the collection
         if (collectionList.Count <= 0) _database.CreateCollection(collectionName); 
     }
 }

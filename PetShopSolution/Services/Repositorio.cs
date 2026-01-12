@@ -10,6 +10,7 @@ public class Repositorio : IRepositorio<Order>
 {
     private readonly IConfiguration _configuration;
     protected IMongoCollection<Order> _collection;
+    private IRepositorio<Order> _repositorioImplementation;
     public string _collectionName { get; set; }
     private MongoDataController _db { get; set; }
     private IMongoDatabase _mongoDatabase { get; set; }
@@ -52,6 +53,60 @@ public class Repositorio : IRepositorio<Order>
     public async Task<Order?> GetByTransectionOrderAsync(string paymentId)
     {
         var filter = Builders<Order>.Filter.Eq(p => p.TransactionId, paymentId);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
+    }
+
+    public async Task<IEnumerable<Order>?> GetAllTodayPaidsCompletes(DateTime dataConsulta, CancellationToken cancellationToken)
+    {
+        var inicioDia = dataConsulta.Date;
+        var fimDia = inicioDia.AddDays(1);
+
+        var filter = Builders<Order>.Filter.And(
+            Builders<Order>.Filter.Eq(o => o.Status, "Paid"),
+            Builders<Order>.Filter.Gte(o => o.CreatedAt, inicioDia),
+            Builders<Order>.Filter.Lt(o => o.CreatedAt, fimDia)
+        );
+
+        return await _collection.Find(filter).ToListAsync(cancellationToken);
+
+    }
+
+    public async Task<IEnumerable<Order>?> GetAllTodayPaidsPending(DateTime dataConsulta, CancellationToken cancellationToken)
+    {
+        var inicioDia = dataConsulta.Date;
+        var fimDia = inicioDia.AddDays(1);
+
+        var filter = Builders<Order>.Filter.And(
+            Builders<Order>.Filter.Eq(o => o.Status, "Pending"),
+            Builders<Order>.Filter.Gte(o => o.CreatedAt, inicioDia),
+            Builders<Order>.Filter.Lt(o => o.CreatedAt, fimDia)
+        );
+
+        return await _collection.Find(filter).ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Order>?> GetAllTodayPaidsCanceled(DateTime dataConsulta, CancellationToken cancellationToken)
+    {
+        var inicioDia = dataConsulta.Date;
+        var fimDia = inicioDia.AddDays(1);
+
+        var filter = Builders<Order>.Filter.And(
+            Builders<Order>.Filter.Eq(o => o.Status, "Canceled"),
+            Builders<Order>.Filter.Gte(o => o.CreatedAt, inicioDia),
+            Builders<Order>.Filter.Lt(o => o.CreatedAt, fimDia)
+        );
+
+        return await _collection.Find(filter).ToListAsync(cancellationToken);
+    }
+
+    public Task<bool> Delete(string id, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Order?> GetByUserIdOrderAsync(string responsavelId)
+    {
+        var filter = Builders<Order>.Filter.Eq(p => p.UserId, responsavelId);
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 

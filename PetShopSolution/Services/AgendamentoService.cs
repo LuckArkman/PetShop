@@ -32,32 +32,28 @@ public class AgendamentoService : IAgendamentoService
 
     public async Task<Agendamento?> GetById(string id, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
         var filter = Builders<Agendamento>.Filter.Eq(a => a.id, id);
-        return await collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Agendamento>> GetByCliente(string rg, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
         var filter = Builders<Agendamento>.Filter.Eq(a => a.rg, rg);
-        return await collection.Find(filter).ToListAsync(cancellationToken);
+        return await _collection.Find(filter).ToListAsync(cancellationToken);
     }
 
     public async Task<Agendamento> Create(Agendamento agendamento, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
-        await collection.InsertOneAsync(agendamento, cancellationToken: cancellationToken);
+        await _collection.InsertOneAsync(agendamento, cancellationToken: cancellationToken);
         return agendamento;
     }
 
     public async Task<Agendamento?> UpdateStatus(string id, Status status, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
         var filter = Builders<Agendamento>.Filter.Eq(a => a.id, id);
         var update = Builders<Agendamento>.Update.Set<Status>(a => a.status, status);
 
-        var result = await collection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+        var result = await _collection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
         return result.ModifiedCount > 0 ? await GetById(id, cancellationToken) : null;
     }
 

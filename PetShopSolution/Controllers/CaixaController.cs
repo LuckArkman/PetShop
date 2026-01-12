@@ -11,26 +11,29 @@ namespace PetShop.API.Controllers;
 [Route("api/[controller]")]
 public class CaixaController  : ControllerBase
 {
-    readonly ICaixaService _caixaService;
     private readonly AgendamentoService _service;
     private readonly IResponsavelService _responsavelService;
     private IPaymentGateway _paymentGateway;
     private readonly IConfiguration _cfg;
     private readonly IRepositorio<Order> _orderRepo;
     
-    public CaixaController(IConfiguration connectionString,
+    public CaixaController(IConfiguration connection,
         AgendamentoService service,
         IResponsavelService responsavelService,
-        ICaixaService caixaService,
         IPaymentGateway paymentGateway,
         IRepositorio<Order> orderRepo)
     {
-        _caixaService = caixaService;
+        _cfg = connection;
         _service = service;
         _responsavelService = responsavelService;
         _paymentGateway = paymentGateway;
-        _cfg = connectionString;
         _orderRepo = orderRepo;
+        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Agendamento");
+        _responsavelService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
+            _cfg["MongoDbSettings:DataBaseName"],
+            "Responsavel");
         _orderRepo.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
             _cfg["MongoDbSettings:DataBaseName"],
             "Orders");
@@ -38,7 +41,7 @@ public class CaixaController  : ControllerBase
     [HttpGet("GetByIdAsync/{id}")]
     public async Task<IActionResult> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
-        var pg = await _caixaService.GetById(id, cancellationToken);
+        var pg = await _orderRepo.GetByIdOrderAsync(id);
         if (pg == null) return new NotFoundResult();
         return Ok(pg);
 
@@ -47,7 +50,7 @@ public class CaixaController  : ControllerBase
     public async Task<IActionResult> GetPagamentosCompletosDoDiaAsync(DateTime dataConsulta, CancellationToken cancellationToken)
     {
         var hoje = dataConsulta.Date;
-        var pg = await _caixaService.GetAllTodayPaidsCompletes(hoje, cancellationToken);
+        var pg = await _orderRepo.GetAllTodayPaidsCompletes(hoje, cancellationToken);
         if (pg == null) return new NotFoundResult();
         return Ok(pg);
     }
@@ -55,7 +58,7 @@ public class CaixaController  : ControllerBase
     public async Task<IActionResult> GetPagamentosPendentesDoDiaAsync(DateTime dataConsulta, CancellationToken cancellationToken)
     {
         var hoje = dataConsulta.Date;
-        var pg = await _caixaService.GetAllTodayPaidsPending(hoje, cancellationToken);
+        var pg = await _orderRepo.GetAllTodayPaidsPending(hoje, cancellationToken);
         if (pg == null) return new NotFoundResult();
         return Ok(pg);
     }
@@ -63,28 +66,24 @@ public class CaixaController  : ControllerBase
     public async Task<IActionResult> GetPagamentosCanceladosDoDiaAsync(DateTime dataConsulta, CancellationToken cancellationToken)
     {
         var hoje = dataConsulta.Date;
-        var pg = await _caixaService.GetAllTodayPaidsCanceled(hoje, cancellationToken);
+        var pg = await _orderRepo.GetAllTodayPaidsCanceled(hoje, cancellationToken);
         if (pg == null) return new NotFoundResult();
         return Ok(pg);
     }
     [HttpGet("GetByClienteCpfAsync/{cpf}")]
     public async Task<IActionResult> GetByClienteCpfAsync(string cpf, CancellationToken cancellationToken)
     {
-        var pg = await _caixaService.GetByCliente(cpf, cancellationToken);
+        var responsavel = await _responsavelService.GetResponsavelRg(cpf);
+        if (responsavel == null) return new NotFoundResult();
+        var pg = await _orderRepo.GetByUserIdOrderAsync(responsavel.Id);
         if (pg == null) return new NotFoundResult();
         return Ok(pg);
     }
-    [HttpPost("CreateAsync")]
-    public async Task<IActionResult> CreateAsync(Pagamento pagamento, CancellationToken cancellationToken)
-    {
-        var pg = await _caixaService.Create(pagamento, cancellationToken);
-        if (pg == null) return new NotFoundResult();
-        return Ok(pg);
-    }
+    
     [HttpPost("UpdateStatusAsync")]
     public async Task<IActionResult> UpdateStatusAsync(string id, PaidStatus status, CancellationToken cancellationToken)
     {
-        var pg = await _caixaService.UpdateStatus(id, status, cancellationToken);
+        var pg = await _orderRepo.Update(id, status.ToString());
         if (pg == null) return new NotFoundResult();
         return Ok(pg);
     }
@@ -94,9 +93,9 @@ public class CaixaController  : ControllerBase
     public async Task<IActionResult> ProcessCheckout([FromBody] CheckoutWithCpf request)
     {
         var _agendamento = await _service.GetById(request.consultaId, CancellationToken.None);
-        if (_agendamento == null) return BadRequest();
-        var _responsavel = await _responsavelService.GetResponsavelRg(_agendamento.rg);
-        if (_responsavel == null) return BadRequest();
+        if (_agendamento == null) return BadRequest(new { success = false, message = "O agendamento não foi encontrado." });
+        Responsavel? _responsavel = await _responsavelService.GetResponsavelRg(_agendamento.rg);
+        if (_responsavel == null) return BadRequest(new { success = false, message = "O responsável pelo animal não foi localizado através do RG informado." });
         try
         {
             if (request.valor <= 0) return BadRequest(new { success = false, message = "Valor inválido para pagamento." });
@@ -104,23 +103,21 @@ public class CaixaController  : ControllerBase
             {
                 id = request.consultaId,
                 UserId = _responsavel.Id,
-                transacao = "Consulta", // Copia os itens
-                TotalAmount = request.valor, // Agora o total será R$ 25,00
+                transacao = "Consulta", 
+                TotalAmount = request.valor, 
                 PaymentMethod = request.PaymentMethod,
                 Status = "Pending",
                 CreatedAt = DateTime.UtcNow
             };
-
-            // Chama o Gateway com o valor correto
-            var paymentResult = await _paymentGateway.CreatePaymentAsync(order, _responsavel.CPF ?? "00000000000", request.PaymentMethod);
-
-            if (!paymentResult.Success)
+            PaymentResponse? paymentResult = null;
+            if(request.PaymentMethod == "pix") paymentResult = await _paymentGateway.CreatePaymentAsync(order, _responsavel, request.PaymentMethod);
+            
+            if (!paymentResult.Success && paymentResult != null)
             {
                 return BadRequest(new { success = false, message = paymentResult.Message });
             }
-            order.TransactionId = paymentResult.TransactionId;
-            
-            // Aqui salvamos os dados críticos para o usuário pagar depois
+            if(paymentResult != null)order.TransactionId = paymentResult.TransactionId;
+            if(paymentResult == null)order.TransactionId = Guid.NewGuid().ToString();
             if (paymentResult.Details != null)
             {
                 order.PaymentData = new PaymentMetadata
@@ -195,7 +192,7 @@ public class CaixaController  : ControllerBase
     [HttpDelete("DeleteAsync/{id}")]
     public async Task<IActionResult> DeleteAsync(string id, CancellationToken cancellationToken)
     {
-        var pg = await _caixaService.Delete(id, cancellationToken);
+        var pg = await _orderRepo.Delete(id, cancellationToken);
         if (pg) return new NotFoundResult();
         return Ok(pg);
     }

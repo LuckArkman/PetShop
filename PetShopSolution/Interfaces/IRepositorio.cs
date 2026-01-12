@@ -11,4 +11,9 @@ public interface IRepositorio<T>
     Task<T> Update(string order,string status);
     Task<T?> GetByIdOrderAsync(string id);
     Task<T?> GetByTransectionOrderAsync(string paymentId);
+    Task<IEnumerable<Order>?> GetAllTodayPaidsCompletes(DateTime dataConsulta, CancellationToken cancellationToken);
+    Task<IEnumerable<Order>?> GetAllTodayPaidsPending(DateTime dataConsulta, CancellationToken cancellationToken);
+    Task<IEnumerable<Order>?> GetAllTodayPaidsCanceled(DateTime dataConsulta, CancellationToken cancellationToken);
+    Task<bool> Delete(string id, CancellationToken cancellationToken);
+    Task<Order?> GetByUserIdOrderAsync(string responsavelId);
 }
