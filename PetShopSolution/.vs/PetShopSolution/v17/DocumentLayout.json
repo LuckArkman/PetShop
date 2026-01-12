@@ -1,0 +1,156 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A0B40536-BC8F-44B0-9CAA-7DD48175BEB0}|Api\\Api.csproj|h:\\documentos\\github\\petshop\\petshopsolution\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0B40536-BC8F-44B0-9CAA-7DD48175BEB0}|Api\\Api.csproj|solutionrelative:api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0B40536-BC8F-44B0-9CAA-7DD48175BEB0}|Api\\Api.csproj|h:\\documentos\\github\\petshop\\petshopsolution\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A0B40536-BC8F-44B0-9CAA-7DD48175BEB0}|Api\\Api.csproj|solutionrelative:api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4346BEE1-16E3-436F-8094-13D8F75E23FB}|DTOs\\DTOs.csproj|h:\\documentos\\github\\petshop\\petshopsolution\\dtos\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4346BEE1-16E3-436F-8094-13D8F75E23FB}|DTOs\\DTOs.csproj|solutionrelative:dtos\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4346BEE1-16E3-436F-8094-13D8F75E23FB}|DTOs\\DTOs.csproj|h:\\documentos\\github\\petshop\\petshopsolution\\dtos\\dtos.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{4346BEE1-16E3-436F-8094-13D8F75E23FB}|DTOs\\DTOs.csproj|solutionrelative:dtos\\dtos.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9D48052-F3D1-4C9C-828B-5A76ADB66B4F}|Services\\Services.csproj|h:\\documentos\\github\\petshop\\petshopsolution\\services\\paymentgateway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9D48052-F3D1-4C9C-828B-5A76ADB66B4F}|Services\\Services.csproj|solutionrelative:services\\paymentgateway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9D48052-F3D1-4C9C-828B-5A76ADB66B4F}|Services\\Services.csproj|h:\\documentos\\github\\petshop\\petshopsolution\\services\\services.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{F9D48052-F3D1-4C9C-828B-5A76ADB66B4F}|Services\\Services.csproj|solutionrelative:services\\services.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9AFE36E-D54B-45FE-AED5-D8DF5341044F}|Controllers\\Controllers.csproj|h:\\documentos\\github\\petshop\\petshopsolution\\controllers\\caixacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9AFE36E-D54B-45FE-AED5-D8DF5341044F}|Controllers\\Controllers.csproj|solutionrelative:controllers\\caixacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9AFE36E-D54B-45FE-AED5-D8DF5341044F}|Controllers\\Controllers.csproj|h:\\documentos\\github\\petshop\\petshopsolution\\controllers\\controllers.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{B9AFE36E-D54B-45FE-AED5-D8DF5341044F}|Controllers\\Controllers.csproj|solutionrelative:controllers\\controllers.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Api\\Program.cs",
+              "RelativeDocumentMoniker": "Api\\Program.cs",
+              "ToolTip": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Api\\Program.cs",
+              "RelativeToolTip": "Api\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T21:56:08.59Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Api\\appsettings.json",
+              "RelativeDocumentMoniker": "Api\\appsettings.json",
+              "ToolTip": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Api\\appsettings.json",
+              "RelativeToolTip": "Api\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxAAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-05T21:55:22.776Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Order.cs",
+              "DocumentMoniker": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\Order.cs",
+              "RelativeDocumentMoniker": "DTOs\\Order.cs",
+              "ToolTip": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\Order.cs",
+              "RelativeToolTip": "DTOs\\Order.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAACAAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T21:48:04.808Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DTOs",
+              "DocumentMoniker": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\DTOs.csproj",
+              "RelativeDocumentMoniker": "DTOs\\DTOs.csproj",
+              "ToolTip": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\DTOs\\DTOs.csproj",
+              "RelativeToolTip": "DTOs\\DTOs.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-01-05T21:47:48.686Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PaymentGateway.cs",
+              "DocumentMoniker": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Services\\PaymentGateway.cs",
+              "RelativeDocumentMoniker": "Services\\PaymentGateway.cs",
+              "ToolTip": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Services\\PaymentGateway.cs",
+              "RelativeToolTip": "Services\\PaymentGateway.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T19:04:32.283Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Services",
+              "DocumentMoniker": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Services\\Services.csproj",
+              "RelativeDocumentMoniker": "Services\\Services.csproj",
+              "ToolTip": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Services\\Services.csproj",
+              "RelativeToolTip": "Services\\Services.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-01-05T19:04:14.141Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CaixaController.cs",
+              "DocumentMoniker": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Controllers\\CaixaController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CaixaController.cs",
+              "ToolTip": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Controllers\\CaixaController.cs",
+              "RelativeToolTip": "Controllers\\CaixaController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T19:04:20.837Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Controllers",
+              "DocumentMoniker": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Controllers\\Controllers.csproj",
+              "RelativeDocumentMoniker": "Controllers\\Controllers.csproj",
+              "ToolTip": "H:\\Documentos\\GitHub\\PetShop\\PetShopSolution\\Controllers\\Controllers.csproj",
+              "RelativeToolTip": "Controllers\\Controllers.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-01-05T19:04:15.142Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

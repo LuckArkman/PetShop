@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -7,6 +8,8 @@ namespace DTOs;
 
 public class Agendamento
 {
+    [BsonId]
+    [BsonElement("_id")]
     public string id { get; set; }
     public string? animalId { get; set; }
     public string? rg { get; set; }

@@ -17,16 +17,16 @@ public class CaixaController  : ControllerBase
     private readonly IConfiguration _cfg;
     private readonly IRepositorio<Order> _orderRepo;
     
-    public CaixaController(IConfiguration connectionString,
+    public CaixaController(IConfiguration connection,
         AgendamentoService service,
         IResponsavelService responsavelService,
         IPaymentGateway paymentGateway,
         IRepositorio<Order> orderRepo)
     {
+        _cfg = connection;
         _service = service;
         _responsavelService = responsavelService;
         _paymentGateway = paymentGateway;
-        _cfg = connectionString;
         _orderRepo = orderRepo;
         _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
             _cfg["MongoDbSettings:DataBaseName"],
@@ -79,15 +79,7 @@ public class CaixaController  : ControllerBase
         if (pg == null) return new NotFoundResult();
         return Ok(pg);
     }
-    /*
-    [HttpPost("CreateAsync")]
-    public async Task<IActionResult> CreateAsync(Pagamento pagamento, CancellationToken cancellationToken)
-    {
-        var pg = await _orderRepo.Create(pagamento, cancellationToken);
-        if (pg == null) return new NotFoundResult();
-        return Ok(pg);
-    }
-    */
+    
     [HttpPost("UpdateStatusAsync")]
     public async Task<IActionResult> UpdateStatusAsync(string id, PaidStatus status, CancellationToken cancellationToken)
     {
@@ -102,7 +94,7 @@ public class CaixaController  : ControllerBase
     {
         var _agendamento = await _service.GetById(request.consultaId, CancellationToken.None);
         if (_agendamento == null) return BadRequest(new { success = false, message = "O agendamento não foi encontrado." });
-        var _responsavel = await _responsavelService.GetResponsavelRg(_agendamento.rg);
+        Responsavel? _responsavel = await _responsavelService.GetResponsavelRg(_agendamento.rg);
         if (_responsavel == null) return BadRequest(new { success = false, message = "O responsável pelo animal não foi localizado através do RG informado." });
         try
         {
@@ -111,14 +103,14 @@ public class CaixaController  : ControllerBase
             {
                 id = request.consultaId,
                 UserId = _responsavel.Id,
-                transacao = "Consulta", // Copia os itens
-                TotalAmount = request.valor, // Agora o total será R$ 25,00
+                transacao = "Consulta", 
+                TotalAmount = request.valor, 
                 PaymentMethod = request.PaymentMethod,
                 Status = "Pending",
                 CreatedAt = DateTime.UtcNow
             };
             PaymentResponse? paymentResult = null;
-            if(request.PaymentMethod == "pix") paymentResult = await _paymentGateway.CreatePaymentAsync(order, _responsavel.CPF ?? "00000000000", request.PaymentMethod);
+            if(request.PaymentMethod == "pix") paymentResult = await _paymentGateway.CreatePaymentAsync(order, _responsavel, request.PaymentMethod);
             
             if (!paymentResult.Success && paymentResult != null)
             {

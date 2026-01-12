@@ -32,7 +32,7 @@ public class AgendamentoService : IAgendamentoService
 
     public async Task<Agendamento?> GetById(string id, CancellationToken cancellationToken)
     {
-        var filter = Builders<Agendamento>.Filter.Eq("_id", id);
+        var filter = Builders<Agendamento>.Filter.Eq(a => a.id, id);
         return await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
