@@ -6,43 +6,28 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class DiagnosticoService : IDiagnosticoService
+public class DiagnosticoService : BaseMongoService<Diagnostico>, IDiagnosticoService
 {
-    protected IMongoCollection<Diagnostico> _collection;
-    private readonly IConfiguration _cfg;
-    public string _collectionName { get; set; }
-    private MongoDataController _db { get; set; }
-    private IMongoDatabase _mongoDatabase { get; set; }
-    
-    public void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName)
+    public DiagnosticoService(ITenantService tenantService, IConfiguration configuration)
+        : base(tenantService, configuration)
     {
-        _collectionName = collectionName;
-        // Verifica se a conexão já foi estabelecida
-        if (_collection != null) return;
-        
-        _db = new MongoDataController(connectionString, databaseName, _collectionName);
-        _mongoDatabase = _db.GetDatabase();
-        _collection = _mongoDatabase.GetCollection<Diagnostico>(_collectionName);
     }
 
     public async Task<Diagnostico?> GetDiagnostico(string _object, CancellationToken cancellationToken)
     {
         var filter = Builders<Diagnostico>.Filter.Eq(u => u.Id, _object);
-        var character = _collection.Find(filter).FirstOrDefault();
-        return character as Diagnostico;
+        var character = await GetCollection().Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return character;
     }
 
     public async Task<Diagnostico?> InsetDiagnostico(Diagnostico _object, CancellationToken cancellationToken)
     {
-        await _collection.InsertOneAsync(_object);
-        return _object as Diagnostico;
+        await GetCollection().InsertOneAsync(_object, cancellationToken: cancellationToken);
+        return _object;
     }
 
     public async Task<Diagnostico?> UpdateDiagnostico(Diagnostico _object, CancellationToken cancellationToken)
     {
-        // Create a filter to find the document by Id
         var filter = Builders<Diagnostico>.Filter.Eq(u => u.Id, _object.Id);
         var update = Builders<Diagnostico>.Update
             .Set(u => u.Id, _object.Id)
@@ -54,8 +39,7 @@ public class DiagnosticoService : IDiagnosticoService
             .Set(u => u.condutaTratamento, _object.condutaTratamento)
             .Set(u => u.gravidade, _object.gravidade);
 
-        // Perform the update
-        var result = _collection.UpdateOne(filter, update);
+        var result = await GetCollection().UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 
         if (result.ModifiedCount > 0)
         {
@@ -65,46 +49,32 @@ public class DiagnosticoService : IDiagnosticoService
         {
             return null;
         }
-        var ob = await GetDiagnostico(_object.Id, CancellationToken.None) as Diagnostico;
-        return ob;
+
+        return await GetDiagnostico(_object.Id!, cancellationToken);
     }
 
     public async Task<bool?> RemoveDiagnostico(string Id, CancellationToken cancellationToken)
     {
         var filter = Builders<Diagnostico>.Filter.Eq(u => u.Id, Id);
-
-        // Remove o documento
-        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
-
-        if (result.DeletedCount > 0)
-        {
-            Console.WriteLine($"Diagnostico com id {Id} removido com sucesso.");
-            return true;
-        }
-        else
-        {
-            Console.WriteLine($"Nenhum Diagnostico encontrado com id {Id}.");
-        }
-
-        return false;
+        var result = await GetCollection().DeleteOneAsync(filter, cancellationToken);
+        return result.DeletedCount > 0;
     }
 
-    public async Task<List<Diagnostico>?> GetAllRelatorios(string animalId, CancellationToken none)
+    public async Task<List<Diagnostico>?> GetAllRelatorios(string animalId, CancellationToken cancellationToken)
     {
         try
         {
             var filtro = Builders<Diagnostico>.Filter.Eq(m => m.animalId, animalId);
-
-            var _relatorios = await _collection
+            var _relatorios = await GetCollection()
                 .Find(filtro)
-                .ToListAsync(none);
+                .ToListAsync(cancellationToken);
 
             return _relatorios;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Erro ao buscar Relatorios para o Diagnostico {animalId}: {ex.Message}");
-            return new List<Diagnostico>(); // Evita retornar null
+            return new List<Diagnostico>();
         }
     }
 }

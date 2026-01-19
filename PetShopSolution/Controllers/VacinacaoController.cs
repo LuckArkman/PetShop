@@ -11,21 +11,17 @@ public class VacinacaoController : ControllerBase
     readonly IVacinacaoService _service;
     readonly IHistoryVacinacaoService _historyVacinacao;
     private readonly IConfiguration _cfg;
-    public VacinacaoController( IVacinacaoService service,
+    public VacinacaoController(IVacinacaoService service,
         IHistoryVacinacaoService historyVacinacao,
         IConfiguration configuration)
     {
         _service = service;
         _historyVacinacao = historyVacinacao;
         _cfg = configuration;
-        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Vacinacao");
-        _historyVacinacao.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "RitmoCircadiano");
+        _service.InitializeCollection(null, null, "Vacinacao");
+        _historyVacinacao.InitializeCollection(null, null, "HistoryVacinacao");
     }
-    
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Vacinacao model)
     {
@@ -34,26 +30,26 @@ public class VacinacaoController : ControllerBase
         {
             register._Vacinacao.Add(model);
             var history = await _historyVacinacao.UpdateObject(register, CancellationToken.None) as HistoryVacinacao;
-            if (history is not null)return Ok(model);
+            if (history is not null) return Ok(model);
         }
         if (register is null)
         {
             var history = new HistoryVacinacao(Guid.NewGuid().ToString(), model.AnimalId, model);
             var _history = await _historyVacinacao.InsetObject(history, CancellationToken.None) as HistoryVacinacao;
-            if (_history is not null)return Ok(model);
+            if (_history is not null) return Ok(model);
         }
-        
+
         return BadRequest(model);
     }
-    
+
     [HttpGet("historico")]
     public async Task<IActionResult> Historico(string AnimalId)
     {
         var register = await _historyVacinacao.GetHistoricoAnimal(AnimalId, CancellationToken.None) as HistoryVacinacao;
-        if(register != null) return Ok(register._Vacinacao);
+        if (register != null) return Ok(register._Vacinacao);
         return BadRequest();
     }
-    
+
     [HttpPost("remove")]
     public async Task<IActionResult> remove([FromBody] VacinaRegister model)
     {
@@ -65,13 +61,13 @@ public class VacinacaoController : ControllerBase
             {
                 register._Vacinacao.Remove(vacina);
                 var history = await _historyVacinacao.UpdateObject(register, CancellationToken.None) as HistoryVacinacao;
-                if (history is not null)return Ok(model);
+                if (history is not null) return Ok(model);
             }
         }
-        
+
         return BadRequest(model);
     }
-    
+
     [HttpPut("update")]
     public async Task<IActionResult> Update([FromBody] Vacinacao model)
     {

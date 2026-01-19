@@ -20,11 +20,9 @@ public class AtendenteController : ControllerBase
     {
         _service = atendenteService;
         _cfg = configuration;
-        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Atendente");
+        _service.InitializeCollection(null, null, "Atendente");
     }
-    
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Atendente model)
     {
@@ -41,7 +39,7 @@ public class AtendenteController : ControllerBase
         var result = await _service.InsetObject(model, CancellationToken.None) as Atendente;
         return Ok(new { Message = "Atendente registrado com sucesso!", User = result });
     }
-    
+
     [HttpPut("update")]
     public async Task<IActionResult> Update([FromBody] Atendente model)
     {
@@ -50,7 +48,7 @@ public class AtendenteController : ControllerBase
         Console.WriteLine($"{result == null}");
         return Ok(new { Message = "Atendente atualizado com sucesso!", User = result });
     }
-    
+
     [HttpGet("Atendente{_rg}")]
     public async Task<IActionResult> Atendente(string _rg)
     {
@@ -58,7 +56,7 @@ public class AtendenteController : ControllerBase
         var result = await _service.GetAtendenteRG(_rg, CancellationToken.None) as Atendente;
         return Ok(result);
     }
-    
+
     [HttpGet("Atendentes")]
     public async Task<IActionResult> Atendentes()
     {
@@ -67,7 +65,7 @@ public class AtendenteController : ControllerBase
         return Ok(result);
     }
 
-    
+
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete(string mail)
     {
@@ -113,5 +111,5 @@ public class AtendenteController : ControllerBase
             Message = "Login bem-sucedido!"
         });
     }
-    
+
 }

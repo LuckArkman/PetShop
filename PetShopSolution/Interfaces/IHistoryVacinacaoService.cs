@@ -4,9 +4,9 @@ namespace Interfaces;
 
 public interface IHistoryVacinacaoService
 {
-    void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName);
+    void InitializeCollection(string? connectionString,
+        string? databaseName,
+        string? collectionName);
     Task<HistoryVacinacao?> GetObject(string _object, CancellationToken cancellationToken);
 
     Task<HistoryVacinacao?> InsetObject(HistoryVacinacao _object, CancellationToken cancellationToken);
@@ -14,5 +14,5 @@ public interface IHistoryVacinacaoService
     Task<HistoryVacinacao?> UpdateObject(HistoryVacinacao _object, CancellationToken cancellationToken);
 
     Task RemoveObject(object _object, CancellationToken cancellationToken);
-    Task<HistoryVacinacao> GetHistoricoAnimal(string animalId, CancellationToken none);
+    Task<HistoryVacinacao?> GetHistoricoAnimal(string animalId, CancellationToken cancellationToken);
 }

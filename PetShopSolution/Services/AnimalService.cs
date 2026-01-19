@@ -6,45 +6,33 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class AnimalService : IAnimalService
+public class AnimalService : BaseMongoService<Animal>, IAnimalService
 {
-    private IMongoCollection<Animal> _collection { get; set; }
-    public string _collectionName { get; set; }
-    private MongoDataController _db { get; set; }
-    private IMongoDatabase _mongoDatabase { get; set; }
-    
-    public void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName)
+    public AnimalService(ITenantService tenantService, IConfiguration configuration)
+        : base(tenantService, configuration)
     {
-        _collectionName = collectionName;
-        // Verifica se a conexão já foi estabelecida
-        if (_collection != null) return;
-        
-        _db = new MongoDataController(connectionString, databaseName, _collectionName);
-        _mongoDatabase = _db.GetDatabase();
-        _collection = _mongoDatabase.GetCollection<Animal>(_collectionName);
     }
+
     public async Task<List<Animal>?> GetAllAnimals(CancellationToken cancellationToken)
     {
-        var animals = await _collection
+        var animals = await GetCollection()
             .Find(Builders<Animal>.Filter.Empty)
             .ToListAsync(cancellationToken);
 
         return animals;
     }
-    
+
     public async Task<Animal?> GetObject(string _object, CancellationToken cancellationToken)
     {
         var filter = Builders<Animal>.Filter.Eq(u => u.id, _object);
-        var character = _collection.Find(filter).FirstOrDefault();
-        return character as Animal;
+        var character = await GetCollection().Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return character;
     }
 
     public async Task<Animal?> InsetObject(Animal _object, CancellationToken cancellationToken)
     {
-        await _collection.InsertOneAsync(_object);
-        return _object as Animal;
+        await GetCollection().InsertOneAsync(_object, cancellationToken: cancellationToken);
+        return _object;
     }
 
     public async Task<Animal?> UpdateObject(Animal _object, CancellationToken cancellationToken)
@@ -58,34 +46,34 @@ public class AnimalService : IAnimalService
             .Set(u => u._idade.meses, _object._idade.meses)
             .Set(u => u._peso.kilos, _object._peso.kilos)
             .Set(u => u._peso.gramas, _object._peso.gramas)
-            .Set(u => u.Raca, _object.Raca)
-            .Set(u => u.Porte,  _object.Porte)
+            .Set(u => u.Porte, _object.Porte)
             .Set(u => u.responsaveis, _object.responsaveis);
-        var result = _collection.UpdateOne(filter, update);
+
+        var result = await GetCollection().UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+
         if (result.ModifiedCount > 0)
         {
-            Console.WriteLine("User updated successfully.");
+            Console.WriteLine("Animal updated successfully.");
         }
         else
         {
             return null;
         }
-        var ob = await GetObject(_object.id, CancellationToken.None) as Animal;
-        return ob;
+
+        return await GetObject(_object.id, cancellationToken);
     }
 
     public async Task<bool> RemoveObject(string _object, CancellationToken cancellationToken)
     {
         var filter = Builders<Animal>.Filter.Eq(u => u.id, _object);
-        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
+        var result = await GetCollection().DeleteOneAsync(filter, cancellationToken);
         return result.DeletedCount > 0;
     }
 
     public async Task<List<Animal>?> GetAnimalsInList(List<string> ids, CancellationToken cancellationToken)
     {
         var filter = Builders<Animal>.Filter.In(a => a.id, ids);
-        var animals = await _collection.Find(filter).ToListAsync(cancellationToken);
-        Console.WriteLine($"Mongo retornou {animals.Count} animais.");
+        var animals = await GetCollection().Find(filter).ToListAsync(cancellationToken);
         return animals;
     }
 }

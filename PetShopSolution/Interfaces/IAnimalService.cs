@@ -4,9 +4,9 @@ namespace Interfaces;
 
 public interface IAnimalService
 {
-    void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName);
+    void InitializeCollection(string? connectionString,
+        string? databaseName,
+        string? collectionName);
     Task<List<Animal>?> GetAllAnimals(CancellationToken cancellationToken);
     Task<Animal?> GetObject(string _object, CancellationToken cancellationToken);
 

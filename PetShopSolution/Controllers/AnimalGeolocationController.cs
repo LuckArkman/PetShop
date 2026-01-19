@@ -9,7 +9,7 @@ namespace PetShop.API.Controllers;
 [ApiController]
 public class AnimalGeolocationController : ControllerBase
 {
-    readonly IAnimalGeolocationHistoryService  _animalGeolocationHistoryService;
+    readonly IAnimalGeolocationHistoryService _animalGeolocationHistoryService;
     readonly IGeolocationRecordService _geolocationRecordService;
     private readonly IConfiguration _cfg;
     public AnimalGeolocationController(
@@ -19,9 +19,9 @@ public class AnimalGeolocationController : ControllerBase
     {
         _cfg = cfg;
         _animalGeolocationHistoryService = animalGeolocationHistoryService;
-        _animalGeolocationHistoryService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "AnimalGeolocationHistory");
+        _geolocationRecordService = geolocationRecordService;
+        _animalGeolocationHistoryService.InitializeCollection(null, null, "AnimalGeolocationHistory");
+        _geolocationRecordService.InitializeCollection(null, null, "GeolocationRecord");
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] GeolocationRecord model)
@@ -31,18 +31,18 @@ public class AnimalGeolocationController : ControllerBase
         {
             _obj.Locations.Add(model);
             var history = await _animalGeolocationHistoryService.UpdateObject(_obj, CancellationToken.None) as AnimalGeolocationHistory;
-            if (history is not null)return Ok(model);
+            if (history is not null) return Ok(model);
         }
-        if (_obj is  null)
+        if (_obj is null)
         {
             _obj = new AnimalGeolocationHistory(model.AnimalId, model);
             _obj.Locations.Add(model);
             var history = await _animalGeolocationHistoryService.UpdateObject(_obj, CancellationToken.None) as AnimalGeolocationHistory;
-            if (history is not null)return Ok(model);
+            if (history is not null) return Ok(model);
         }
         return BadRequest(model);
     }
-    
+
     [HttpGet("AnimalGeolocation/{Id}")]
     public async Task<IActionResult> AnimalGeolocation(string Id)
     {

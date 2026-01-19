@@ -16,11 +16,9 @@ public class DiagnosticoController : ControllerBase
     {
         _service = service;
         _cfg = cfg;
-        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Diagnostico");
+        _service.InitializeCollection(null, null, "Diagnostico");
     }
-    
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Diagnostico model)
     {
@@ -34,7 +32,7 @@ public class DiagnosticoController : ControllerBase
         var register = await _service.UpdateDiagnostico(model, CancellationToken.None) as Diagnostico;
         return Ok(register);
     }
-    
+
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete(string id)
     {
@@ -43,11 +41,11 @@ public class DiagnosticoController : ControllerBase
         await _service.RemoveDiagnostico(register.Id, CancellationToken.None);
         return Ok(register);
     }
-    
+
     [HttpGet("Diagnosticos")]
     public async Task<IActionResult> Diagnosticos(string animalId)
     {
-        var register = await _service.GetAllRelatorios(animalId,CancellationToken.None);
+        var register = await _service.GetAllRelatorios(animalId, CancellationToken.None);
         return Ok(register);
     }
 

@@ -4,9 +4,9 @@ namespace Interfaces;
 
 public interface IMedicoVeterinarioService
 {
-    void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName);
+    void InitializeCollection(string? connectionString,
+        string? databaseName,
+        string? collectionName);
     Task<List<MedicoVeterinario>?> GetAllMedicoVeterinario(CancellationToken cancellationToken);
     Task<MedicoVeterinario?> GetObject(string _object, CancellationToken cancellationToken);
 

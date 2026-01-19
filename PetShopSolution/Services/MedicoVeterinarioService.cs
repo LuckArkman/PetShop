@@ -6,29 +6,16 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class MedicoVeterinarioService : IMedicoVeterinarioService
+public class MedicoVeterinarioService : BaseMongoService<MedicoVeterinario>, IMedicoVeterinarioService
 {
-    protected IMongoCollection<MedicoVeterinario> _collection;
-    public string _collectionName { get; set; }
-    private MongoDataController _db { get; set; }
-    private IMongoDatabase _mongoDatabase { get; set; }
-    
-    public void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName)
+    public MedicoVeterinarioService(ITenantService tenantService, IConfiguration configuration)
+        : base(tenantService, configuration)
     {
-        _collectionName = collectionName;
-        // Verifica se a conexão já foi estabelecida
-        if (_collection != null) return;
-        
-        _db = new MongoDataController(connectionString, databaseName, _collectionName);
-        _mongoDatabase = _db.GetDatabase();
-        _collection = _mongoDatabase.GetCollection<MedicoVeterinario>(_collectionName);
     }
 
     public async Task<List<MedicoVeterinario>?> GetAllMedicoVeterinario(CancellationToken cancellationToken)
     {
-        var _objts = await _collection
+        var _objts = await GetCollection()
             .Find(Builders<MedicoVeterinario>.Filter.Empty)
             .ToListAsync(cancellationToken);
 
@@ -38,17 +25,14 @@ public class MedicoVeterinarioService : IMedicoVeterinarioService
     public async Task<MedicoVeterinario?> GetObject(string _object, CancellationToken cancellationToken)
     {
         var filter = Builders<MedicoVeterinario>.Filter.Eq(u => u.CRMV, _object);
-
-        // Find the document matching the filter
-        var character = _collection.Find(filter).FirstOrDefault();
-
-        return character as MedicoVeterinario;
+        var character = await GetCollection().Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return character;
     }
 
     public async Task<MedicoVeterinario?> InsetObject(MedicoVeterinario _object, CancellationToken cancellationToken)
     {
-        await _collection.InsertOneAsync(_object);
-        return _object as MedicoVeterinario;
+        await GetCollection().InsertOneAsync(_object, cancellationToken: cancellationToken);
+        return _object;
     }
 
     public async Task<MedicoVeterinario?> UpdateObject(MedicoVeterinario _object, CancellationToken cancellationToken)
@@ -61,41 +45,36 @@ public class MedicoVeterinarioService : IMedicoVeterinarioService
             .Set(u => u.Especialidade, _object.Especialidade)
             .Set(u => u.Telefone, _object.Telefone)
             .Set(u => u.Email, _object.Email)
-            .Set(u => u.Endereco,  _object.Endereco)
+            .Set(u => u.Endereco, _object.Endereco)
             .Set(u => u.Cidade, _object.Cidade)
             .Set(u => u.Estado, _object.Estado)
             .Set(u => u.CEP, _object.CEP);
 
-        // Perform the update
-        var result = await _collection.UpdateOneAsync(filter, update);
+        var result = await GetCollection().UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 
         if (result.ModifiedCount > 0)
         {
-            Console.WriteLine("User updated successfully.");
+            Console.WriteLine("MedicoVeterinario updated successfully.");
         }
         else
         {
             return null;
         }
-        var ob = await GetObject(_object.Id, CancellationToken.None) as MedicoVeterinario;
-        return ob;
+
+        return await GetObject(_object.CRMV!, cancellationToken);
     }
 
     public async Task<bool> RemoveAsync(object _object, CancellationToken cancellationToken)
     {
         var filter = Builders<MedicoVeterinario>.Filter.Eq(u => u.CRMV, _object);
-        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
-
-        return result.DeletedCount > 0;  
+        var result = await GetCollection().DeleteOneAsync(filter, cancellationToken);
+        return result.DeletedCount > 0;
     }
 
     public async Task<MedicoVeterinario?> FindByCRMVAsync(string modelCredencial, CancellationToken cancellationToken)
     {
         var filter = Builders<MedicoVeterinario>.Filter.Eq(u => u.CRMV, modelCredencial);
-
-        // Find the document matching the filter
-        var character = _collection.Find(filter).FirstOrDefault();
-
-        return character as MedicoVeterinario;
+        var character = await GetCollection().Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return character;
     }
 }

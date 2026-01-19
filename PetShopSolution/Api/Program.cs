@@ -15,13 +15,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo 
-    { 
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
         Title = "Pet Monitoring API", // Give your API a descriptive title
-        Version = "v1", 
+        Version = "v1",
         Description = "API for managing animal health and geolocation records."
     });
 });
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ITenantService, TenantService>();
 
 // Dependency Injection Setup
 builder.Services.AddScoped<IAnimalService, AnimalService>();
@@ -71,6 +74,8 @@ if (app.Environment.IsDevelopment())
 
 // ORDEM CRÍTICA: UseCors ANTES de MapControllers
 app.UseHttpsRedirection();
+
+app.UseMiddleware<Api.Middleware.TenantMiddleware>();
 
 app.UseCors("AllowAll"); // ESSA LINHA ESTAVA FALTANDO!
 

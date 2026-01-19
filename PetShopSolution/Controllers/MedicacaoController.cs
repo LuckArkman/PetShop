@@ -7,20 +7,18 @@ namespace PetShop.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class MedicacaoController  : ControllerBase
+public class MedicacaoController : ControllerBase
 {
     readonly IMedicacaoService _medicacaoService;
     private readonly IConfiguration _cfg;
-    public MedicacaoController(IMedicacaoService  medicacaoService,
+    public MedicacaoController(IMedicacaoService medicacaoService,
         IConfiguration cfg)
     {
-        _medicacaoService  = medicacaoService;
+        _medicacaoService = medicacaoService;
         _cfg = cfg;
-        _medicacaoService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Medicacao");
+        _medicacaoService.InitializeCollection(null, null, "Medicacao");
     }
-    
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Medicacao model)
     {
@@ -34,7 +32,7 @@ public class MedicacaoController  : ControllerBase
         var register = await _medicacaoService.UpdateMedicacao(model, CancellationToken.None) as Medicacao;
         return Ok(register);
     }
-    
+
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete(string id)
     {
@@ -43,11 +41,11 @@ public class MedicacaoController  : ControllerBase
         await _medicacaoService.RemoveMedicacao(register, CancellationToken.None);
         return Ok(register);
     }
-    
+
     [HttpGet("Medicacoes")]
     public async Task<IActionResult> Medicacoes(string animalId)
     {
-        var register = await _medicacaoService.GetAllMedicacoes(animalId,CancellationToken.None);
+        var register = await _medicacaoService.GetAllMedicacoes(animalId, CancellationToken.None);
         return Ok(register);
     }
 
