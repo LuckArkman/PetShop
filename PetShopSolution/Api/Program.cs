@@ -44,6 +44,7 @@ builder.Services.AddScoped<IRitmoCircadianoService, RitmoCircadianoService>();
 builder.Services.AddScoped<IHistoryFrequenciaCardiaca, HistoryFrequenciaCardiacaService>();
 builder.Services.AddScoped<IFrequenciaCardiaca, FrequenciaCardiacaService>();
 builder.Services.AddScoped<IAtendenteService, AtendenteService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<AgendamentoService>();
 builder.Services.AddScoped<AtendimentoService>();
 builder.Services.AddScoped<DisponibilidadeService>();
