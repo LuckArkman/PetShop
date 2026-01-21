@@ -12,7 +12,7 @@ namespace PetShop.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class MedicoVeterinarioController  : ControllerBase
+public class MedicoVeterinarioController : ControllerBase
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _cfg;
@@ -22,11 +22,9 @@ public class MedicoVeterinarioController  : ControllerBase
     {
         _service = service;
         _cfg = cfg;
-        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "MedicoVeterinario");
+        _service.InitializeCollection(null, null, "MedicoVeterinario");
     }
-    
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] MedicoVeterinario model)
     {
@@ -48,15 +46,15 @@ public class MedicoVeterinarioController  : ControllerBase
         var register = await _service.UpdateObject(model, CancellationToken.None) as MedicoVeterinario;
         return Ok(register);
     }
-    
+
     [HttpGet("MedicoVeterinario/{crmv}")]
     public async Task<IActionResult> MedicoVeterinario(string crmv)
     {
-        
+
         var model = await _service.GetObject(crmv, CancellationToken.None) as MedicoVeterinario;
         return Ok(model);
     }
-    
+
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete(string crmv)
     {
@@ -65,7 +63,7 @@ public class MedicoVeterinarioController  : ControllerBase
         var rm = await _service.RemoveAsync(register, CancellationToken.None);
         return Ok(register);
     }
-    
+
     [HttpGet("MedicoVeterinarios")]
     public async Task<IActionResult> MedicoVeterinarios()
     {
@@ -73,18 +71,18 @@ public class MedicoVeterinarioController  : ControllerBase
         var result = await _service.GetAllMedicoVeterinario(CancellationToken.None);
         return Ok(result);
     }
-    
+
     [HttpPost("login")]
     public async Task<ActionResult<LoginResult>> Login([FromBody] LoginRequest model)
     {
         var user = await _service.FindByCRMVAsync(model.credencial, CancellationToken.None) as MedicoVeterinario;
-        model.password =  GerarHashSenha(model.password);
+        model.password = GerarHashSenha(model.password);
         Console.WriteLine($"{user == null}");
         if (user == null || !Verify(model.password, user.Password))
         {
             return BadRequest(new { Success = false, Message = "Credenciais inválidas." });
         }
-        
+
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -110,7 +108,7 @@ public class MedicoVeterinarioController  : ControllerBase
             Token = new JwtSecurityTokenHandler().WriteToken(token),
             Message = "Login bem-sucedido!"
         });
-        
+
         return null;
     }
 

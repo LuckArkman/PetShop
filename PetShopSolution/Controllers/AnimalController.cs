@@ -20,13 +20,10 @@ public class AnimalController : ControllerBase
         _animalService = animalService;
         _responsavel = responsavel;
         _cfg = configuration;
-        
-        _animalService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Animais");
-        _responsavel.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Responsavel");
+
+        // Agora os serviços resolvem os parâmetros automaticamente via Multi-tenant base service
+        _animalService.InitializeCollection(null, null, "Animais");
+        _responsavel.InitializeCollection(null, null, "Responsavel");
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Animal model)
@@ -41,7 +38,7 @@ public class AnimalController : ControllerBase
         var register = await _animalService.UpdateObject(model, CancellationToken.None) as Animal;
         return Ok(register);
     }
-    
+
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete(string id)
     {
@@ -62,7 +59,7 @@ public class AnimalController : ControllerBase
         }
         return BadRequest();
     }
-    
+
     [HttpGet("animais")]
     public async Task<IActionResult> Animais()
     {

@@ -6,31 +6,16 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class ResponsavelService : IResponsavelService
+public class ResponsavelService : BaseMongoService<Responsavel>, IResponsavelService
 {
-    private readonly IConfiguration _configuration;
-    protected IMongoCollection<Responsavel> _collection;
-    public string _collectionName { get; set; }
-    private MongoDataController _db { get; set; }
-    private IMongoDatabase _mongoDatabase { get; set; }
-    
-    public void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName)
+    public ResponsavelService(ITenantService tenantService, IConfiguration configuration)
+        : base(tenantService, configuration)
     {
-        _collectionName = collectionName;
-        // Verifica se a conexão já foi estabelecida
-        if (_collection != null) return;
-        
-        _db = new MongoDataController(connectionString, databaseName, _collectionName);
-        _mongoDatabase = _db.GetDatabase();
-        _collection = _mongoDatabase.GetCollection<Responsavel>(_collectionName);
     }
 
     public async Task<List<Responsavel>?> GetAllResponsavel(CancellationToken cancellationToken)
     {
-        // Busca todos os animais
-        var _objts = await _collection
+        var _objts = await GetCollection()
             .Find(Builders<Responsavel>.Filter.Empty)
             .ToListAsync(cancellationToken);
 
@@ -40,29 +25,25 @@ public class ResponsavelService : IResponsavelService
     public async Task<Responsavel?> GetObject(string mail, CancellationToken cancellationToken)
     {
         var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, mail);
-        var _responsavel = _collection.Find(filter).FirstOrDefault();
-        return _responsavel as Responsavel;
+        var _responsavel = await GetCollection().Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return _responsavel;
     }
-    
+
     public async Task<Responsavel?> GetResponsavelId(string _rg, CancellationToken cancellationToken)
     {
         var filter = Builders<Responsavel>.Filter.Eq(u => u.RG, _rg);
-        var _responsavel = _collection.Find(filter).FirstOrDefault();
-        return _responsavel as Responsavel;
+        var _responsavel = await GetCollection().Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return _responsavel;
     }
 
     public async Task<Responsavel?> InsetObject(Responsavel _object, CancellationToken cancellationToken)
     {
-        await _collection.InsertOneAsync(_object);
-        return _object as Responsavel;
+        await GetCollection().InsertOneAsync(_object, cancellationToken: cancellationToken);
+        return _object;
     }
 
     public async Task<Responsavel?> UpdateObject(Responsavel _object, CancellationToken cancellationToken)
     {
-        if (_object.Email != null)
-        {
-            var obj = await FindByEmailAsync(_object.Email, CancellationToken.None) as Responsavel;
-        }
         var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, _object.Email);
 
         var update = Builders<Responsavel>.Update
@@ -77,41 +58,41 @@ public class ResponsavelService : IResponsavelService
             .Set(u => u.ZipCode, _object.ZipCode)
             .Set(u => u.PhoneNumber, _object.PhoneNumber)
             .Set(u => u.Animais, _object.Animais);
-        var result = _collection.UpdateOne(filter, update);
+
+        var result = await GetCollection().UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 
         if (result.ModifiedCount > 0)
         {
-            Console.WriteLine("User updated successfully.");
+            Console.WriteLine("Responsavel updated successfully.");
         }
         else
         {
             return null;
         }
 
-        var ob = await FindByEmailAsync(_object.Email, CancellationToken.None) as Responsavel;
-        return ob;
+        return await FindByEmailAsync(_object.Email, cancellationToken);
     }
 
     public async Task<bool> RemoveAsync(string _object, CancellationToken cancellationToken)
     {
         var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, _object);
-        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
-        return result.DeletedCount > 0;  
+        var result = await GetCollection().DeleteOneAsync(filter, cancellationToken);
+        return result.DeletedCount > 0;
     }
 
     public async Task<Responsavel?> FindByEmailAsync(string modelCredencial, CancellationToken cancellationToken)
     {
         var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, modelCredencial);
-        var _responsavel = _collection.Find(filter).FirstOrDefault();
-        return _responsavel as Responsavel;
+        var _responsavel = await GetCollection().Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return _responsavel;
     }
 
-    public async Task<List<Responsavel>?> GetAllResponsaveis(ICollection<string> resResponsaveis, CancellationToken none)
+    public async Task<List<Responsavel>?> GetAllResponsaveis(ICollection<string> resResponsaveis, CancellationToken cancellationToken)
     {
         var filter = Builders<Responsavel>.Filter.In(a => a.Id, resResponsaveis);
-        var responsaveis = await _collection
+        var responsaveis = await GetCollection()
             .Find(filter)
-            .ToListAsync(none);
+            .ToListAsync(cancellationToken);
 
         return responsaveis;
     }
@@ -119,7 +100,7 @@ public class ResponsavelService : IResponsavelService
     public async Task<Responsavel?> GetResponsavelRg(string? rg)
     {
         var filter = Builders<Responsavel>.Filter.Eq(u => u.RG, rg);
-        var _responsavel = _collection.Find(filter).FirstOrDefault();
-        return _responsavel as Responsavel;
+        var _responsavel = await GetCollection().Find(filter).FirstOrDefaultAsync();
+        return _responsavel;
     }
 }

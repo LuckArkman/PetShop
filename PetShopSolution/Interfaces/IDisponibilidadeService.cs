@@ -5,9 +5,9 @@ namespace Interfaces;
 
 public interface IDisponibilidadeService
 {
-    void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName);
+    void InitializeCollection(string? connectionString,
+        string? databaseName,
+        string? collectionName);
     IMongoCollection<DiasIndisponiveis> GetCollection();
     Task<List<DiasIndisponiveis>> GetIndisponiveis(CancellationToken cancellationToken);
     Task AddIndisponivel(DiasIndisponiveis dia, CancellationToken cancellationToken);

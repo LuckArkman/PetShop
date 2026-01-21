@@ -6,52 +6,35 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class DisponibilidadeService : IDisponibilidadeService
+public class DisponibilidadeService : BaseMongoService<DiasIndisponiveis>, IDisponibilidadeService
 {
-    private readonly IConfiguration _configuration;
-    protected IMongoCollection<DiasIndisponiveis> _collection;
-    public string _collectionName { get; set; }
-    private MongoDataController _db { get; set; }
-    private IMongoDatabase _mongoDatabase { get; set; }
-    
-    public void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName)
+    public DisponibilidadeService(ITenantService tenantService, IConfiguration configuration)
+        : base(tenantService, configuration)
     {
-        _collectionName = collectionName;
-        // Verifica se a conexão já foi estabelecida
-        if (_collection != null) return;
-        
-        _db = new MongoDataController(connectionString, databaseName, _collectionName);
-        _mongoDatabase = _db.GetDatabase();
-        _collection = _mongoDatabase.GetCollection<DiasIndisponiveis>(_collectionName);
     }
 
-    public IMongoCollection<DiasIndisponiveis> GetCollection() =>
-        _db.GetDatabase().GetCollection<DiasIndisponiveis>("Disponibilidade");
-    
+    public new IMongoCollection<DiasIndisponiveis> GetCollection() => base.GetCollection();
+
     public async Task<List<DiasIndisponiveis>> GetIndisponiveis(CancellationToken cancellationToken)
     {
-        var collection = GetCollection();
-        return await collection.Find(_ => true).ToListAsync(cancellationToken);
+        return await GetCollection().Find(_ => true).ToListAsync(cancellationToken);
     }
+
     public async Task AddIndisponivel(DiasIndisponiveis dia, CancellationToken cancellationToken)
     {
-        var collection = GetCollection();
-
-        var existe = await collection
+        var existe = await GetCollection()
             .Find(d => d.Data.Date == dia.Data.Date)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (existe != null)
             throw new Exception($"O dia {dia.Data:dd/MM/yyyy} já está marcado como indisponível.");
 
-        await collection.InsertOneAsync(dia, cancellationToken: cancellationToken);
+        await GetCollection().InsertOneAsync(dia, cancellationToken: cancellationToken);
     }
-    
+
     public async Task<IEnumerable<Agendamento>> GetByDate(DateTime date, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Agendamento>("Agendamento");
+        var collection = _mongoDatabase!.GetCollection<Agendamento>("Agendamento");
 
         var dataInicio = date.Date;
         var dataFim = dataInicio.AddDays(1);
@@ -62,17 +45,14 @@ public class DisponibilidadeService : IDisponibilidadeService
         return await collection.Find(filter).ToListAsync(cancellationToken);
     }
 
-    // 🔹 Remove um dia da lista de indisponíveis
     public async Task RemoverIndisponivel(DateTime data, CancellationToken cancellationToken)
     {
-        var collection = GetCollection();
         var filter = Builders<DiasIndisponiveis>.Filter.Eq(d => d.Data, data.Date);
-        await collection.DeleteOneAsync(filter, cancellationToken);
+        await GetCollection().DeleteOneAsync(filter, cancellationToken);
     }
 
     public async Task<List<DiasIndisponiveis>> Getdisponiveis(CancellationToken cancellationToken)
     {
-        var collection = GetCollection();
-        return await collection.Find(_ => true).ToListAsync(cancellationToken);
+        return await GetCollection().Find(_ => true).ToListAsync(cancellationToken);
     }
 }

@@ -6,37 +6,24 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class VacinacaoService : IVacinacaoService
+public class VacinacaoService : BaseMongoService<Vacinacao>, IVacinacaoService
 {
-    private readonly IConfiguration _configuration;
-    protected IMongoCollection<Vacinacao> _collection;
-    public string _collectionName { get; set; }
-    private MongoDataController _db { get; set; }
-    private IMongoDatabase _mongoDatabase { get; set; }
-    
-    public void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName)
+    public VacinacaoService(ITenantService tenantService, IConfiguration configuration)
+        : base(tenantService, configuration)
     {
-        _collectionName = collectionName;
-        // Verifica se a conexão já foi estabelecida
-        if (_collection != null) return;
-        
-        _db = new MongoDataController(connectionString, databaseName, _collectionName);
-        _mongoDatabase = _db.GetDatabase();
-        _collection = _mongoDatabase.GetCollection<Vacinacao>(_collectionName);
     }
+
     public async Task<object?> GetObject(string _object, CancellationToken cancellationToken)
     {
         var filter = Builders<Vacinacao>.Filter.Eq(u => u.id, _object);
-        var character = _collection.Find(filter).FirstOrDefault();
-        return character as Vacinacao;
+        var character = await GetCollection().Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return character;
     }
 
     public async Task<object?> InsetObject(Vacinacao _object, CancellationToken cancellationToken)
     {
-        await _collection.InsertOneAsync(_object);
-        return _object as Vacinacao;
+        await GetCollection().InsertOneAsync(_object, cancellationToken: cancellationToken);
+        return _object;
     }
 
     public async Task<object?> UpdateObject(Vacinacao _object, CancellationToken cancellationToken)
@@ -49,24 +36,25 @@ public class VacinacaoService : IVacinacaoService
             .Set(u => u.Tipo, _object.Tipo)
             .Set(u => u.Relatorio, _object.Relatorio)
             .Set(u => u._veterinarioCRMV, _object._veterinarioCRMV);
-        var result = await _collection.UpdateOneAsync(filter, update);
+
+        var result = await GetCollection().UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 
         if (result.ModifiedCount > 0)
         {
-            Console.WriteLine("User updated successfully.");
+            Console.WriteLine("Vacinacao updated successfully.");
         }
         else
         {
             return null;
         }
-        var ob = await GetObject(_object.id, CancellationToken.None) as Animal;
-        return ob;
+
+        return await GetObject(_object.id!, cancellationToken);
     }
 
     public async Task<bool> RemoveObject(Vacinacao _object, CancellationToken cancellationToken)
     {
         var filter = Builders<Vacinacao>.Filter.Eq(u => u.id, _object.id);
-        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
-        return result.DeletedCount > 0;  
+        var result = await GetCollection().DeleteOneAsync(filter, cancellationToken);
+        return result.DeletedCount > 0;
     }
 }

@@ -6,37 +6,19 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class MedicacaoService : IMedicacaoService
+public class MedicacaoService : BaseMongoService<Medicacao>, IMedicacaoService
 {
-    private readonly IConfiguration _configuration;
-    protected IMongoCollection<Medicacao> _collection;
-    public string _collectionName { get; set; }
-    private MongoDataController _db { get; set; }
-    private IMongoDatabase _mongoDatabase { get; set; }
-    
-    public void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName)
+    public MedicacaoService(ITenantService tenantService, IConfiguration configuration)
+        : base(tenantService, configuration)
     {
-        _collectionName = collectionName;
-        // Verifica se a conexão já foi estabelecida
-        if (_collection != null) return;
-        
-        _db = new MongoDataController(connectionString, databaseName, _collectionName);
-        _mongoDatabase = _db.GetDatabase();
-        _collection = _mongoDatabase.GetCollection<Medicacao>(_collectionName);
     }
 
-    public async Task<List<Medicacao>?> GetAllMedicacoes(string _object,CancellationToken cancellationToken)
+    public async Task<List<Medicacao>?> GetAllMedicacoes(string _object, CancellationToken cancellationToken)
     {
         try
         {
-            var collection = _db.GetDatabase().GetCollection<Medicacao>("Medicacao");
-
-            // Cria filtro para buscar apenas as medicações do animal
             var filtro = Builders<Medicacao>.Filter.Eq(m => m.animalId, _object);
-
-            var medicacoes = await collection
+            var medicacoes = await GetCollection()
                 .Find(filtro)
                 .ToListAsync(cancellationToken);
 
@@ -45,37 +27,25 @@ public class MedicacaoService : IMedicacaoService
         catch (Exception ex)
         {
             Console.WriteLine($"Erro ao buscar medicações para o animal {_object}: {ex.Message}");
-            return new List<Medicacao>(); // Evita retornar null
+            return new List<Medicacao>();
         }
     }
 
     public async Task<Medicacao?> GetMedicacao(string _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Medicacao>("Medicacao");
         var filter = Builders<Medicacao>.Filter.Eq(u => u.Id, _object);
-        var character = collection.Find(filter).FirstOrDefault();
-
-        return character as Medicacao;
+        var character = await GetCollection().Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return character;
     }
 
     public async Task<Medicacao?> InsetMedicacao(Medicacao _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<Medicacao>("Medicacao");
-        // Insert the user object into the collection
-        collection.InsertOne(_object);
-        return _object as Medicacao;
+        await GetCollection().InsertOneAsync(_object, cancellationToken: cancellationToken);
+        return _object;
     }
 
     public async Task<Medicacao?> UpdateMedicacao(Medicacao _object, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(_object.Id))
-        {
-            var obj = await GetMedicacao(_object.Id, CancellationToken.None) as Medicacao;
-        }
-
-        var collection = _db.GetDatabase().GetCollection<Medicacao>("Medicacao");
-
-        // Create a filter to find the document by Id
         var filter = Builders<Medicacao>.Filter.Eq(u => u.Id, _object.Id);
 
         var update = Builders<Medicacao>.Update
@@ -88,32 +58,26 @@ public class MedicacaoService : IMedicacaoService
             .Set(u => u.indicacao, _object.indicacao)
             .Set(u => u.observacoes, _object.observacoes);
 
-        // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = await GetCollection().UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 
         if (result.ModifiedCount > 0)
         {
-            Console.WriteLine("User updated successfully.");
+            Console.WriteLine("Medicacao updated successfully.");
         }
         else
         {
             return null;
         }
 
-        var ob = await GetMedicacao(_object.Id, CancellationToken.None) as Medicacao;
-        return ob;
+        return await GetMedicacao(_object.Id!, cancellationToken);
     }
 
     public async Task<bool?> RemoveMedicacao(Medicacao _object, CancellationToken cancellationToken)
     {
         try
         {
-            var collection = _db.GetDatabase().GetCollection<Medicacao>("Medicacao");
-
-            // Filtro para encontrar a medicação pelo ID
             var filtro = Builders<Medicacao>.Filter.Eq(m => m.Id, _object.Id);
-
-            var resultado = await collection.DeleteOneAsync(filtro, cancellationToken);
+            var resultado = await GetCollection().DeleteOneAsync(filtro, cancellationToken);
             return resultado.DeletedCount > 0;
         }
         catch (Exception ex)

@@ -6,54 +6,40 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class Repositorio : IRepositorio<Order>
+public class Repositorio : BaseMongoService<Order>, IRepositorio<Order>
 {
-    private readonly IConfiguration _configuration;
-    protected IMongoCollection<Order> _collection;
-    private IRepositorio<Order> _repositorioImplementation;
-    public string _collectionName { get; set; }
-    private MongoDataController _db { get; set; }
-    private IMongoDatabase _mongoDatabase { get; set; }
-    
-    public void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName)
+    public Repositorio(ITenantService tenantService, IConfiguration configuration)
+        : base(tenantService, configuration)
     {
-        _collectionName = collectionName;
-        // Verifica se a conexão já foi estabelecida
-        if (_collection != null) return;
-        
-        _db = new MongoDataController(connectionString, databaseName, _collectionName);
-        _mongoDatabase = _db.GetDatabase();
-        _collection = _mongoDatabase.GetCollection<Order>(_collectionName);
     }
 
-    public async Task<Order?> InsertOneAsync(Order document)
+    public async Task<Order> InsertOneAsync(Order document)
     {
-        await _collection.InsertOneAsync(document);
+        await GetCollection().InsertOneAsync(document);
         return document;
     }
 
-    public async Task<Order?> Update(string order, string status)
+    public async Task<Order> Update(string order, string status)
     {
         var filter = Builders<Order>.Filter.Eq(p => p.id, order);
         var update = Builders<Order>.Update
             .Set(a => a.Status, status)
             .Set(a => a.updateAt, DateTime.UtcNow);
-        
-        var result = await _collection.UpdateOneAsync(filter, update, cancellationToken: CancellationToken.None);
-        return await GetByIdOrderAsync(order);
+
+        await GetCollection().UpdateOneAsync(filter, update);
+        return (await GetByIdOrderAsync(order))!;
     }
 
-    Task<Order?> IRepositorio<Order>.GetByIdOrderAsync(string id)
+    public async Task<Order?> GetByIdOrderAsync(string id)
     {
-        return GetByIdOrderAsync(id);
+        var filter = Builders<Order>.Filter.Eq(p => p.id, id);
+        return await GetCollection().Find(filter).FirstOrDefaultAsync();
     }
 
     public async Task<Order?> GetByTransectionOrderAsync(string paymentId)
     {
         var filter = Builders<Order>.Filter.Eq(p => p.TransactionId, paymentId);
-        return await _collection.Find(filter).FirstOrDefaultAsync();
+        return await GetCollection().Find(filter).FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Order>?> GetAllTodayPaidsCompletes(DateTime dataConsulta, CancellationToken cancellationToken)
@@ -67,8 +53,7 @@ public class Repositorio : IRepositorio<Order>
             Builders<Order>.Filter.Lt(o => o.CreatedAt, fimDia)
         );
 
-        return await _collection.Find(filter).ToListAsync(cancellationToken);
-
+        return await GetCollection().Find(filter).ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Order>?> GetAllTodayPaidsPending(DateTime dataConsulta, CancellationToken cancellationToken)
@@ -82,7 +67,7 @@ public class Repositorio : IRepositorio<Order>
             Builders<Order>.Filter.Lt(o => o.CreatedAt, fimDia)
         );
 
-        return await _collection.Find(filter).ToListAsync(cancellationToken);
+        return await GetCollection().Find(filter).ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Order>?> GetAllTodayPaidsCanceled(DateTime dataConsulta, CancellationToken cancellationToken)
@@ -96,23 +81,19 @@ public class Repositorio : IRepositorio<Order>
             Builders<Order>.Filter.Lt(o => o.CreatedAt, fimDia)
         );
 
-        return await _collection.Find(filter).ToListAsync(cancellationToken);
+        return await GetCollection().Find(filter).ToListAsync(cancellationToken);
     }
 
-    public Task<bool> Delete(string id, CancellationToken cancellationToken)
+    public async Task<bool> Delete(string id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var filter = Builders<Order>.Filter.Eq(p => p.id, id);
+        var result = await GetCollection().DeleteOneAsync(filter, cancellationToken);
+        return result.DeletedCount > 0;
     }
 
     public async Task<Order?> GetByUserIdOrderAsync(string responsavelId)
     {
         var filter = Builders<Order>.Filter.Eq(p => p.UserId, responsavelId);
-        return await _collection.Find(filter).FirstOrDefaultAsync();
-    }
-
-    private async Task<Order?> GetByIdOrderAsync(string id)
-    {
-        var filter = Builders<Order>.Filter.Eq(p => p.id, id);
-        return await _collection.Find(filter).FirstOrDefaultAsync();
+        return await GetCollection().Find(filter).FirstOrDefaultAsync();
     }
 }

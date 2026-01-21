@@ -9,14 +9,14 @@ namespace PetShop.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CaixaController  : ControllerBase
+public class CaixaController : ControllerBase
 {
     private readonly AgendamentoService _service;
     private readonly IResponsavelService _responsavelService;
     private IPaymentGateway _paymentGateway;
     private readonly IConfiguration _cfg;
     private readonly IRepositorio<Order> _orderRepo;
-    
+
     public CaixaController(IConfiguration connection,
         AgendamentoService service,
         IResponsavelService responsavelService,
@@ -28,15 +28,9 @@ public class CaixaController  : ControllerBase
         _responsavelService = responsavelService;
         _paymentGateway = paymentGateway;
         _orderRepo = orderRepo;
-        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Agendamento");
-        _responsavelService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Responsavel");
-        _orderRepo.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Orders");
+        _service.InitializeCollection(null, null, "Agendamento");
+        _responsavelService.InitializeCollection(null, null, "Responsavel");
+        _orderRepo.InitializeCollection(null, null, "Orders");
     }
     [HttpGet("GetByIdAsync/{id}")]
     public async Task<IActionResult> GetByIdAsync(string id, CancellationToken cancellationToken)
@@ -79,7 +73,7 @@ public class CaixaController  : ControllerBase
         if (pg == null) return new NotFoundResult();
         return Ok(pg);
     }
-    
+
     [HttpPost("UpdateStatusAsync")]
     public async Task<IActionResult> UpdateStatusAsync(string id, PaidStatus status, CancellationToken cancellationToken)
     {
@@ -87,7 +81,7 @@ public class CaixaController  : ControllerBase
         if (pg == null) return new NotFoundResult();
         return Ok(pg);
     }
-    
+
     [HttpPost]
     [Route("Payment/ProcessCheckout")]
     public async Task<IActionResult> ProcessCheckout([FromBody] CheckoutWithCpf request)
@@ -103,21 +97,21 @@ public class CaixaController  : ControllerBase
             {
                 id = request.consultaId,
                 UserId = _responsavel.Id,
-                transacao = "Consulta", 
-                TotalAmount = request.valor, 
+                transacao = "Consulta",
+                TotalAmount = request.valor,
                 PaymentMethod = request.PaymentMethod,
                 Status = "Pending",
                 CreatedAt = DateTime.UtcNow
             };
             PaymentResponse? paymentResult = null;
-            if(request.PaymentMethod == "pix") paymentResult = await _paymentGateway.CreatePaymentAsync(order, _responsavel, request.PaymentMethod);
-            
+            if (request.PaymentMethod == "pix") paymentResult = await _paymentGateway.CreatePaymentAsync(order, _responsavel, request.PaymentMethod);
+
             if (!paymentResult.Success && paymentResult != null)
             {
                 return BadRequest(new { success = false, message = paymentResult.Message });
             }
-            if(paymentResult != null)order.TransactionId = paymentResult.TransactionId;
-            if(paymentResult == null)order.TransactionId = Guid.NewGuid().ToString();
+            if (paymentResult != null) order.TransactionId = paymentResult.TransactionId;
+            if (paymentResult == null) order.TransactionId = Guid.NewGuid().ToString();
             if (paymentResult.Details != null)
             {
                 order.PaymentData = new PaymentMetadata
@@ -133,13 +127,13 @@ public class CaixaController  : ControllerBase
                     BoletoDueDate = paymentResult.Details.BoletoDueDate
                 };
             }
-            
+
             await _orderRepo.InsertOneAsync(order);
 
             string redirectUrl = "";
-            return Ok(new 
-            { 
-                success = true, 
+            return Ok(new
+            {
+                success = true,
                 message = "Ordem de Pagamento gerado com sucesso",
                 transactionId = order.TransactionId,
                 paymentData = order.PaymentData, // Isso imprimirá o QR Code e Barcode no Swagger
@@ -151,7 +145,7 @@ public class CaixaController  : ControllerBase
             return StatusCode(500, new { success = false, message = "Erro interno: " + ex.Message });
         }
     }
-    
+
     [HttpPost]
     [Route("Payment/CompleteCheckout")]
     public async Task<IActionResult> CompleteCheckout([FromBody] Checkout request)
@@ -174,7 +168,7 @@ public class CaixaController  : ControllerBase
             return StatusCode(500, new { success = false, message = "Erro interno: " + ex.Message });
         }
     }
-    
+
     [HttpGet]
     [Route("Checkout/{id}")]
     public async Task<IActionResult> CompleteCheckout(string id)
@@ -196,7 +190,7 @@ public class CaixaController  : ControllerBase
         if (pg) return new NotFoundResult();
         return Ok(pg);
     }
-    
+
     [HttpPost("webhook")]
     public async Task<IActionResult> ReceiveNotification([FromBody] MercadoPagoWebhookRequest notification)
     {
@@ -206,11 +200,11 @@ public class CaixaController  : ControllerBase
             {
                 var paymentId = notification.Data?.Id;
                 if (string.IsNullOrEmpty(paymentId)) return Ok();
-                
+
                 var paymentInfo = await _paymentGateway.GetPaymentAsync(paymentId);
-                
+
                 var order = await _orderRepo.GetByTransectionOrderAsync(paymentId);
-                
+
                 string newStatus = paymentInfo.Message.ToLower() switch
                 {
                     "approved" => "Paid",
@@ -221,7 +215,7 @@ public class CaixaController  : ControllerBase
                     "cancelled" => "Canceled",
                     "refunded" => "Refunded",
                     "charged_back" => "ChargedBack",
-                    _ => order.Status 
+                    _ => order.Status
                 };
                 var update = await _orderRepo.Update(order.id, newStatus);
                 if (update == null) return BadRequest();
@@ -231,7 +225,7 @@ public class CaixaController  : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500); 
+            return StatusCode(500);
         }
     }
 }

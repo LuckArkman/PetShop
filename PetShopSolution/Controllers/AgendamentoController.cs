@@ -25,16 +25,10 @@ public class AgendamentoController : ControllerBase
         _atendimentoService = atendimentoService;
         _disponibilidadeService = disponibilidadeService;
         _cfg = configuration;
-        
-        _service.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Agendamento");
-        _atendimentoService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Atendimento");
-        _disponibilidadeService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "Disponibilidade");
+
+        _service.InitializeCollection(null, null, "Agendamento");
+        _atendimentoService.InitializeCollection(null, null, "Atendimento");
+        _disponibilidadeService.InitializeCollection(null, null, "Disponibilidade");
     }
 
     /// <summary>
@@ -140,7 +134,7 @@ public class AgendamentoController : ControllerBase
         await _disponibilidadeService.RemoverIndisponivel(parsed, cancellationToken);
         return Ok(new { message = $"Dia {parsed:dd/MM/yyyy} removido da lista de indisponíveis." });
     }
-    
+
     /// <summary>
     /// Retorna todos os dias indisponíveis do calendário, com seus respectivos horários ocupados.
     /// Inclui tanto dias bloqueados manualmente quanto dias parcialmente ocupados.
@@ -193,7 +187,7 @@ public class AgendamentoController : ControllerBase
 
         return Ok(lista);
     }
-    
+
     /// <summary>
     /// Remove um agendamento específico com base na data e horário informados.
     /// </summary>
@@ -213,7 +207,7 @@ public class AgendamentoController : ControllerBase
 
         return Ok(new { message = $"Agendamento de {dataHora:dd/MM/yyyy HH:mm} removido com sucesso." });
     }
-    
+
     // ===========================================================
     // 🔹 NOVA ROTA: Retorna dias + horários Indisponíveis
     // ===========================================================
@@ -257,7 +251,7 @@ public class AgendamentoController : ControllerBase
 
         return Ok(lista);
     }
-    
+
     /// <summary>
     /// Retorna todos os agendamentos de um veterinário específico.
     /// </summary>
@@ -268,13 +262,13 @@ public class AgendamentoController : ControllerBase
     public async Task<IActionResult> GetByVeterinario(string crmv, CancellationToken cancellationToken)
     {
         var lista = await _service.GetByVeterinario(crmv, cancellationToken);
-    
+
         if (!lista.Any())
             return NotFound(new { message = "Nenhum agendamento encontrado para este veterinário." });
 
         return Ok(lista);
     }
-    
+
     /// <summary>
     /// Retorna a lista de horários ocupados (indisponíveis) em um determinado dia.
     /// </summary>
@@ -288,7 +282,7 @@ public class AgendamentoController : ControllerBase
             .Distinct()
             .ToList();
     }
-    
+
     private async Task<List<string>> GetHorariosDisponiveisInterno(DateTime dataConsulta, CancellationToken cancellationToken)
     {
         var inicioExpediente = new TimeSpan(8, 0, 0);  // 08:00

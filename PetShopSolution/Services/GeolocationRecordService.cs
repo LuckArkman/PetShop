@@ -6,53 +6,31 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class GeolocationRecordService : IGeolocationRecordService
+public class GeolocationRecordService : BaseMongoService<GeolocationRecord>, IGeolocationRecordService
 {
-    private readonly IConfiguration _configuration;
-    protected IMongoCollection<GeolocationRecord> _collection;
-    public string _collectionName { get; set; }
-    private MongoDataController _db { get; set; }
-    private IMongoDatabase _mongoDatabase { get; set; }
-    
-    public void InitializeCollection(string connectionString,
-        string databaseName,
-        string collectionName)
+    public GeolocationRecordService(ITenantService tenantService, IConfiguration configuration)
+        : base(tenantService, configuration)
     {
-        _collectionName = collectionName;
-        // Verifica se a conexão já foi estabelecida
-        if (_collection != null) return;
-        
-        _db = new MongoDataController(connectionString, databaseName, _collectionName);
-        _mongoDatabase = _db.GetDatabase();
-        _collection = _mongoDatabase.GetCollection<GeolocationRecord>(_collectionName);
     }
+
     public async Task<GeolocationRecord?> GetObject(string _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<GeolocationRecord>("GeolocationRecord");
-        
-        var filter = MongoDB.Driver.Builders<GeolocationRecord>.Filter.Eq(u => u.Id, _object);
-        
-        var character = _collection.Find(filter).FirstOrDefault();
-
-        return character as GeolocationRecord;
+        var filter = Builders<GeolocationRecord>.Filter.Eq(u => u.Id, _object);
+        var character = await GetCollection().Find(filter).FirstOrDefaultAsync(cancellationToken);
+        return character;
     }
 
     public async Task<GeolocationRecord?> InsetObject(GeolocationRecord _object, CancellationToken cancellationToken)
     {
-        var collection = _db.GetDatabase().GetCollection<GeolocationRecord>("GeolocationRecord");
-        collection.InsertOne(_object);
-        return _object as GeolocationRecord;
+        await GetCollection().InsertOneAsync(_object, cancellationToken: cancellationToken);
+        return _object;
     }
 
     public async Task<GeolocationRecord?> UpdateObject(GeolocationRecord _object, CancellationToken cancellationToken)
     {
-        var obj = await GetObject(_object.Id, CancellationToken.None) as GeolocationRecord;
-        var collection = _db.GetDatabase().GetCollection<GeolocationRecord>("GeolocationRecord");
+        var filter = Builders<GeolocationRecord>.Filter.Eq(u => u.Id, _object.Id);
 
-        // Create a filter to find the document by Id
-        var filter = MongoDB.Driver.Builders<GeolocationRecord>.Filter.Eq(u => u.Id, _object.Id);
-
-        var update = MongoDB.Driver.Builders<GeolocationRecord>.Update
+        var update = Builders<GeolocationRecord>.Update
             .Set(u => u.Id, _object.Id)
             .Set(u => u.AnimalId, _object.AnimalId)
             .Set(u => u.Latitude, _object.Latitude)
@@ -61,22 +39,21 @@ public class GeolocationRecordService : IGeolocationRecordService
             .Set(u => u.Endereco, _object.Endereco)
             .Set(u => u.Observacoes, _object.Observacoes);
 
-        // Perform the update
-        var result = collection.UpdateOne(filter, update);
+        var result = await GetCollection().UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 
         if (result.ModifiedCount > 0)
         {
-            Console.WriteLine("User updated successfully.");
+            Console.WriteLine("GeolocationRecord updated successfully.");
         }
         else
         {
             return null;
         }
-        var ob = await GetObject(_object.Id, CancellationToken.None) as GeolocationRecord;
-        return ob;
+
+        return await GetObject(_object.Id, cancellationToken);
     }
 
-    public async Task RemoveObject(object _object, CancellationToken cancellationToken)
+    public Task RemoveObject(object _object, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

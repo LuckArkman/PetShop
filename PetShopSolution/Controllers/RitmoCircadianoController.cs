@@ -16,9 +16,7 @@ public class RitmoCircadianoController : ControllerBase
     {
         _animalService = animalService;
         _cfg = configuration;
-        _animalService.InitializeCollection(_cfg["MongoDbSettings:ConnectionString"],
-            _cfg["MongoDbSettings:DataBaseName"],
-            "RitmoCircadiano");
+        _animalService.InitializeCollection(null, null, "RitmoCircadiano");
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RitmoCircadiano model)
