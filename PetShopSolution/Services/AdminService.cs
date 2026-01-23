@@ -21,7 +21,7 @@ public class AdminService : BaseMongoService<RegisterViewModel>, IAdminService
 
     public async Task<RegisterViewModel?> InsetObject(RegisterViewModel _object, CancellationToken cancellationToken)
     {
-        await GetCollection().InsertOneAsync(_object, cancellationToken: cancellationToken);
+        await GetCollection().InsertOneAsync(_object, cancellationToken);
         return _object;
     }
 

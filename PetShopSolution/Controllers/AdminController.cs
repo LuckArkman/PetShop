@@ -35,7 +35,7 @@ public class AdminController  : ControllerBase
         {
             Success = false,
             Token = "",
-            Message = "Veterinario ja cadastrado!"
+            Message = "Administrador ja cadastrado!"
         });
         var register = await _service.InsetObject(model, CancellationToken.None) as RegisterViewModel;
         return Ok(register);
