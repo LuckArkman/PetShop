@@ -3,6 +3,7 @@ using Interfaces;
 using MercadoPago.Config;
 using Services;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var accessToken = builder.Configuration["MercadoPago:AccessToken"]
@@ -10,6 +11,7 @@ var accessToken = builder.Configuration["MercadoPago:AccessToken"]
                   ?? throw new InvalidOperationException("MercadoPago AccessToken não configurado.");
 
 // Configuração global do SDK
+BsonSerializer.RegisterSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(MongoDB.Bson.GuidRepresentation.Standard));
 MercadoPagoConfig.AccessToken = accessToken;
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -49,7 +51,7 @@ builder.Services.AddScoped<AgendamentoService>();
 builder.Services.AddScoped<AtendimentoService>();
 builder.Services.AddScoped<DisponibilidadeService>();
 builder.Services.AddHttpClient<IPaymentGateway, PaymentGateway>();
-builder.Services.AddSingleton(typeof(IRepositorio<Order>), typeof(Repositorio));
+builder.Services.AddScoped(typeof(IRepositorio<Order>), typeof(Repositorio));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
