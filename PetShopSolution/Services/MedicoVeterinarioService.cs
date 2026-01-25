@@ -64,9 +64,9 @@ public class MedicoVeterinarioService : BaseMongoService<MedicoVeterinario>, IMe
         return await GetObject(_object.CRMV!, cancellationToken);
     }
 
-    public async Task<bool> RemoveAsync(object _object, CancellationToken cancellationToken)
+    public async Task<bool> RemoveAsync(MedicoVeterinario _object, CancellationToken cancellationToken)
     {
-        var filter = Builders<MedicoVeterinario>.Filter.Eq(u => u.CRMV, _object);
+        var filter = Builders<MedicoVeterinario>.Filter.Eq(u => u.CRMV, _object.CRMV);
         var result = await GetCollection().DeleteOneAsync(filter, cancellationToken);
         return result.DeletedCount > 0;
     }
