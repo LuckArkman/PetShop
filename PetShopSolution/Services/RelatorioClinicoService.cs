@@ -96,6 +96,8 @@ public class RelatorioClinicoService : IRelatorioClinicoService
 
     public async Task<bool?> RemoveRelatorio(Relatorio _object, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var filter = Builders<Relatorio>.Filter.Eq(a => a.Id, _object.Id);
+        var result = await _collection.DeleteOneAsync(filter, cancellationToken);
+        return result.DeletedCount > 0;
     }
 }

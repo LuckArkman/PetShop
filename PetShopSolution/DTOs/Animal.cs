@@ -13,6 +13,8 @@ public class Animal
     [Required, Display(Name = "Nome do Animal")]
     public string Nome { get; set; }
 
+    public string? picture { get; set; } = string.Empty;
+
     [Required, Display(Name = "Espécie")]
     public string Especie { get; set; }
 
