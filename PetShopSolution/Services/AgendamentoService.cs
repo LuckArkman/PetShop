@@ -75,4 +75,17 @@ public class AgendamentoService : BaseMongoService<Agendamento>, IAgendamentoSer
 
         return await GetCollection().Find(filtro).ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<Agendamento>> GetAgendamentosUltimos30Dias(CancellationToken cancellationToken)
+    {
+        var dataLimite = DateTime.UtcNow.Date.AddDays(-30);
+        var dataHoje = DateTime.UtcNow; // Inclui até o momento atual
+
+        var filtro = Builders<Agendamento>.Filter.And(
+            Builders<Agendamento>.Filter.Gte(a => a.dataConsulta, dataLimite),
+            Builders<Agendamento>.Filter.Lte(a => a.dataConsulta, dataHoje)
+        );
+
+        return await GetCollection().Find(filtro).ToListAsync(cancellationToken);
+    }
 }

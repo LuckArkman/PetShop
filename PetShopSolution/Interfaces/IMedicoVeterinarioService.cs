@@ -14,6 +14,6 @@ public interface IMedicoVeterinarioService
 
     Task<MedicoVeterinario?> UpdateObject(MedicoVeterinario _object, CancellationToken cancellationToken);
 
-    Task<bool> RemoveAsync(object _object, CancellationToken cancellationToken);
+    Task<bool> RemoveAsync(MedicoVeterinario _object, CancellationToken cancellationToken);
     Task<MedicoVeterinario?> FindByCRMVAsync(string modelCredencial, CancellationToken cancellationToken);
 }

@@ -105,7 +105,7 @@ public class CaixaController : ControllerBase
             };
             PaymentResponse? paymentResult = null;
             if (request.PaymentMethod == "pix") paymentResult = await _paymentGateway.CreatePaymentAsync(order, _responsavel, request.PaymentMethod);
-
+            
             if (!paymentResult.Success && paymentResult != null)
             {
                 return BadRequest(new { success = false, message = paymentResult.Message });

@@ -2,6 +2,7 @@ using DTOs;
 using Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
 using Services;
 
 namespace PetShop.API.Controllers;
@@ -103,6 +104,23 @@ public class AgendamentoController : ControllerBase
         }
 
         return Ok(horarios);
+    }
+    
+    /// <summary>
+    /// Retorna todas as consultas agendadas nos últimos 30 dias.
+    /// </summary>
+    [HttpGet("recentes")]
+    [ProducesResponseType(typeof(List<Agendamento>), 200)]
+    [ProducesResponseType(204)]
+    public async Task<IActionResult> GetRecentes(CancellationToken cancellationToken)
+    {
+        // Chama o novo método do service
+        var agendamentos = await _service.GetAgendamentosUltimos30Dias(cancellationToken);
+
+        if (agendamentos == null || !agendamentos.Any())
+            return NoContent();
+
+        return Ok(agendamentos);
     }
 
     // ===========================================================
