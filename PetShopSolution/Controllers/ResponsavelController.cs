@@ -79,7 +79,8 @@ public class ResponsavelController : ControllerBase
     {
         Console.WriteLine($"{nameof(Animais)}: {mail.mail}");
         var register = await _service.GetObject(mail.mail, CancellationToken.None) as Responsavel;
-        if (register!.Animais.Count <= 0)
+        var animais = register!.Animais;
+        if (animais != null && animais.Count <= 0)
         {
             return Ok(Array.Empty<object>());
         }
