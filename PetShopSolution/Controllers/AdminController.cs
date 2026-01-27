@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using DTOs;
 using Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -57,44 +58,67 @@ public class AdminController  : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<LoginResult>> Login([FromBody] LoginRequest model)
+public async Task<ActionResult> Login([FromBody] LoginRequest model)
+{
+    var user = await _service.FindByEmailAsync(model.credencial, CancellationToken.None) as RegisterViewModel;
+    
+    // Importante: Verifique se sua lógica de hash condiz com o que está no banco
+    var passwordHash = GerarHashSenha(model.password);
+
+    if (user == null || !Verify(passwordHash, user.Senha))
     {
-        var user = await _service.FindByEmailAsync(model.credencial, CancellationToken.None) as RegisterViewModel;
-        model.password = GerarHashSenha(model.password);
-        Console.WriteLine($"{user == null}");
-        if (user == null || !Verify(model.password, user.Senha))
-        {
-            return BadRequest(new { Success = false, Message = "Credenciais inválidas." });
-        }
-
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
-            new Claim(ClaimTypes.Name, user.Nome),
-            new Claim(ClaimTypes.Email, user.Email)
-        };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_cfg["Jwt:ExpireMinutes"] ?? "120"));
-
-        var token = new JwtSecurityToken(
-            issuer: _cfg["Jwt:Issuer"],
-            audience: _cfg["Jwt:Audience"],
-            claims: claims,
-            expires: expires,
-            signingCredentials: creds
-        );
-
-        return Ok(new
-        {
-            Success = true,
-            Token = new JwtSecurityTokenHandler().WriteToken(token),
-            Message = "Login bem-sucedido!"
-        });
-
-        return null;
+        return BadRequest(new { Success = false, Message = "Credenciais inválidas." });
     }
+
+    var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
+        new Claim(ClaimTypes.Name, user.Nome),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.Role, "Admin") // Adicionado para autorização
+    };
+
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]!));
+    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+    var expiresValue = Convert.ToDouble(_cfg["Jwt:ExpireMinutes"] ?? "120");
+    var expires = DateTime.UtcNow.AddMinutes(expiresValue);
+
+    var token = new JwtSecurityToken(
+        issuer: _cfg["Jwt:Issuer"],
+        audience: _cfg["Jwt:Audience"],
+        claims: claims,
+        expires: expires,
+        signingCredentials: creds
+    );
+
+    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+    // --- CONFIGURAÇÃO DO COOKIE HTTPONLY ---
+    var cookieOptions = new CookieOptions
+    {
+        HttpOnly = true,        
+        Secure = true,          
+        SameSite = SameSiteMode.Strict, 
+        Expires = expires       
+    };
+
+    // Adiciona o cookie na resposta
+    Response.Cookies.Append("X-Access-Token", tokenString, cookieOptions);
+
+    return Ok(new
+    {
+        Success = true,
+        Message = "Login bem-sucedido!"
+        // Note que o Token NÃO é enviado no JSON
+    });
+}
+
+[HttpPost("logout")]
+public IActionResult Logout()
+{
+    Response.Cookies.Delete("X-Access-Token");
+    return Ok(new { Message = "Logout realizado com sucesso" });
+}
 
     private bool Verify(string modelPassword, string userPassword)
         => modelPassword == userPassword;

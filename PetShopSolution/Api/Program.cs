@@ -78,8 +78,6 @@ if (app.Environment.IsDevelopment())
 // ORDEM CRÍTICA: UseCors ANTES de MapControllers
 app.UseHttpsRedirection();
 
-app.UseMiddleware<Api.Middleware.TenantMiddleware>();
-
 app.UseCors("AllowAll"); // ESSA LINHA ESTAVA FALTANDO!
 
 app.MapControllers();
