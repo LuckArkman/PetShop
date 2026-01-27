@@ -94,4 +94,25 @@ public class ResponsavelService : BaseMongoService<Responsavel>, IResponsavelSer
         var _responsavel = await GetCollection().Find(filter).FirstOrDefaultAsync();
         return _responsavel;
     }
+
+    public async Task<Responsavel> UpdateAnaimalListObject(Responsavel model, CancellationToken cancellationToken)
+    {
+        var filter = Builders<Responsavel>.Filter.Eq(u => u.Email, model.Email);
+
+        var update = Builders<Responsavel>.Update
+            .Set(u => u.Animais, model.Animais);
+
+        var result = await GetCollection().UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+
+        if (result.ModifiedCount > 0)
+        {
+            Console.WriteLine("Responsavel updated successfully.");
+        }
+        else
+        {
+            return null;
+        }
+
+        return await FindByEmailAsync(model.Email, cancellationToken);
+    }
 }

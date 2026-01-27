@@ -53,7 +53,7 @@ public class ResponsavelController : ControllerBase
     public async Task<IActionResult> Update([FromBody] Responsavel model)
     {
         Console.WriteLine($"{nameof(Update)}: {model}");
-        var result = await _service.UpdateObject(model, CancellationToken.None) as Responsavel;
+        var result = await _service.UpdateAnaimalListObject(model, CancellationToken.None) as Responsavel;
         Console.WriteLine($"{result == null}");
         return Ok(new { Message = "Usuário atualizado com sucesso!", User = result });
     }
@@ -75,15 +75,24 @@ public class ResponsavelController : ControllerBase
     }
 
     [HttpPost("animais")]
-    public async Task<IActionResult> Animais([FromBody]Mail mail)
+    public async Task<IActionResult> Animais([FromBody] Mail mail)
     {
         Console.WriteLine($"{nameof(Animais)}: {mail.mail}");
+    
         var register = await _service.GetObject(mail.mail, CancellationToken.None) as Responsavel;
-        var animais = register!.Animais;
-        if (animais != null && animais.Count <= 0)
+
+        // 1. Check if the user exists
+        if (register == null)
+        {
+            return NotFound(new { Message = "Responsável não encontrado." });
+        }
+
+        // 2. Safely check if the list is null or empty
+        if (register.Animais == null || register.Animais.Count == 0)
         {
             return Ok(Array.Empty<object>());
         }
+
         var animals = await _animalService.GetAnimalsInList(register.Animais, CancellationToken.None);
         return Ok(animals);
     }
