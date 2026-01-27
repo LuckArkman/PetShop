@@ -48,16 +48,7 @@ public class ResponsavelService : BaseMongoService<Responsavel>, IResponsavelSer
 
         var update = Builders<Responsavel>.Update
             .Set(u => u.Email, _object.Email)
-            .Set(u => u.FirstName, _object.FirstName)
-            .Set(u => u.LastName, _object.LastName)
-            .Set(u => u.CPF, _object.CPF)
-            .Set(u => u.RG, _object.RG)
-            .Set(u => u.Address, _object.Address)
-            .Set(u => u.City, _object.City)
-            .Set(u => u.State, _object.State)
-            .Set(u => u.ZipCode, _object.ZipCode)
-            .Set(u => u.PhoneNumber, _object.PhoneNumber)
-            .Set(u => u.Animais, _object.Animais);
+            .Set(u => u.Password, _object.Password);
 
         var result = await GetCollection().UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 
