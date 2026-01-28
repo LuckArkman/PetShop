@@ -96,6 +96,7 @@ document.addEventListener("DOMContentLoaded",async e=>{
                         }catch(error){}
 
                         btn_save.onclick = async ()=>{
+                            console.log("clicou")
                             try{
                                 const req_vet = await fetch(`https://petrakka.com:7231/api/MedicoVeterinario/MedicoVeterinario/${vet_crmv.value}`)
                                 const res_vet = await req_vet.json()
@@ -247,7 +248,7 @@ async function tutor_pet(res){
     }
 }
 
-btn_save.addEventListener("click",async()=>{
+btn_save.onclick = async()=>{
     if(!selectedPetId){
         showMessage("Selecione um pet primeiro","red")
         return
@@ -289,7 +290,7 @@ btn_save.addEventListener("click",async()=>{
         showMessage("Erro interno","red")
         console.log(error)
     }
-})
+}  
 
 const btn_vet = document.getElementById("btn_vet")
 btn_vet.addEventListener("click",async e=>{
@@ -298,14 +299,16 @@ btn_vet.addEventListener("click",async e=>{
     try{
         const req_vet_hist_rel = await fetch(`https://petrakka.com:7231/api/RelatorioClinico/Relatorios_Veterinario/${searchHistVet}`)
         const res_vet_hist_rel = await req_vet_hist_rel.json()
+        if(res_vet_hist_rel.length == 0){
+            showMessage("Veterinário não tem histórico de consultas","red")
+            return
+        }
         console.log(res_vet_hist_rel)
-
         const req_info_vet = await fetch(`https://petrakka.com:7231/api/MedicoVeterinario/MedicoVeterinario/${searchHistVet}`)
         const res_info_vet = await req_info_vet.json()
         let name_vet = res_info_vet.id ? res_info_vet.nome : ""
         for(let i=0;i<res_vet_hist_rel.length;i++){
             if(res_vet_hist_rel[i].id){
-
                 const req_info_pet = await fetch(`https://petrakka.com:7231/api/Animal/animal/${res_vet_hist_rel[i].animalId}`)
                 const res_info_pet = await req_info_pet.json()
                 let name_pet = res_info_pet.id ? res_info_pet.nome : ""
@@ -325,10 +328,10 @@ btn_vet.addEventListener("click",async e=>{
                 const dataFormatada =
                     iso.slice(8,10)+"/"+
                     iso.slice(5,7)+"/"+
-                    iso.slice(0,4)+" "+
-                    iso.slice(11,16)
+                    iso.slice(0,4)
 
                 span_data.innerText = dataFormatada
+                console.log(dataFormatada)
                 span_vet.innerText = "  Veterinário: " + name_vet
 
                 const p_sintomas = document.createElement("p")
@@ -347,10 +350,76 @@ btn_vet.addEventListener("click",async e=>{
                 btn_edit.innerText = "Editar"
                 btn_edit.classList.add("edit-btn")
 
+                btn_edit.addEventListener("click", () => {
+                    let relatorioSelecionado = res_vet_hist_rel[i] // objeto completo
+                    document.getElementById("modalEdit").style.display = "flex"
+                    document.getElementById("edit_id").value = res_vet_hist_rel[i].id
+                    document.getElementById("edit_sintomas").value = res_vet_hist_rel[i].sintomas
+                    document.getElementById("edit_tratamento").value = res_vet_hist_rel[i].tratamento
+                    document.getElementById("edit_observacoes").value = res_vet_hist_rel[i].observacoes
+                    document.getElementById("btn_save_edit").onclick = async () =>{
+                    if (!relatorioSelecionado) return
+
+                const obj = {
+                id: relatorioSelecionado.id,
+                animalId: relatorioSelecionado.animalId,
+                _data: relatorioSelecionado._data,
+                sintomas: document.getElementById("edit_sintomas").value,
+                tratamento: document.getElementById("edit_tratamento").value,
+                observacoes: document.getElementById("edit_observacoes").value,
+                veterinarioId: relatorioSelecionado.veterinarioId
+                }
+
+  try {
+    const req = await fetch(
+      `https://petrakka.com:7231/api/RelatorioClinico/update`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(obj)
+      }
+    )
+
+    if (!req.ok) {
+      showMessage("Erro ao editar consulta", "red")
+      return
+    }
+
+    showMessage("Consulta atualizada com sucesso", "green")
+    setTimeout(() => location.reload(), 800)
+    document.getElementById("modalEdit").style.display = "none"
+  } catch (err) {
+    showMessage("Erro interno", "red")
+  }
+}
+                })
+
                 const btn_delete = document.createElement("button")
                 btn_delete.innerText = "Excluir"
                 btn_delete.classList.add("cancel-btn")
+                document.getElementById("closeModalEdit").onclick = () => {
+                    document.getElementById("modalEdit").style.display = "none"
+                }
+                btn_delete.addEventListener("click", async () => {
+  if (!confirm("Deseja realmente excluir esta consulta?")) return
 
+  try {
+    const req = await fetch(
+      `https://petrakka.com:7231/api/RelatorioClinico/delete?id=${res_vet_hist_rel[i].id}`,
+      { method: "DELETE" }
+    )
+    console.log(req)
+    if (!req.ok) {
+      showMessage("Erro ao excluir consulta", "red")
+      return
+    }
+    div_card_hist_consul.remove()
+    showMessage("Consulta excluída com sucesso", "green")
+  } catch (err) {
+    showMessage("Erro interno", "red")
+    console.log(err)
+  }
+})
                 p_data.appendChild(span_data)
                 p_data.appendChild(span_vet)
 
@@ -374,7 +443,7 @@ btn_vet.addEventListener("click",async e=>{
 })
 
 
-const btn_tutor = document.getElementById("btn_tutor")
+/*const btn_tutor = document.getElementById("btn_tutor")
 btn_tutor.addEventListener("click",async e=>{
     const searchHistTutor = document.getElementById("searchHistTutor").value
     search_results_t.innerHTML = ""
@@ -402,13 +471,39 @@ btn_tutor.addEventListener("click",async e=>{
                 const div_actions = document.createElement("div")
                 div_actions.classList.add("actions_hist")
 
-                const btn_edit = document.createElement("button")
-                btn_edit.innerText = "Editar"
-                btn_edit.classList.add("edit-btn")
 
                 const btn_delete = document.createElement("button")
                 btn_delete.innerText = "Excluir"
                 btn_delete.classList.add("cancel-btn")
+                    const agendamentoId = res_vet_hist_rel[i].id
+                btn_delete.addEventListener("click", async () => {
+    if (!confirm("Deseja realmente excluir este agendamento?")) return
+
+
+    try {
+        const req = await fetch(
+            `https://petrakka.com:7231/api/Agendamento/${agendamentoId}`,
+            {
+                method: "DELETE"
+            }
+        )
+
+        // se não for 2xx
+        if (!req.ok) {
+            console.error("Status:", req.status)
+            showMessage("Erro ao excluir agendamento", "red")
+            return
+        }
+
+        // REMOVE DA TELA
+        div_card_hist_consul.remove()
+        showMessage("Agendamento excluído com sucesso", "green")
+
+    } catch (err) {
+        console.error(err)
+        showMessage("Erro interno ao excluir", "red")
+    }
+})
 
                 const p_data = document.createElement("p")
                 const span_data = document.createElement("span")
@@ -431,7 +526,6 @@ btn_tutor.addEventListener("click",async e=>{
                     div_stats.classList.add("status_tag","status-done")
                     div_stats.innerText = "Concluída"
                 }
-                div_actions.appendChild(btn_edit)
                 div_actions.appendChild(btn_delete)
                 p_data.appendChild(span_data)
                 p_data.appendChild(span_tutor)
@@ -446,7 +540,7 @@ btn_tutor.addEventListener("click",async e=>{
         console.log(error)
     }
 })
-
+*/
 const modal = document.getElementById('modalHist')
 const btn = document.getElementById('btnVerMais')
 const close = document.getElementById('closeModal')
@@ -456,8 +550,6 @@ const btn_tutor_mais = document.getElementById('btnVerMaisTutor')
 
 btn.onclick = () => modal.style.display = 'flex'
 close.onclick = () => modal.style.display = 'none'
-btn_tutor_mais.onclick = () => modalHistTutor.style.display = 'flex'
-closeModalTutor.onclick = () => modalHistTutor.style.display = 'none'
 window.onclick = e => {
     if(e.target == modalHistTutor){
         modalHistTutor.style.display = 'none'
@@ -465,7 +557,6 @@ window.onclick = e => {
         modal.style.display = "none"
     }
 }
-
 
 
 async function teste(){

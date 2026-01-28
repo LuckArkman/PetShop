@@ -8,6 +8,9 @@
 </head>
 <body>
     <main>
+        <div style="display: flex; justify-content: end; align-items: end;">
+            <a href="../pages_cad/Cad_user.html">Sair</a>
+        </div>
     <div class="title_vet">
         <h1>Painel veterinário</h1>
         <p>Registrar consulta • Consultas do dia • Protocolos rápidos</p>
@@ -124,12 +127,6 @@
             <p>Acesse o histórico completo de consultas do veterinário.</p>
             <button id="btnVerMais" class="btn_ver_mais">Ver mais</button>
         </div>
-
-        <div class="card_hist_dir">
-            <h1>Histórico — Tutor</h1>
-            <p>Acesse o histórico completo do tutor e visualize todos os  agendamentos do tutor</p>
-            <button id="btnVerMaisTutor" class="btn_ver_mais">Ver mais</button>
-        </div>
     </div>
     </div>
 
@@ -139,23 +136,12 @@
             <span id="closeModal" class="close">&times;</span>
             <h2>Histórico completo</h2>
             <input type="text" id="searchHistVet" placeholder="Buscar por veterinário" class="search_input">
+            <button id="btn_vet" class="btn_b">Buscar</button>        
             <div class="search_results" id="search_resultsVet">
-                <button id="btn_vet" class="btn_b">Buscar</button>        
             </div>
         </div>
     </div>
 
-    <div id="modalHistTutor" class="modal">
-        <div class="modal_content">
-            <span id="closeModalTutor" class="close">&times;</span>
-            <h2>Histórico completo</h2>
-            <input type="text" id="searchHistTutor" placeholder="Buscar por tutor" class="search_input">
-            <div id="search_resultsTutor" class="search_results">
-                <!-- Aqui você vai popular com JS as consultas filtradas -->
-                <button id="btn_tutor" class="btn_b">Buscar</button>
-            </div>
-        </div>
-    </div>
     <!-- Modal -->
 <div id="modal-user" class="modal">
     <div class="modal-content">
@@ -186,6 +172,33 @@
       <p><strong>Castrado:</strong> <span id="modal_pet_castrado"></span></p>
     </div>
   </div>
+
+
+  <!-- Modal Editar Consulta -->
+<div id="modalEdit" class="modal">
+<div class="modal_content">
+<span id="closeModalEdit" class="close">&times;</span>
+<h2>Editar consulta</h2>
+
+
+<input type="hidden" id="edit_id">
+
+
+<label>Sintomas</label>
+<textarea id="edit_sintomas"></textarea>
+
+
+<label>Tratamento</label>
+<input type="text" id="edit_tratamento">
+
+
+<label>Observações</label>
+<input type="text" id="edit_observacoes">
+
+
+<button id="btn_save_edit" class="btn_save">Salvar alterações</button>
+</div>
+</div>
     </main>
 </body>
 </html>

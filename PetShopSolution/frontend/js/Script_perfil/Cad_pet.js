@@ -24,7 +24,7 @@ sair_user.addEventListener("click",(e)=>{
 })
 
 document.addEventListener('DOMContentLoaded', async() => {
-    const selectedPetId = localStorage.getItem("selectedPetId")
+    const selectedPetId = JSON.parse(localStorage.getItem("selectedPetId"))
     if(!selectedPetId){
         return
     }
@@ -69,16 +69,15 @@ function getPayloadFromToken(token) {
 
 const token = localStorage.getItem("token")
 if (!token) {
-    div_msg.textContent = "Usuário não autenticado!"
-    div_msg.style.color = "red"
-    throw new Error("Usuário não autenticado")
+    showMessage("Usuário não autenticado!", "red")
+    setTimeout(() => window.location.href = "../../pages/pages_login/Login_user.html", 1000)
 }
 const payload = getPayloadFromToken(token)
 const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
 const userEmail = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
-
+console.log(userEmail)
+let avatar_img = document.getElementById("avatar_img")
 function updatePetUI(pet) {
-
     document.getElementById("animal_name").textContent = pet.nome
     document.getElementById("race_animal").textContent = pet.raca || "Sem Raça"
     document.getElementById("petSpecies").textContent = pet.especie
@@ -88,8 +87,11 @@ function updatePetUI(pet) {
     document.getElementById("petPorte").textContent = pet.porte
     document.getElementById("petCastrated").textContent = pet.castrado ? "Sim" : "Não"
     const avatar = document.getElementById("avatar")
-    avatar.style.background = pet.Sexo === "Fêmea" ? "Pink" : "linear-gradient(135deg,#3b82f6,#60a5fa)"
+    avatar.style.background = pet.sexo === "Fêmea" ? "Pink" : "linear-gradient(135deg,#3b82f6,#60a5fa)"
+    avatar_img.src = pet.picture
 }
+const avatar = document.getElementById("avatar")
+
 
 async function populatePets() {
     select_pet.innerHTML = `<option value="">Pet Atual</option>`
@@ -99,13 +101,15 @@ async function populatePets() {
                headers:{"Content-Type":"application/json"},
                body:JSON.stringify({mail:userEmail})
             })
+            console.log(res)
             const pets = await res.json()
+            console.log(pets)
             const selectedPetId = localStorage.getItem("selectedPetId") 
             pets.forEach(pet => {
                 const option = document.createElement("option")
                 option.value = pet.id
                 option.textContent = pet.nome
-                if (selectedPetId && selectedPetId === pet.id) {
+                if (selectedPetId === pet.id) {
                     option.selected = true
                     updatePetUI(pet)
                     info_bottom_pet.style.display = "block"
@@ -113,7 +117,7 @@ async function populatePets() {
                 select_pet.appendChild(option)
             })
         } catch (err) {
-            console.error("Erro ao buscar pet:", err)
+            console.log(err)
         }
 }
 
@@ -144,7 +148,7 @@ select_pet.addEventListener("change", async () => {
 })
 
 saveSimple.addEventListener("click", async () => {
-    const fRg = document.getElementById("fRg").value
+    const fRg = document.getElementById("fRg").value.replace(/[^\dXx]/g, "")
     const fName = document.getElementById("fName").value
     const fSpecies = document.getElementById("fSpecies").value
     const fBreed = document.getElementById("fBreed").value
@@ -155,6 +159,10 @@ saveSimple.addEventListener("click", async () => {
     const fCastrado = document.getElementById("fCastrado").value
     const fAgeSelect = document.getElementById("fAgeSelect").value
     const fWeightSelect = document.getElementById("fWeightSelect").value
+    const fotoInput = document.getElementById("fFoto")
+    const fotoFile = fotoInput.files[0] || null
+    const fotoUrl = await uploadToCloudinary(fotoFile)
+
     const value_fCastrado = fCastrado === "Sim"
     const token = localStorage.getItem("token")
     if (!token) {
@@ -187,6 +195,10 @@ saveSimple.addEventListener("click", async () => {
         showMessage("Peso inválido digite um peso menor que 1000 gramas sass","red")
         return 
     }
+
+    if(!fotoInput.files || fotoInput.files.length === 0){
+        showMessage("Selecione uma imagem para seu pet","red")
+    }
     try {
         const req = await fetch("https://petrakka.com:7231/api/Animal/register", {
             method: "POST",
@@ -197,6 +209,7 @@ saveSimple.addEventListener("click", async () => {
             body: JSON.stringify({
                 nome: fName,
                 especie: fSpecies,
+                picture:fotoUrl,
                 raca: fBreed,
                 sexo: fSex,
                 castrado: value_fCastrado,
@@ -214,7 +227,16 @@ saveSimple.addEventListener("click", async () => {
         })
 
         const res = await req.json()
+        console.log(res)
         if (res.id) {
+            const avatarImg = document.getElementById("avatar_img")
+            avatarImg.src = res.picture
+            if (avatarImg) {
+                avatarImg.src = res.picture
+            } else {
+                console.error("Elemento #avatar_img não encontrado no DOM")
+            }
+            console.log(avatarImg)           
             localStorage.setItem("selectedPetId", JSON.stringify(res.id))
             let animalIds = JSON.parse(localStorage.getItem("userAnimalIds")) || []
             animalIds.push(res.id)
@@ -234,7 +256,7 @@ saveSimple.addEventListener("click", async () => {
             })
             const res_get_user = await req_get_user.json()
             res_get_user.Animais = animalIds
-
+            //setTimeout(() => location.reload(), 800)
             const req_put_user = await fetch(`https://petrakka.com:7231/api/Responsavel/update`,{
                 method:"PUT",
                 headers: {
@@ -248,10 +270,33 @@ saveSimple.addEventListener("click", async () => {
         }
     } catch (err) {
         showMessage("Erro interno!","red")
-
+        console.log(err)
     }
 })
 
+async function uploadToCloudinary(file) {
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("upload_preset", "back_projeto_pet")
+
+    const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dlb26geus/image/upload",
+        {
+            method: "POST",
+            body: formData
+        }
+    )
+
+    if (!res.ok) {
+        showMessage("Selecione uma imagem para seu pet","red")
+        return
+    }
+
+    const data = await res.json()
+
+    // ✅ ESSA é a URL que você vai mandar pro backend
+    return data.secure_url
+}
 
 function resetForm() {
     document.getElementById("fRg").value = ""
@@ -293,6 +338,7 @@ btn_remove_pet.addEventListener("click",async()=>{
             await populatePets()
             localStorage.removeItem("selectedPetId")
             showMessage("Pet excluído com sucesso!","green")
+            setTimeout(() => location.reload(), 800)
         }else{
             showMessage("Erro ao deletar","red")
         }

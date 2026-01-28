@@ -23,7 +23,7 @@
         </div>
         <div class="content_text">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            <p>Sair</p> 
+            <p id="btn_out_page">Sair</p> 
          </div>
       </div>         
     </div>  
@@ -165,9 +165,7 @@
         <select id="paymentType">
           <option value="selecione">Selecione</option>
           <option value="pix">PIX</option>
-          <option value="card">Cartão</option>
         </select>
-        <input type="email" name="" id="email_value">
       </div>
 
       
@@ -189,8 +187,26 @@
         <i class="fa-solid fa-shield-halved"></i>
         Pagamento 100% seguro
       </p>
-
     </div>
+  </div>
+  <div class="pix-card" id="pix_card">
+      <div style="display: flex; justify-content: end; align-items: end;">
+        <span id="close_pix" style="align-self: flex-end; cursor: pointer; font-size: 1.2em;">&times;</span>
+      </div>
+      <h2>Pagamento via PIX</h2>
+      <p>Escaneie o QR Code com o app do seu banco</p>
+      <img
+        id="qr_code_pagament"
+        alt="QR Code PIX"
+        src=""
+      />
+      <span class="pix-warning">
+       O pagamento será confirmado automaticamente
+      </span>
+
+      <button class="pix-cancel" id="cancel_pix">
+        Cancelar pagamento
+      </button>
   </div>
 </div>
 </div>
@@ -220,6 +236,158 @@
     </select>
     <!--<input type="text" id="cpf_tutor" class="cmrv_vet" placeholder="Digite seu CPF">-->
     <button id="btn_agendar_horario" class="btn-agendar">Agendar</button>
+  </div>
+</div>
+
+<!-- Modal usuário não cadastrado -->
+<div id="modal-user-not-found" class="modal">
+  <div class="modal-content" style="max-width: 420px; text-align:center;">
+    <h2>⚠️ Usuário não cadastrado</h2>
+    <p style="margin: 12px 0; color:#666;">
+      Este RG não está vinculado a nenhum tutor.<br>
+      Deseja cadastrar agora?
+    </p>
+
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+      <button id="btn_cadastrar_user" class="btn_info_user">
+        Cadastrar usuário
+      </button>
+      <button id="btn_cancel_modal_user" class="cancel-btn">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-cadastro-user" class="modal">
+  <div class="modal-content cadastro-modal">
+    <span id="close-cadastro-user" class="close">&times;</span>
+
+    <h2>Cadastrar Tutor</h2>
+
+    <div class="form-group-cad">
+      <input type="text" id="cad_nome" placeholder="Nome completo">
+      <input type="email" id="cad_email" placeholder="Email">
+      <input type="text" id="cad_rg" placeholder="RG">
+      <input type="text" id="cad_cpf" placeholder="CPF">
+      <input type="password" id="cad_senha" placeholder="Senha">
+      <input type="password" id="cad_conf_senha" placeholder="Confirmar senha">
+    </div>
+
+    <p id="msg_cad" class="msg-cad"></p>
+
+    <button id="confirm_cadastro_user" class="btn_info_user">
+      Cadastrar
+    </button>
+  </div>
+</div>
+
+
+<!-- Modal pet não cadastrado -->
+<div id="modal-pet-not-found" class="modal">
+  <div class="modal-content" style="max-width: 420px; text-align:center;">
+    <h2>⚠️ Usuário não tem pet cadastrado</h2>
+    <p style="margin: 12px 0; color:#666;">
+      Este Usuário não tem nenhum pet<br>
+      Deseja cadastrar agora?
+    </p>
+
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+      <button id="btn_cadastrar_pet" class="btn_info_user">
+        Cadastrar pet
+      </button>
+      <button id="btn_cancel_modal_pet" class="cancel-btn">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+        <!-- MODAL PET -->
+<div class="modal_pet" id="modalPet">
+  <div class="modal_pet_box" role="dialog" aria-modal="true">
+
+    <h3>Cadastrar pet - informações essenciais</h3>
+    <p class="muted">Somente os campos mínimos para criar o perfil.</p>
+
+    <div class="form-grid">
+      <div>
+        <label class="label">RG</label>
+        <input class="input" id="fRg" placeholder="Ex: Digite seu RG" maxlength="12" />
+      </div>
+
+      <div>
+        <label class="label">Nome</label>
+        <input class="input" id="fName" placeholder="Ex: Max" maxlength="12" />
+      </div>
+
+      <div>
+        <label class="label">Espécie</label>
+        <select class="select" id="fSpecies">
+          <option value="">Selecione</option>
+          <option>Canino</option>
+          <option>Felino</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="label">Raça</label>
+        <input class="input" id="fBreed" placeholder="Ex: Golden Retriever" />
+      </div>
+
+      <div>
+        <label class="label">Idade</label>
+        <input class="input" id="fAge" placeholder="Idade" />
+        <select class="select small" id="fAgeSelect">
+          <option value="">Selecione</option>
+          <option>Anos</option>
+          <option>Meses</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="label">Peso</label>
+        <input class="input" id="fWeight" placeholder="Peso" />
+        <select class="select small" id="fWeightSelect">
+          <option value="">Selecione</option>
+          <option>Kilos</option>
+          <option>Gramas</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="label">Porte</label>
+        <select class="select" id="fPorte">
+          <option value="">Selecione</option>
+          <option>Pequeno</option>
+          <option>Médio</option>
+          <option>Grande</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="label">Sexo</label>
+        <select class="select" id="fSex">
+          <option value="">Selecione</option>
+          <option>Macho</option>
+          <option>Fêmea</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="label">Castrado?</label>
+        <select class="select" id="fCastrado">
+          <option value="">Selecione</option>
+          <option>Sim</option>
+          <option>Não</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button id="cancelSimple" class="btn-ghost">Cancelar</button>
+      <button id="saveSimple">Criar perfil</button>
+    </div>
+
   </div>
 </div>
 </main>

@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
+  text-decoration: none;
 }
 
 body {
@@ -180,8 +181,30 @@ th, td {
     display:none;
     align-items:center;
     justify-content:center;
-    padding:20px
+    padding:20px;
 }   
+
+.modal-backdrop_edit{
+    position:fixed;
+    inset:0;
+    background:rgba(2,6,23,.45);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+.modal_edit {
+    background:#fff;
+    height: auto;
+    margin-top: 10%;
+    width:auto;
+    max-width:100%;
+    border-radius:12px;
+    padding:20px;
+}
+.modal_edit h3{
+    margin-top:0;
+}
 .modal{
     background:#fff;
     height: auto;

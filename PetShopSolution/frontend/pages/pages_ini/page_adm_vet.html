@@ -11,13 +11,10 @@
 <aside class="sidebar">
   <h2 class="logo">PetAdmin</h2>
   <nav>
-    <a><i class="fa-solid fa-paw"></i> Dashboard</a>
-    <a><i class="fa-solid fa-user"></i> Usuários</a>
-    <a class="active"><i class="fa-solid fa-stethoscope"></i> Veterinários</a>
-    <a><i class="fa-solid fa-clipboard"></i> Recepcionistas</a>
-    <a href=""><i class="fa-solid fa-calendar"></i> Consultas</a>
-    <a href=""><i class="fa-solid fa-credit-card"></i> Pagamentos</a>
-   
+      <a href="pagina_adm_dash.html"><i class="fa-solid fa-paw"></i> Dashboard</a>
+      <a href="page_adm_user.html"><i class="fa-solid fa-user"></i> Usuários</a>
+      <a class="active" href="page_adm_vet.html"><i class="fa-solid fa-stethoscope"></i> Veterinários</a>
+      <a href="page_adm_recep.html"><i class="fa-solid fa-clipboard"></i> Recepcionistas</a>
   </nav>
 </aside>
 
@@ -34,23 +31,7 @@
         <th>Nome</th>
         <th>Especialidade</th>
         <th>CRMV</th>
-        <th>Status</th>
         <th>Ações</th>
-      </tr>
-      <tr>
-        <td>Dra. Ana</td>
-        <td>Clínica Geral</td>
-        <td>12345</td>
-        <td>Ativo</td>
-        <td class="actions">
-            <button class="btn-edit">
-                <i class="fa-solid fa-pen"></i> Editar
-            </button>
-
-            <button class="btn-delete">
-                <i class="fa-solid fa-trash"></i> Deletar
-            </button>
-        </td>
       </tr>
     </table>
   </div>
@@ -64,15 +45,15 @@
             <form id="form_vet">
             <div>
                 <label>CRMV</label>
-                <input type="text" id="fCmrv" placeholder="Ex:Digite cmrv do veterinário" maxlength="12"/>
+                <input type="text" id="fCmrv" placeholder="Ex:Digite cmrv do veterinário"/>
               </div>
             <div>
               <label>Nome</label>
-              <input type="text" id="fNamevet" placeholder="Ex:Carlos" maxlength="12" />
+              <input type="text" id="fNamevet" placeholder="Ex:Carlos" />
             </div>
             <div>
               <label>Email</label>
-              <input type="text" id="fEmailvet" placeholder="Ex:vet123@gmail.com" maxlength="12" />
+              <input type="text" id="fEmailvet" placeholder="Ex:vet123@gmail.com"/>
             <div>
             <div>
               <label>Especialidade</label>
@@ -99,6 +80,61 @@
         </div>
   </div> 
 </main>
+ <!-- Modal de edição de veterinário -->
+<div class="modal-backdrop_edit" id="backdropSimplevetedit">
+  <div class="modal_edit" role="dialog" aria-modal="true" style="margin-bottom: 10%;">
+    <h3>Editar Veterinário - informações essenciais</h3>
+
+    <div class="form-grid_edit" style="margin-top:12px">
+      <form id="form_vet_edit">
+
+        <div>
+          <label>CRMV</label>
+          <input type="text" id="fCmrvvetedit" placeholder="CRMV">
+        </div>
+
+        <div>
+          <label>Nome</label>
+          <input type="text" id="fNamevetedit" placeholder="Nome">
+        </div>
+
+        <div>
+          <label>Email</label>
+          <input type="text" id="fEmailvetedit" placeholder="Email">
+        </div>
+
+        <div>
+          <label>Especialidade</label>
+          <input type="text" id="fEspvetedit" placeholder="Especialidade">
+        </div>
+
+        <div>
+          <label>Telefone</label>
+          <input type="tel" id="fTelvetedit" placeholder="Telefone">
+        </div>
+
+        <div>
+          <label>Senha</label>
+          <input type="text" id="fsenhavetedit" placeholder="Senha">
+        </div>
+
+        <div>
+          <label>Confirme senha</label>
+          <input type="text" id="fConsenhavetedit" placeholder="Confirmar senha">
+        </div>
+
+        <div style="margin-top: 3%; text-align: center" id="toastMessageedit"></div>
+
+        <div class="modal-actions_edit">
+          <button type="button" id="cancelSimplevetedit" class="btn-ghost">Cancelar</button>
+          <button type="button" id="saveSimplevetedit">Editar perfil</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
 

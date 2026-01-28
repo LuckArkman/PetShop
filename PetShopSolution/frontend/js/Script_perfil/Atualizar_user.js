@@ -38,10 +38,28 @@ const payload = getPayloadFromToken(token)
 const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
 const userName = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
 
+function showMessage(message, color = "black", duration = 2000) {
+    let toast = document.getElementById("toastMessage")
+    if (!toast) {
+        toast = document.createElement("div")
+        toast.id = "toastMessage"
+        document.body.appendChild(toast)
+    }
+    toast.textContent = message
+    toast.style.color = color
+    toast.style.display = "block"
+    toast.style.opacity = "1"
+
+    setTimeout(() => {
+        toast.style.opacity = "0"
+        setTimeout(() => {
+            toast.style.display = "none"
+        }, 300)
+    }, duration)
+}
 
 btn_save.addEventListener("click",async(e)=>{
     e.preventDefault()
-    alert("clicado")
     const update_first_name = document.getElementById("update_first_name").value
     const update_last_name = document.getElementById("update_last_name").value
     const update_email = document.getElementById("update_email").value
@@ -57,7 +75,6 @@ btn_save.addEventListener("click",async(e)=>{
 
     const updatedUser = {
         Id: userId,
-        Email:update_email,
         FirstName:update_first_name,
         LastName:update_last_name,
         CPF:update_cpf,
@@ -67,10 +84,24 @@ btn_save.addEventListener("click",async(e)=>{
         Address:update_address ,
         City:update_city,
         State:update_state,
-        ZipCode:update_zip_code,
-        PhoneNumber:update_phone_number
+        ZipCode:update_zip_code
     }
 
+    if (update_email.trim() !== "") {
+        updatedUser.Email = update_email
+    }
+
+    if (update_phone_number.trim() !== "") {
+        updatedUser.PhoneNumber = update_phone_number
+    }
+    if(update_password!==update_confirm_password){
+        showMessage("Senha não coincidem")
+        return
+    }
+    if(update_password==""){
+        showMessage("Digite sua senha para atualizar sua conta","red")
+        return
+    }
     try {
         const req = await fetch(`https://petrakka.com:7231/api/Responsavel/update`,{
             method: "PUT",
@@ -81,18 +112,13 @@ btn_save.addEventListener("click",async(e)=>{
             body: JSON.stringify(updatedUser)
         })
         const res = await req.json()
-        if (res.Message) {
-            div_msg.textContent = "Usuário atualizado com sucesso!"
-            div_msg.style.color = "green"
-            setTimeout(() => { div_msg.textContent = "" }, 2000)
+        console.log(res)
+        if (res.message) {
+            showMessage("Usuário atualizado com sucesso!","green")
         } else {
-            div_msg.textContent = "Erro ao atualizar!"
-            div_msg.style.color = "red"
-            setTimeout(() => { div_msg.textContent = "" }, 2000)
+            showMessage("Erro ao atualizar!","red")
         }
     } catch (error) {
-        div_msg.textContent = "Erro interno!"
-        div_msg.style.color = "red"
-        setTimeout(() => { div_msg.textContent = "" }, 2000)
+        showMessage("Erro interno!","red")
     }
 })

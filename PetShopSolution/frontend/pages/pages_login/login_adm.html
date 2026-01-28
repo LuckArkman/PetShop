@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Criar Admin</title>
+  <link rel="stylesheet" href="../../css/admin_css.css">
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- imagem lateral -->
+    <div class="card-img">
+      <img src="../../assets/imagens/admin.jpg" alt="Admin">
+    </div>
+
+    <!-- formulário -->
+    <div class="card-form">
+      <h1>Fazer login como Administrador</h1>
+
+      <form id="adminForm">
+        <input type="email" id="email" placeholder="Email" required>
+        <div class="form-row">
+          <input type="password" id="senha" placeholder="Senha" required>
+        </div>
+        <button id="adminForm" type="submit">Login Admin</button>
+        <p id="msg"></p>
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+
+    document.getElementById("adminForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value
+      const senha = document.getElementById("senha").value
+      const data = {
+        credencial:email,
+        password:senha
+      }
+      console.log(data)
+      const res = await fetch("https://petrakka.com:7231/api/Admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+
+      const result = await res.json();
+      console.log(result)
+      const msg = document.getElementById("msg");
+      if (!res.ok) {
+        msg.textContent = result.Message || "Erro ao criar admin";
+        msg.style.color = "#e11d48";
+        return;
+      }
+      if(result.success){
+        window.location.href = "../pages_ini/pagina_adm_dash.html"
+      }
+      msg.textContent = "Administrador criado com sucesso!";
+      msg.style.color = "#22c55e";
+      e.target.reset();
+    });
+  </script>
+
+</body>
+</html>

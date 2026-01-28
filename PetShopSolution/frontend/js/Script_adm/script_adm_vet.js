@@ -1,91 +1,212 @@
-//Chamar os modais
+// ===================== MODAIS =====================
 const modal_vet = document.getElementById("backdropSimplevet")
-//fim
-//chamar os form
+const modal_vet_edit = document.getElementById("backdropSimplevetedit")
+
 const form_vet = document.getElementById("form_vet")
-//fim
-//chamar btn add
+const form_vet_edit = document.getElementById("form_vet_edit")
+
 const btn_add_vet = document.getElementById("btn_add_vet")
-//fim
-//chamar btn cancel
 const btn_cancel_vet = document.getElementById("cancelSimplevet")
-//fim
-function modal(btn_add,modal,btn_cancel,form){
-    console.log("ola")
-    btn_add.addEventListener("click",(e)=>{
-        console.log("ola")
-        modal.style.display = "flex"
-        form.reset()
-    })
-    btn_cancel.addEventListener("click",(e)=>{
-        modal.style.display = "none"
-    })
-}
+const btn_cancel_vet_edit = document.getElementById("cancelSimplevetedit")
 
-//chamar a rota
-modal(btn_add_vet,modal_vet,btn_cancel_vet,form_vet)
-//fim
+const btn_cad_vet = document.getElementById("saveSimplevet")
+const btn_save_vet_edit = document.getElementById("saveSimplevetedit")
 
-function showMessage(message, color = "black", duration = 2000) {
-        let toast = document.getElementById("toastMessage")
-        if (!toast) {
-            toast = document.createElement("div")
-            toast.id = "toastMessage"
-            document.body.appendChild(toast)
-        }
-        toast.textContent = message
-        toast.style.color = color
-        toast.style.display = "block"
-        toast.style.opacity = "1"
-      
-        setTimeout(() => {
-            toast.style.opacity = "0"
-            setTimeout(() => {
-                toast.style.display = "none"
-            }, 300)
-        }, duration)
-}
+let VET_ID_EDIT = null
 
-const btn_cad = document.getElementById("saveSimplevet")
+// ===================== LISTAR VETERINÁRIOS =====================
+document.addEventListener("DOMContentLoaded", async () => {
+    const table = document.querySelector("table")
 
-    btn_cad.addEventListener("click",async (e)=>{
-        e.preventDefault()
-        const fCmrv = document.getElementById("fCmrv").value
-        const fEspvet = document.getElementById("fEspvet").value
-        const username_user = document.getElementById("fNamevet").value
-        const email_user = document.getElementById("fEmailvet").value
-        const fTelvet = document.getElementById("fTelvet").value
-        const senha_user = document.getElementById("fsenhavet").value
-        const confirm_senha_user = document.getElementById("fConsenhavet").value
-        if(senha_user!=confirm_senha_user){
-            showMessage("Senhas não coincidem","red")
-            return
-        }
-        if(username_user==""||email_user==""||senha_user==""||confirm_senha_user=="" || fCmrv=="" || fEspvet=="" || fTelvet==""){
-            showMessage("Preencha todos os campos","red")
-            return
-        }
-        try {
-            const req = await fetch("https://petrakka.com:7231/api/MedicoVeterinario/register",{
-                method:"Post",
-                headers:{"Content-Type":"application/json"},
-                body:JSON.stringify({Nome:username_user,CRMV:fCmrv,Password:senha_user,ConfirmPassword:confirm_senha_user,Telefone:fTelvet,Especialidade:fEspvet,Email:email_user})
+    try {
+        const req = await fetch("https://petrakka.com:7231/api/MedicoVeterinario/MedicoVeterinarios")
+        const vets = await req.json()
+
+        vets.forEach(vet => {
+            const tr = document.createElement("tr")
+
+            tr.innerHTML = `
+                <td>${vet.nome}</td>
+                <td>${vet.especialidade}</td>
+                <td>${vet.crmv}</td>
+                <td class="actions">
+                    <button class="btn-edit">
+                        <i class="fa-solid fa-pen"></i> Editar
+                    </button>
+                    <button class="btn-delete">
+                        <i class="fa-solid fa-trash"></i> Excluir
+                    </button>
+                </td>
+            `
+
+            const btn_edit = tr.querySelector(".btn-edit")
+            const btn_delete = tr.querySelector(".btn-delete")
+
+            // ===== EDITAR =====
+            btn_edit.addEventListener("click", () => {
+                modal_vet_edit.style.display = "flex"
+                VET_ID_EDIT = vet.id
+                document.getElementById("fCmrvvetedit").value = vet.crmv || ""
+                document.getElementById("fNamevetedit").value = vet.nome || ""
+                document.getElementById("fEmailvetedit").value = vet.email || ""
+                document.getElementById("fEspvetedit").value = vet.especialidade || ""
+                document.getElementById("fTelvetedit").value = vet.telefone || ""
+                document.getElementById("fsenhavetedit").value = ""
+                document.getElementById("fConsenhavetedit").value = ""
             })
-            const res = await req.json()
-            console.log(res)
-            if(req.status === 401){
-                showMessage(res.message,"red")
+
+            // ===== DELETAR =====
+            btn_delete.addEventListener("click", async () => {
+                if (!confirm("Tem certeza que deseja excluir este veterinário?")) return
+
+                try {
+                    const req = await fetch(
+                        `https://petrakka.com:7231/api/MedicoVeterinario/delete?crmv=${vet.crmv}`,
+                        { method: "DELETE" }
+                    )
+                    const res = await req.json()
+                    setTimeout(() => location.reload(), 800)
+                } catch {
+                    showMessage("Erro interno", "red")
+                }
+            })
+
+            table.appendChild(tr)
+        })
+
+    } catch (error) {
+        console.error(error)
+    }
+})
+
+// ===================== MODAL CRIAR =====================
+btn_add_vet.addEventListener("click", () => {
+    modal_vet.style.display = "flex"
+    modal_vet_edit.style.display = "none"
+    form_vet.reset()
+})
+
+btn_cancel_vet.addEventListener("click", () => {
+    modal_vet.style.display = "none"
+})
+
+// ===================== TOAST =====================
+function showMessage(message, color = "black", duration = 2000) {
+    let toast = document.getElementById("toastMessage")
+    toast.textContent = message
+    toast.style.color = color
+    toast.style.display = "block"
+    toast.style.opacity = "1"
+
+    setTimeout(() => {
+        toast.style.opacity = "0"
+        setTimeout(() => toast.style.display = "none", 300)
+    }, duration)
+}
+
+function showMessageedit(message, color = "black", duration = 2000) {
+    let toast = document.getElementById("toastMessageedit")
+    toast.textContent = message
+    toast.style.color = color
+    toast.style.display = "block"
+    toast.style.opacity = "1"
+
+    setTimeout(() => {
+        toast.style.opacity = "0"
+        setTimeout(() => toast.style.display = "none", 300)
+    }, duration)
+}
+
+// ===================== CRIAR VETERINÁRIO =====================
+btn_cad_vet.addEventListener("click", async (e) => {
+    e.preventDefault()
+
+    const data = {
+        Nome: document.getElementById("fNamevet").value,
+        Email: document.getElementById("fEmailvet").value,
+        CRMV: document.getElementById("fCmrv").value,
+        Especialidade: document.getElementById("fEspvet").value,
+        Telefone: document.getElementById("fTelvet").value,
+        Password: document.getElementById("fsenhavet").value,
+        ConfirmPassword: document.getElementById("fConsenhavet").value
+    }
+
+    if (data.Password !== data.ConfirmPassword) {
+        showMessage("Senhas não coincidem", "red")
+        return
+    }
+
+    try {
+        const req = await fetch(
+            "https://petrakka.com:7231/api/MedicoVeterinario/register",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
             }
-            if(res.id){
-                showMessage("Cadastro realizado com sucesso","green")
-            }else{
-                showMessage(res.message,"red")
-                return
-            }
-            
-            
-        } catch (error) {
-            showMessage("Erro interno","red")
+        )
+
+        const res = await req.json()
+
+        if (!req.ok) {
+            showMessage(res.message || "Erro ao cadastrar", "red")
             return
         }
-    })
+
+        showMessage("Veterinário cadastrado com sucesso", "green")
+        setTimeout(() => location.reload(), 800)
+
+    } catch {
+        showMessage("Erro interno", "red")
+    }
+})
+
+// ===================== MODAL EDITAR =====================
+btn_cancel_vet_edit.addEventListener("click", () => {
+    modal_vet_edit.style.display = "none"
+})
+
+// ===================== ATUALIZAR VETERINÁRIO =====================
+btn_save_vet_edit.addEventListener("click", async (e) => {
+    console.log("clicou")
+    const data = {
+        id: VET_ID_EDIT,
+        nome: document.getElementById("fNamevetedit").value,
+        email: document.getElementById("fEmailvetedit").value,
+        crmv: document.getElementById("fCmrvvetedit").value,
+        especialidade: document.getElementById("fEspvetedit").value,
+        telefone: document.getElementById("fTelvetedit").value,
+        password: document.getElementById("fsenhavetedit").value,
+        confirmPassword: document.getElementById("fConsenhavetedit").value
+    }
+
+    if (data.password !== data.confirmPassword) {
+        showMessageedit("Senhas não coincidem", "red")
+        return
+    }
+
+    if (data.password == "") {
+        showMessageedit("Digite a senha para atualizar", "red")
+        return
+    }
+    try {
+        const req = await fetch(
+            "https://petrakka.com:7231/api/MedicoVeterinario/update",
+            {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            }
+        )
+        if (req.status == 204) {
+            showMessageedit("Veterinário atualizado com sucesso", "green")
+            setTimeout(() => location.reload(), 800)
+        } else {
+            showMessageedit("Erro ao atualizar", "red")
+        }
+
+    } catch (error){
+        showMessageedit("Erro interno", "red")
+        console.log(error)
+    }
+})

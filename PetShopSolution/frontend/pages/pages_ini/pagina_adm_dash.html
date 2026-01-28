@@ -16,9 +16,6 @@
       <a href="page_adm_user.html"><i class="fa-solid fa-user"></i> Usuários</a>
       <a href="page_adm_vet.html"><i class="fa-solid fa-stethoscope"></i> Veterinários</a>
       <a href="page_adm_recep.html"><i class="fa-solid fa-clipboard"></i> Recepcionistas</a>
-      <a href="page_adm_consul.html"><i class="fa-solid fa-calendar"></i> Consultas</a>
-      <a href="page_adm_pagament.html"><i class="fa-solid fa-credit-card"></i> Pagamentos</a>
-     
     </nav>
   </aside>
 
@@ -26,81 +23,84 @@
     <header class="topbar">
       <div></div>
       <div class="icons">
-        <i class="fa-regular fa-bell"></i>
-        <i class="fa-regular fa-user"></i>
+        <a href="../pages_login/login_adm.html">Sair</a>
       </div>
     </header>
 
+    <!-- CARDS PRINCIPAIS -->
     <section class="cards">
       <div class="card blue">
         <i class="fa-solid fa-paw"></i>
         <p>Total de Consultas</p>
-        <h3>1.250</h3>
+        <h3 id="total_consul"></h3>
       </div>
 
       <div class="card green">
         <i class="fa-solid fa-bone"></i>
-        <p>Faturamento Mensal</p>
-        <h3>R$ 25.000</h3>
+        <p>Consultas Pagas</p>
+        <h3 id="fatu_pagament"></h3>
       </div>
 
       <div class="card orange">
         <i class="fa-solid fa-clock"></i>
         <p>Consultas Pendentes</p>
-        <h3>850</h3>
+        <h3 id="consul_pendent"></h3>
       </div>
     </section>
 
-    <section class="charts">
-      <div class="chart box">
-        <h3>Histórico de Consultas</h3>
-        <div class="fake-line"></div>
-      </div>
-
-      <div class="chart box">
-        <h3>Pagamentos</h3>
-        <div class="fake-donut">
-          <span>Pagos 80%</span>
-        </div>
+    <!-- INFORMAÇÕES RÁPIDAS (SUBSTITUI OS GRÁFICOS) -->
+    <section class="tables">
+      <div class="box">
+        <h3>Resumo do Sistema</h3>
+        <table>
+          <tr>
+            <th>Informação</th>
+            <th>Total</th>
+          </tr>
+          <tr>
+            <td>Usuários cadastrados</td>
+            <td id="total_users"></td>
+          </tr>
+          <tr>
+            <td>Veterinários ativos</td>
+            <td id="total_vet"></td>
+          </tr>
+          <tr>
+            <td>Recepcionistas</td>
+            <td id="total_rec"></td>
+          </tr>
+        </table>
       </div>
     </section>
 
+    <!-- TABELAS PRINCIPAIS -->
     <section class="tables">
       <div class="box">
         <h3>Últimas Consultas</h3>
-        <table>
+        <p id="p_sem_pag_consul" style="display: flex; justify-content: center; align-items: center; margin-top: 7%;">Sem Consultas recentes</p>
+        <table id="content_user">
           <tr>
             <th>Paciente</th>
             <th>Tutor</th>
-            <th>Serviço</th>
             <th>Status</th>
-          </tr>
-          <tr>
-            <td>Buddy</td>
-            <td>Jane Doe</td>
-            <td>Banho</td>
-            <td>Concluída</td>
           </tr>
         </table>
       </div>
 
       <div class="box">
         <h3>Últimos Pagamentos</h3>
-        <table>
+        <p id="p_sem_pag" style="display: flex; justify-content: center; align-items: center; margin-top: 7%;">Sem pagamentos recentes</p>
+        <table id="table_content" style="display: none;">
           <tr>
             <th>Tutor</th>
             <th>Valor</th>
             <th>Status</th>
-          </tr>
-          <tr>
-            <td>John Smith</td>
-            <td>R$ 50</td>
-            <td>Pago</td>
           </tr>
         </table>
       </div>
     </section>
   </main>
 
+  <script src="../../js/Script_adm/script_adm_dash.js"></script>
 </body>
 </html>

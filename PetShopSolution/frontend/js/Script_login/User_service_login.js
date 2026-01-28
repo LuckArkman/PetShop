@@ -20,8 +20,7 @@ const div_msg = document.getElementById("div_msg")
                 body:JSON.stringify({credencial:email_user,password:senha_user})
             })
             const res = await req.json()
-
-            if(res.success){
+                if(res.success){
                 localStorage.setItem("token", res.token)
                 div_msg.textContent = res.message
                 div_msg.style.color = "green"

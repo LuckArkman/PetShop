@@ -11,12 +11,10 @@
 <aside class="sidebar">
   <h2 class="logo">PetAdmin</h2>
   <nav>
-    <a><i class="fa-solid fa-paw"></i> Dashboard</a>
-    <a class="active"><i class="fa-solid fa-user"></i> Usuários</a>
-    <a><i class="fa-solid fa-stethoscope"></i> Veterinários</a>
-    <a><i class="fa-solid fa-clipboard"></i> Recepcionistas</a>
-    <a><i class="fa-solid fa-calendar"></i> Consultas</a>
-    <a><i class="fa-solid fa-credit-card"></i> Pagamentos</a>
+      <a href="pagina_adm_dash.html"><i class="fa-solid fa-paw"></i> Dashboard</a>
+      <a class="active" href="page_adm_user.html"><i class="fa-solid fa-user"></i> Usuários</a>
+      <a href="page_adm_vet.html"><i class="fa-solid fa-stethoscope"></i> Veterinários</a>
+      <a href="page_adm_recep.html"><i class="fa-solid fa-clipboard"></i> Recepcionistas</a>
   </nav>
 </aside>
 
@@ -29,35 +27,17 @@
   <div class="box">
     <input class="search" placeholder="Buscar usuário...">
 
-    <table>
+    <table id="content_user">
       <tr>
         <th>Nome</th>
         <th>Email</th>
-        <th>Telefone</th>
-        <th>Tipo</th>
-        <th>Status</th>
+        <th>Rg</th>
         <th>Ações</th>
-      </tr>
-      <tr>
-        <td>João Silva</td>
-        <td>joao@email.com</td>
-        <td>(11) 99999-9999</td>
-        <td>Cliente</td>
-        <td>Ativo</td>
-        <td class="actions">
-            <button class="btn-edit">
-                <i class="fa-solid fa-pen"></i> Editar
-            </button>
-
-            <button class="btn-delete">
-                <i class="fa-solid fa-trash"></i> Deletar
-            </button>
-        </td>
       </tr>
     </table>
   </div>
 
- <!--Modal de criação de recepcionista-->
+ <!--Modal de criação de user-->
   <div class="modal-backdrop" id="backdropSimpleuser">
         <div class="modal" role="dialog" aria-modal="true" style="margin-bottom: 10%;">
           <h3>Cadastrar Usuário - informações essenciais</h3>
@@ -66,11 +46,11 @@
             <form action="" id="form_user">
             <div>
               <label>Nome</label>
-              <input type="text" id="fNameuser" placeholder="Ex:Pedro" maxlength="12" />
+              <input type="text" id="fNameuser" placeholder="Ex:Pedro" />
             </div>
             <div>
               <label>Email</label>
-              <input type="text" id="fEmailuser" placeholder="Ex:user123@gmail.com" maxlength="12" />
+              <input type="text" id="fEmailuser" placeholder="Ex:user123@gmail.com" />
             </div>
             <div>
               <label>RG</label>
@@ -88,7 +68,7 @@
               <label>Confirme senha</label>
               <input type="text" id="fConsenhauser" placeholder="confirmar senha">
             </div>
-            <div style="margin-top: 3%; text-align: center " id="toastMessage"></div>
+            <div style="margin-top: 3%; text-align: center " id="toastMessageedit"></div>
           <div class="modal-actions">
             <button type="button" id="cancelSimpleuser" class="btn-ghost">Cancelar</button>
             <button type="button" id="saveSimpleuser">Criar perfil</button>
@@ -97,8 +77,44 @@
         </div>
   </div> 
 </main>
-
+  <!--Modal de edição de user-->
+  <div class="modal-backdrop_edit" id="backdropSimpleuseredit">
+        <div class="modal_edit" role="dialog" aria-modal="true" style="margin-bottom: 10%;">
+          <h3>Editar Usuário - informações essenciais</h3>
+          <div class="form-grid_edit" style="margin-top:12px">
+            <form action="" id="form_user_edit">
+            <div>
+              <label>Nome</label>
+              <input type="text" id="fNameuseredit" placeholder="Ex:Pedro" />
+            </div>
+            <div>
+              <label>Email</label>
+              <input type="text" id="fEmailuseredit" placeholder="Ex:user123@gmail.com"/>
+            </div>
+            <div>
+              <label>RG</label>
+              <input type="number" id="fRguseredit" placeholder="RG">
+            </div>
+            <div>
+              <label>CPF</label>
+              <input type="number" id="fCpfuseredit" placeholder="CPF">
+            </div>
+            <div>
+              <label>Senha</label>
+              <input type="text" id="fsenhauseredit" placeholder="Senha" />
+            </div>
+            <div>
+              <label>Confirme senha</label>
+              <input type="text" id="fConsenhauseredit" placeholder="confirmar senha">
+            </div>
+            <div style="margin-top: 3%; text-align: center " id="toastMessage"></div>
+          <div class="modal-actions_edit">
+            <button type="button" id="cancelSimpleuseredit" class="btn-ghost">Cancelar</button>
+            <button type="button" id="saveSimpleuseredit">Editar perfil</button>
+          </div>
+          </form>
+        </div>
+  </div> 
 </body>
-</html>
-
 <script src="../../js/Script_adm/script_adm_user.js"></script>
+</html>

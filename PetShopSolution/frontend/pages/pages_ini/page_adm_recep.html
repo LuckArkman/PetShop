@@ -11,13 +11,10 @@
 <aside class="sidebar">
   <h2 class="logo">PetAdmin</h2>
   <nav>
-    <a><i class="fa-solid fa-paw"></i> Dashboard</a>
-    <a><i class="fa-solid fa-user"></i> Usuários</a>
-    <a><i class="fa-solid fa-stethoscope"></i> Veterinários</a>
-    <a class="active"><i class="fa-solid fa-clipboard"></i> Recepcionistas</a>
-    <a href=""><i class="fa-solid fa-calendar"></i> Consultas</a>
-    <a href=""><i class="fa-solid fa-credit-card"></i> Pagamentos</a>
-   
+      <a href="pagina_adm_dash.html"><i class="fa-solid fa-paw"></i> Dashboard</a>
+      <a href="page_adm_user.html"><i class="fa-solid fa-user"></i> Usuários</a>
+      <a href="page_adm_vet.html"><i class="fa-solid fa-stethoscope"></i> Veterinários</a>
+      <a class="active" href="page_adm_recep.html"><i class="fa-solid fa-clipboard"></i> Recepcionistas</a>
   </nav>
 </aside>
 
@@ -29,28 +26,12 @@
 
   <div class="box">
     <input class="search" placeholder="Buscar Recepcionista...">
-    <table>
+    <table id="content_user">
       <tr>
         <th>Nome</th>
         <th>Email</th>
-        <th>Turno</th>
-        <th>Status</th>
+        <th>RG</th>
         <th>Ações</th>
-      </tr>
-      <tr>
-        <td>Maria Souza</td>
-        <td>maria@email.com</td>
-        <td>Manhã</td>
-        <td>Ativo</td>
-        <td class="actions">
-            <button class="btn-edit">
-                <i class="fa-solid fa-pen"></i> Editar
-            </button>
-
-            <button class="btn-delete">
-                <i class="fa-solid fa-trash"></i> Deletar
-            </button>
-        </td>
       </tr>
     </table>
   </div>
@@ -86,7 +67,7 @@
               <label>Confirme senha</label>
               <input type="text" id="fConsenharec" placeholder="confirmar senha">
             </div>
-            <div style="text-align: center;" id="toastMessage"></div>
+            <div style="text-align: center;" class="toastMessage"></div>
           <div class="modal-actions">
             <button id="cancelSimplerec" class="btn-ghost">Cancelar</button>
             <button id="saveSimplerec">Criar perfil</button>
@@ -95,7 +76,44 @@
         </div>
   </div> 
 </main>
-
+<!--Modal de edição de recepcionista-->
+  <div class="modal-backdrop_edit" id="backdropSimpleuseredit">
+        <div class="modal_edit" role="dialog" aria-modal="true" style="margin-bottom: 10%;">
+          <h3>Editar Recepcionista - informações essenciais</h3>
+          <div class="form-grid_edit" style="margin-top:12px">
+            <form action="" id="form_user_edit">
+            <div>
+              <label>Nome</label>
+              <input type="text" id="fNameuseredit" placeholder="Ex:Pedro" />
+            </div>
+            <div>
+              <label>Email</label>
+              <input type="text" id="fEmailuseredit" placeholder="Ex:user123@gmail.com"/>
+            </div>
+            <div>
+              <label>RG</label>
+              <input type="number" id="fRguseredit" placeholder="RG">
+            </div>
+            <div>
+              <label>CPF</label>
+              <input type="number" id="fCpfuseredit" placeholder="CPF">
+            </div>
+            <div>
+              <label>Senha</label>
+              <input type="text" id="fsenhauseredit" placeholder="Senha" />
+            </div>
+            <div>
+              <label>Confirme senha</label>
+              <input type="text" id="fConsenhauseredit" placeholder="confirmar senha">
+            </div>
+            <div style="margin-top: 3%; text-align: center " class="toastMessage"></div>
+          <div class="modal-actions_edit">
+            <button type="button" id="cancelSimpleuseredit" class="btn-ghost">Cancelar</button>
+            <button type="button" id="saveSimpleuseredit">Editar perfil</button>
+          </div>
+          </form>
+        </div>
+  </div> 
 </body>
 </html>
 

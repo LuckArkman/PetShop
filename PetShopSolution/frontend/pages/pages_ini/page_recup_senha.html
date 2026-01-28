@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperar Senha</title>
+  <link rel="stylesheet" href="../../css/recup_senha.css">
+  </head>
+<body>
+
+  <div class="card">
+    
+    <div class="card-img">
+      <img src="../../assets/imagens/security.jpeg" alt="Recuperação de senha">
+    </div>
+
+    <div class="card-form">
+      <h1>Recuperar Senha</h1>
+
+
+      <div>
+        <input 
+          type="text" 
+          placeholder="cpf" 
+          name="cpf"
+          required
+          id="cpf_user"
+        >
+
+        <input 
+          type="email" 
+          placeholder="Email cadastrado" 
+          name="email"
+          required
+          id="email_user"
+        >
+
+        <input 
+          type="password" 
+          placeholder="Nova senha" 
+          name="newPassword"
+          required
+          id="senha_user"
+        >
+
+        <input
+          type="password" 
+          placeholder="Confirmar nova senha" 
+          name="confirmPassword"
+          required
+          id="confirm_senha_user"
+        >
+
+        <button id="btn_reset_senha">
+          Atualizar senha
+        </button>
+      </div>
+
+      <p>
+        <a href="../pages_login/Login_user.html">Voltar para o login</a>
+      </p>
+    </div>
+
+  </div>
+<script src="../../js/Script_rec_senha/rec_senha.js"></script>
+</body>
+</html>
